@@ -3,7 +3,6 @@ package com.dsm.pick.utils.handler;
 import com.dsm.pick.utils.exception.IdOrPasswordMismatchException;
 import com.dsm.pick.utils.exception.RefreshTokenMismatchException;
 import com.dsm.pick.utils.exception.TokenExpirationException;
-import com.dsm.pick.utils.exception.UnauthorizedException;
 import com.dsm.pick.utils.form.ApiErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,12 +11,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
 public class ApiExceptionHandler {
-
-    @ExceptionHandler(UnauthorizedException.class)
-    public ResponseEntity<ApiErrorResponse> unauthorizedExceptionHandle(UnauthorizedException ex) {
-        ApiErrorResponse response = new ApiErrorResponse("Unauthorized Exception", "토큰이 유효하지 않거나 잘못됨");
-        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
-    }
 
     @ExceptionHandler(IdOrPasswordMismatchException.class)
     public ResponseEntity<ApiErrorResponse> idMismatchExceptionHandler(IdOrPasswordMismatchException ex) {

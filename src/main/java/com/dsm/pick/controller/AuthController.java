@@ -5,10 +5,7 @@ import com.dsm.pick.domains.service.AuthService;
 import com.dsm.pick.utils.form.*;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Api(value = "Auth Controller")
@@ -41,7 +38,7 @@ public class AuthController {
             @ApiResponse(code = 404, message = "Refresh Token Mismatch"),
             @ApiResponse(code = 500, message = "500인데 이거 안 뜰듯")
     })
-    @PostMapping("/refresh")
+    @PutMapping("/refresh")
     public AccessTokenReissuanceResultForm refreshToken(RefreshTokenForm refreshTokenForm) {
         String refreshToken = refreshTokenForm.getToken();
 

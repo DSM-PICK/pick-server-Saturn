@@ -1,17 +1,16 @@
 package com.dsm.pick.domains.service;
 
-import antlr.Token;
 import com.dsm.pick.domains.domain.User;
 import com.dsm.pick.domains.repository.UserRepository;
 import com.dsm.pick.utils.exception.IdOrPasswordMismatchException;
 import com.dsm.pick.utils.exception.RefreshTokenMismatchException;
 import com.dsm.pick.utils.exception.TokenExpirationException;
-import com.dsm.pick.utils.exception.UnauthorizedException;
 import com.dsm.pick.utils.form.AccessTokenReissuanceResultForm;
 import com.dsm.pick.utils.form.LoginResultForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;
@@ -33,15 +32,16 @@ public class AuthService {
         this.jwtService = jwtService;
     }
 
-    public LoginResultForm login(User user) throws IdOrPasswordMismatchException {
+    public LoginResultForm login(User user) {
         String userId = user.getId();
         String userPw = sha512(user.getPw());
 
-        User findUser = userRepository.findById(userId).orElseThrow(() -> new IdOrPasswordMismatchException());
+        User findUser = userRepository.findById(userId)
+                .orElseThrow(() -> new IdOrPasswordMismatchException());
+
         String findUserPw = findUser.getPw();
         if (!(userPw.equals(findUserPw)))
             throw new IdOrPasswordMismatchException();
-
 
         String accessToken = jwtService.createAccessToken(userId);
         String refreshToken = jwtService.createRefreshToken(userId);
@@ -68,9 +68,11 @@ public class AuthService {
     }
 
     public AccessTokenReissuanceResultForm accessTokenReissuance(String refreshToken) {
+        System.out.println(refreshToken);
         User findUser = null;
-        if(jwtService.isValid(refreshToken) && jwtService.isTimeOut(refreshToken))
-            userRepository.findByRefreshToken(refreshToken).orElseThrow(() -> new TokenExpirationException());
+        //if(jwtService.isValid(refreshToken) && jwtService.isTimeOut(refreshToken))
+            findUser = userRepository.findByRefreshToken(refreshToken)
+                    .orElseThrow(() -> new TokenExpirationException());
 
         String accessToken = null;
         if(refreshToken.equals(findUser.getRefreshToken()))
@@ -84,7 +86,8 @@ public class AuthService {
     }
 
     public void logout(String id, String accessToken) {
-        String refreshToken = userRepository.findById(id).orElseThrow(() -> new UnauthorizedException()).getRefreshToken();
+        String refreshToken = userRepository.findById(id)
+                .orElseThrow(() -> new TokenExpirationException()).getRefreshToken();
         jwtService.killToken(refreshToken);
         jwtService.killToken(accessToken);
     }

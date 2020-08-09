@@ -1,6 +1,6 @@
 package com.dsm.pick.domains.service;
 
-import com.dsm.pick.utils.exception.UnauthorizedException;
+import com.dsm.pick.utils.exception.TokenExpirationException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -56,7 +56,7 @@ public class JwtService {
 
             return true;
         } catch(Exception e) {
-            throw new UnauthorizedException();
+            throw new TokenExpirationException();
         }
     }
 
@@ -69,9 +69,8 @@ public class JwtService {
                     .getBody()
                     .getExpiration();
 
-            if(expiration.after(now)) {
+            if(expiration.after(now))
                 return true;
-            }
 
             return false;
         } catch(Exception e) {
