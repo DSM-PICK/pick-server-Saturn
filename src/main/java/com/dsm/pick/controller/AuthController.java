@@ -39,9 +39,8 @@ public class AuthController {
             @ApiResponse(code = 500, message = "500인데 이거 안 뜰듯")
     })
     @PutMapping("/refresh")
-    public AccessTokenReissuanceResultForm refreshToken(RefreshTokenForm refreshTokenForm) {
-        String refreshToken = refreshTokenForm.getToken();
-
+    public AccessTokenReissuanceResultForm refreshToken(TokenForm tokenForm) {
+        String refreshToken = tokenForm.getToken();
         return authService.accessTokenReissuance(refreshToken);
     }
     

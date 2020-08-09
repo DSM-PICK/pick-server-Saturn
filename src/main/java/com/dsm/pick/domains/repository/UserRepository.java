@@ -23,8 +23,8 @@ public class UserRepository {
     }
 
     public Optional<User> findByRefreshToken(String refreshToken) {
-        return entityManager.createQuery("SELECT u FROM User u WHERE u.token = :token", User.class)
-                .setParameter("token", refreshToken)
+        return entityManager.createQuery("SELECT u FROM User u WHERE u.refreshToken = :a", User.class)
+                .setParameter("a", refreshToken)
                 .getResultList()
                 .stream()
                 .findAny();

@@ -16,6 +16,7 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -63,16 +64,17 @@ public class AuthService {
             System.out.println("존재하지 않는 인코딩 : " + ENCODING);
             System.out.println("존재하지 않는 암호화 : " + ALGORITHM);
         }
-        System.out.println(resultHex);
         return resultHex;
     }
 
     public AccessTokenReissuanceResultForm accessTokenReissuance(String refreshToken) {
-        System.out.println(refreshToken);
+        System.out.println("Refresh Token : " + refreshToken);
         User findUser = null;
         //if(jwtService.isValid(refreshToken) && jwtService.isTimeOut(refreshToken))
-            findUser = userRepository.findByRefreshToken(refreshToken)
-                    .orElseThrow(() -> new TokenExpirationException());
+//            findUser = userRepository.findByRefreshToken(refreshToken)
+//                    .orElseThrow(() -> new TokenExpirationException());
+        findUser = userRepository.findByRefreshToken(refreshToken)
+                .orElseThrow(() -> new ClassCastException());
 
         String accessToken = null;
         if(refreshToken.equals(findUser.getRefreshToken()))
