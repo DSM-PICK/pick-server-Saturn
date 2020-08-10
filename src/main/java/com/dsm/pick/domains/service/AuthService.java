@@ -67,7 +67,7 @@ public class AuthService {
 
     public AccessTokenReissuanceResponseForm accessTokenReissuance(String refreshToken) {
         Teacher findUser = null;
-        if(jwtService.isValid(refreshToken) && jwtService.isTimeOut(refreshToken))
+        if(jwtService.isUsableToken(refreshToken))
             findUser = userRepository.findByRefreshToken(refreshToken)
                     .orElseThrow(() -> new TokenExpirationException());
 
@@ -84,7 +84,7 @@ public class AuthService {
 
     public void logout(String id, String accessToken) {
         String refreshToken = null;
-        if(jwtService.isValid(accessToken) && jwtService.isTimeOut(accessToken))
+        if(jwtService.isUsableToken(accessToken))
             refreshToken = userRepository.findById(id)
                     .orElseThrow(() -> new TokenExpirationException()).getRefreshToken();
         jwtService.killToken(refreshToken);

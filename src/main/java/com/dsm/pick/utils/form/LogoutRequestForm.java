@@ -9,6 +9,12 @@ public class LogoutRequestForm {
     @ApiParam(value = "사용자 엑세스 토큰", required = true)
     private String accessToken;
 
+    public LogoutRequestForm() {}
+    public LogoutRequestForm(String id, String accessToken) {
+        this.id = id;
+        this.accessToken = accessToken;
+    }
+
     public String getId() {
         return id;
     }

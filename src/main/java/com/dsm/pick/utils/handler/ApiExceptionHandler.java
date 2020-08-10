@@ -29,4 +29,10 @@ public class ApiExceptionHandler {
         ApiErrorResponseForm response = new ApiErrorResponseForm("Refresh Token Mismatch Exception", "일치하는 리프레시 토큰을 찾을 수 없음");
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(NumberFormatException.class)
+    public ResponseEntity<ApiErrorResponseForm> numberFormatExceptionHandler(NumberFormatException ex) {
+        ApiErrorResponseForm response = new ApiErrorResponseForm("Number Format Exception", "잘못된 숫자 형식입니다.");
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
 }

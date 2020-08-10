@@ -20,24 +20,32 @@ public class JwtService {
     private static final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
     private static final Key KEY = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
 
-    public String createAccessToken(String userId){
+    public String createAccessToken(String teacherId){
         return Jwts.builder()
                 .setHeaderParam("typ", "JWT")
                 .setSubject("access token")
-                .claim("id", userId)
+                .claim("id", teacherId)
                 .setExpiration(new Date(System.currentTimeMillis() + (1000 * 60 * 30)))             // 30분
                 .signWith(signatureAlgorithm, KEY)
                 .compact();
     }
 
-    public String createRefreshToken(String userId) {
+    public String createRefreshToken(String teacherId) {
         return Jwts.builder()
                 .setHeaderParam("typ", "JWT")
                 .setSubject("reflash token")
-                .claim("id", userId)
+                .claim("id", teacherId)
                 .setExpiration(new Date(System.currentTimeMillis() + (1000 * 60 * 60 * 24 * 7)))    // 2주
                 .signWith(signatureAlgorithm, KEY)
                 .compact();
+    }
+
+    public String getTeacherId(String token) {
+        return Jwts.parser()
+                .setSigningKey(KEY)
+                .parseClaimsJws(token)
+                .getBody()
+                .get("id", String.class);
     }
 
     public Date getExpiration(String token) {
@@ -48,7 +56,14 @@ public class JwtService {
                 .getExpiration();
     }
 
-    public boolean isValid(String token) {
+    public boolean isUsableToken(String token) {
+        boolean isValid = isValid(token);
+        boolean isTimeOut = isTimeOut(token);
+
+        return isValid && isTimeOut;
+    }
+
+    private boolean isValid(String token) {
         try {
             Jws<Claims> jws = Jwts.parser()
                     .setSigningKey(KEY)
@@ -60,7 +75,7 @@ public class JwtService {
         }
     }
 
-    public boolean isTimeOut(String token) {
+    private boolean isTimeOut(String token) {
         try {
             Date now = new Date();
             Date expiration = Jwts.parser()

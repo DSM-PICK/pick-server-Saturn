@@ -2,12 +2,18 @@ package com.dsm.pick.utils.form;
 
 import io.swagger.annotations.ApiParam;
 
-public class UserResponseForm {
+public class TeacherResponseForm {
 
     @ApiParam(value = "사용자 아이디", required = true)
     private String id;
     @ApiParam(value = "사용자 비밀번호", required = true)
     private String pw;
+
+    public TeacherResponseForm() {}
+    public TeacherResponseForm(String id, String pw) {
+        this.id = id;
+        this.pw = pw;
+    }
 
     public String getId() {
         return id;
