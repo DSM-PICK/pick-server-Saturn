@@ -2,7 +2,7 @@ package com.dsm.pick.utils.form;
 
 import io.swagger.annotations.ApiModelProperty;
 
-public class AttendancePeriodForm {
+public class AttendanceStateForm {
 
     @ApiModelProperty(example = "출석", required = false)
     private String seven;
@@ -13,8 +13,8 @@ public class AttendancePeriodForm {
     @ApiModelProperty(example = "출석", required = true)
     private String ten;
 
-    public AttendancePeriodForm() {}
-    public AttendancePeriodForm(String seven, String eight, String nine, String ten) {
+    public AttendanceStateForm() {}
+    public AttendanceStateForm(String seven, String eight, String nine, String ten) {
         this.seven = seven;
         this.eight = eight;
         this.nine = nine;

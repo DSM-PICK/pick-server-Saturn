@@ -10,14 +10,14 @@ public class AttendanceListForm {
     private String gradeClassNumber;
     @ApiModelProperty(example = "이진혁", required = true)
     private String name;
-    private AttendancePeriodForm period;
+    private AttendanceStateForm state;
 
     public AttendanceListForm() {}
-    public AttendanceListForm(String sequence, String gradeClassNumber, String name, AttendancePeriodForm period) {
+    public AttendanceListForm(String sequence, String gradeClassNumber, String name, AttendanceStateForm state) {
         this.sequence = sequence;
         this.gradeClassNumber = gradeClassNumber;
         this.name = name;
-        this.period = period;
+        this.state = state;
     }
 
     public String getSequence() {
@@ -44,11 +44,11 @@ public class AttendanceListForm {
         this.name = name;
     }
 
-    public AttendancePeriodForm getPeriod() {
-        return period;
+    public AttendanceStateForm getState() {
+        return state;
     }
 
-    public void setPeriod(AttendancePeriodForm period) {
-        this.period = period;
+    public void setState(AttendanceStateForm state) {
+        this.state = state;
     }
 }

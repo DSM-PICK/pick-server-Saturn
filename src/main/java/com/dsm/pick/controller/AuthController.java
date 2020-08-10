@@ -40,7 +40,7 @@ public class AuthController {
             @ApiResponse(code = 500, message = "500인데 이거 안 뜰듯")
     })
     @PutMapping("/access-token")
-    public AccessTokenReissuanceResponseForm accessTokenReissuance(TokenResponseForm tokenForm) {
+    public AccessTokenReissuanceResponseForm accessTokenReissuance(RefreshTokenRequestForm tokenForm) {
         String refreshToken = tokenForm.getToken();
         return authService.accessTokenReissuance(refreshToken);
     }
