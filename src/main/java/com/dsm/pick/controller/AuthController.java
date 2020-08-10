@@ -51,9 +51,10 @@ public class AuthController {
             @ApiResponse(code = 404, message = "NOT User"),
             @ApiResponse(code = 500, message = "500인데 이거 안 뜰듯")
     })
+
     @DeleteMapping("/access-refresh-token")
-    public void logout(LogoutRequestForm logoutRequestForm) {
-        authService.logout(logoutRequestForm.getId(), logoutRequestForm.getAccessToken());
+    public void logout(AccessTokenRequestForm accessTokenRequestForm) {
+        authService.logout(accessTokenRequestForm.getToken());
     }
 
     @ApiOperation(value = "테스트라고 했다 이거 보고 뭐라 하지 마라", notes = "마마 이거 왜 여노?")

@@ -82,11 +82,15 @@ public class AuthService {
         return new AccessTokenReissuanceResponseForm(accessToken, accessTokenExpiration);
     }
 
-    public void logout(String id, String accessToken) {
+    public void logout(String accessToken) {
+        String teacherId = jwtService.getTeacherId(accessToken);
+        System.out.println(teacherId);
         String refreshToken = null;
+
         if(jwtService.isUsableToken(accessToken))
-            refreshToken = userRepository.findById(id)
+            refreshToken = userRepository.findById(teacherId)
                     .orElseThrow(() -> new TokenExpirationException()).getRefreshToken();
+
         jwtService.killToken(refreshToken);
         jwtService.killToken(accessToken);
     }
