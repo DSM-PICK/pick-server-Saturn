@@ -1,11 +1,11 @@
 package com.dsm.pick.utils.form;
 
-public class ApiErrorResponse {
+public class ApiErrorResponseForm {
 
     private String error;
     private String message;
 
-    public ApiErrorResponse(String error, String message) {
+    public ApiErrorResponseForm(String error, String message) {
         this.error = error;
         this.message = message;
     }

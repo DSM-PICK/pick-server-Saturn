@@ -1,22 +1,20 @@
 package com.dsm.pick.domains.service;
 
-import com.dsm.pick.domains.domain.User;
+import com.dsm.pick.domains.domain.Teacher;
 import com.dsm.pick.domains.repository.UserRepository;
 import com.dsm.pick.utils.exception.IdOrPasswordMismatchException;
 import com.dsm.pick.utils.exception.RefreshTokenMismatchException;
 import com.dsm.pick.utils.exception.TokenExpirationException;
-import com.dsm.pick.utils.form.AccessTokenReissuanceResultForm;
-import com.dsm.pick.utils.form.LoginResultForm;
+import com.dsm.pick.utils.form.AccessTokenReissuanceResponseForm;
+import com.dsm.pick.utils.form.LoginResponseForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -33,11 +31,11 @@ public class AuthService {
         this.jwtService = jwtService;
     }
 
-    public LoginResultForm login(User user) {
-        String userId = user.getId();
-        String userPw = sha512(user.getPw());
+    public LoginResponseForm login(Teacher teacher) {
+        String userId = teacher.getId();
+        String userPw = sha512(teacher.getPw());
 
-        User findUser = userRepository.findById(userId)
+        Teacher findUser = userRepository.findById(userId)
                 .orElseThrow(() -> new IdOrPasswordMismatchException());
 
         String findUserPw = findUser.getPw();
@@ -50,7 +48,7 @@ public class AuthService {
 
         findUser.setRefreshToken(refreshToken);
 
-        return new LoginResultForm(accessToken, refreshToken, accessTokenExpiration);
+        return new LoginResponseForm(accessToken, refreshToken, accessTokenExpiration);
     }
 
     private String sha512(String original) {
@@ -67,8 +65,8 @@ public class AuthService {
         return resultHex;
     }
 
-    public AccessTokenReissuanceResultForm accessTokenReissuance(String refreshToken) {
-        User findUser = null;
+    public AccessTokenReissuanceResponseForm accessTokenReissuance(String refreshToken) {
+        Teacher findUser = null;
         if(jwtService.isValid(refreshToken) && jwtService.isTimeOut(refreshToken))
             findUser = userRepository.findByRefreshToken(refreshToken)
                     .orElseThrow(() -> new TokenExpirationException());
@@ -81,7 +79,7 @@ public class AuthService {
 
         LocalDateTime accessTokenExpiration = LocalDateTime.ofInstant(jwtService.getExpiration(accessToken).toInstant(), ZoneId.of("Asia/Seoul"));
 
-        return new AccessTokenReissuanceResultForm(accessToken, accessTokenExpiration);
+        return new AccessTokenReissuanceResponseForm(accessToken, accessTokenExpiration);
     }
 
     public void logout(String id, String accessToken) {
@@ -93,8 +91,8 @@ public class AuthService {
         jwtService.killToken(accessToken);
     }
 
-    public void join(User user) {
-        user.setPw(sha512(user.getPw()));
-        userRepository.save(user);
+    public void join(Teacher teacher) {
+        teacher.setPw(sha512(teacher.getPw()));
+        userRepository.save(teacher);
     }
 }

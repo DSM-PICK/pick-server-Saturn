@@ -1,17 +1,11 @@
 package com.dsm.pick.domains.service;
 
-import com.dsm.pick.domains.domain.User;
 import com.dsm.pick.domains.repository.UserRepository;
-import com.dsm.pick.utils.form.LoginResultForm;
-import com.dsm.pick.utils.form.UserForm;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.EntityManager;
-
-import static org.junit.jupiter.api.Assertions.*;
-
 
 class AuthServiceTest {
 
@@ -29,11 +23,7 @@ class AuthServiceTest {
 
     @Test
     void login() {
-        User user = new User();
-        user.setId("aaa");
-        user.setPw("bbb");
-
-        LoginResultForm result = authService.login(user);
+        System.out.println(entityManager);
     }
 
     @Test

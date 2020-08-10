@@ -1,6 +1,6 @@
 package com.dsm.pick.domains.repository;
 
-import com.dsm.pick.domains.domain.User;
+import com.dsm.pick.domains.domain.Teacher;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -14,17 +14,17 @@ public class UserRepository {
         this.entityManager = entityManager;
     }
 
-    public void save(User user) {
+    public void save(Teacher user) {
         entityManager.persist(user);
     }
 
-    public Optional<User> findById(String id) {
-        return Optional.ofNullable(entityManager.find(User.class, id));
+    public Optional<Teacher> findById(String id) {
+        return Optional.ofNullable(entityManager.find(Teacher.class, id));
     }
 
-    public Optional<User> findByRefreshToken(String refreshToken) {
-        return entityManager.createQuery("SELECT u FROM User u WHERE u.refreshToken = :a", User.class)
-                .setParameter("a", refreshToken)
+    public Optional<Teacher> findByRefreshToken(String refreshToken) {
+        return entityManager.createQuery("SELECT t FROM Teacher t WHERE t.refreshToken = :token", Teacher.class)
+                .setParameter("token", refreshToken)
                 .getResultList()
                 .stream()
                 .findAny();
