@@ -15,6 +15,7 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Date;
 
 @Service
 @Transactional
@@ -31,23 +32,49 @@ public class AuthService {
         this.jwtService = jwtService;
     }
 
-    public LoginResponseForm login(Teacher teacher) {
-        String userId = teacher.getId();
-        String userPw = sha512(teacher.getPw());
+    public String encodingPassword(String password) {
+        return sha512(password);
+    }
 
-        Teacher findUser = userRepository.findById(userId)
+    public boolean checkIdAndPw(Teacher teacher) {
+        // 계정 존재하는지 확인
+        String userId = teacher.getId();
+
+        Teacher findTeacher = userRepository.findById(userId)
                 .orElseThrow(() -> new IdOrPasswordMismatchException());
 
-        String findUserPw = findUser.getPw();
+        // 비밀번호 일치 확인
+        String userPw = teacher.getPw();
+        String findUserPw = findTeacher.getPw();
+
         if (!(userPw.equals(findUserPw)))
             throw new IdOrPasswordMismatchException();
 
-        String accessToken = jwtService.createAccessToken(userId);
-        String refreshToken = jwtService.createRefreshToken(userId);
-        LocalDateTime accessTokenExpiration = LocalDateTime.ofInstant(jwtService.getExpiration(accessToken).toInstant(), ZoneId.of("Asia/Seoul"));
+        setTeacherRefreshToken(findTeacher);
 
-        findUser.setRefreshToken(refreshToken);
+        return true;
+    }
 
+    private void setTeacherRefreshToken(Teacher teacher) {
+        String refreshToken = getRefreshToken(teacher.getId());
+        teacher.setRefreshToken(refreshToken);
+    }
+
+    public String getAccessToken(String id) {
+        return jwtService.createAccessToken(id);
+    }
+
+    public String getRefreshToken(String id) {
+        return jwtService.createRefreshToken(id);
+    }
+
+    public LocalDateTime getAccessTokenExpiration(String id) {
+        String accessToken = getAccessToken(id);
+        Date expiration = jwtService.getExpiration(accessToken);
+        return LocalDateTime.ofInstant(expiration.toInstant(), ZoneId.of("Asia/Seoul"));
+    }
+
+    public LoginResponseForm formatLoginResponseForm(String accessToken, String refreshToken, LocalDateTime accessTokenExpiration) {
         return new LoginResponseForm(accessToken, refreshToken, accessTokenExpiration);
     }
 

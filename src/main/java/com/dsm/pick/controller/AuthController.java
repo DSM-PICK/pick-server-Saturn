@@ -5,10 +5,10 @@ import com.dsm.pick.domains.service.AuthService;
 import com.dsm.pick.utils.form.*;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/auth")
@@ -33,7 +33,21 @@ public class AuthController {
         teacher.setId(userForm.getId());
         teacher.setPw(userForm.getPw());
 
-        return authService.login(teacher);
+        String encodedPassword = authService.encodingPassword(teacher.getPw());
+        teacher.setPw(encodedPassword);
+
+        LoginResponseForm result = null;
+        if(authService.checkIdAndPw(teacher)) {
+            String teacherId = teacher.getId();
+
+            String accessToken = authService.getAccessToken(teacherId);
+            String refreshToken = authService.getRefreshToken(teacherId);
+            LocalDateTime accessTokenExpiration = authService.getAccessTokenExpiration(teacherId);
+
+            result = authService.formatLoginResponseForm(accessToken, refreshToken, accessTokenExpiration);
+        }
+
+        return result;
     }
 
     @ApiOperation(value = "엑세스 토큰 만료", notes = "엑세스 토큰 재발급")

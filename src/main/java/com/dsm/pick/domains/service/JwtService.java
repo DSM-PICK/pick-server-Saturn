@@ -5,6 +5,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.spec.SecretKeySpec;
@@ -13,7 +14,7 @@ import java.security.Key;
 import java.util.Date;
 import java.util.Map;
 
-@Service
+@Component
 public class JwtService {
     private static Map<String, String> env = System.getenv();
 
