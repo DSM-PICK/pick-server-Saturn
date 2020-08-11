@@ -32,7 +32,7 @@ public class ApiExceptionHandler {
 
     @ExceptionHandler(NumberFormatException.class)
     public ResponseEntity<ApiErrorResponseForm> numberFormatExceptionHandler(NumberFormatException ex) {
-        ApiErrorResponseForm response = new ApiErrorResponseForm("Number Format Exception", "잘못된 숫자 형식입니다.");
+        ApiErrorResponseForm response = new ApiErrorResponseForm("Number Format Exception", "요청에 대한 적절한 응답을 찾을 수 없음");
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 }

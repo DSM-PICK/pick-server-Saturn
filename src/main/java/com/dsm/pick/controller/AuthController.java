@@ -5,7 +5,10 @@ import com.dsm.pick.domains.service.AuthService;
 import com.dsm.pick.utils.form.*;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/auth")
@@ -39,22 +42,28 @@ public class AuthController {
             @ApiResponse(code = 404, message = "Refresh Token Mismatch"),
             @ApiResponse(code = 500, message = "500인데 이거 안 뜰듯")
     })
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "token", dataType = "string", required = true, value = "Refresh Token")
+    })
     @PutMapping("/access-token")
-    public AccessTokenReissuanceResponseForm accessTokenReissuance(RefreshTokenRequestForm tokenForm) {
-        String refreshToken = tokenForm.getToken();
+    public AccessTokenReissuanceResponseForm accessTokenReissuance(HttpServletRequest request) {
+        String refreshToken = request.getHeader("token");
+        System.out.println(refreshToken);
         return authService.accessTokenReissuance(refreshToken);
     }
     
     @ApiOperation(value = "로그아웃", notes = "JWT 토큰 제거")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "NO Return"),
+            @ApiResponse(code = 200, message = "NO Return Success"),
             @ApiResponse(code = 404, message = "NOT User"),
             @ApiResponse(code = 500, message = "500인데 이거 안 뜰듯")
     })
-
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "token", dataType = "string", required = true, value = "Access Token")
+    })
     @DeleteMapping("/access-refresh-token")
-    public void logout(AccessTokenRequestForm accessTokenRequestForm) {
-        authService.logout(accessTokenRequestForm.getToken());
+    public void logout(HttpServletRequest request) {
+        authService.logout(request.getHeader("token"));
     }
 
     @ApiOperation(value = "테스트라고 했다 이거 보고 뭐라 하지 마라", notes = "마마 이거 왜 여노?")

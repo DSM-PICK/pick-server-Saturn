@@ -14,6 +14,7 @@ public class AttendanceService {
     public AttendanceNavigationResponseForm getNavigationInfomation(String activity, int floor) {
 
 
+
         return new AttendanceNavigationResponseForm();
     }
 }

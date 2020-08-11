@@ -1,7 +1,27 @@
+spring:
+  profiles:
+  active: default
 server:
   address: localhost
-  port: 8090
+  port: 8889
+---
 spring:
+  profiles: dev
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    password: 1111
+    url: jdbc:mysql://localhost:3306/pick_test?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC
+    username: root
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    generate-ddl: true
+    show-sql: true
+  resources:
+    add-mappings: true
+---
+spring:
+  profiles: prod
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     password: 1111

@@ -10,15 +10,12 @@ public class AttendanceStateRequestForm {
     private String period;
     @ApiParam(value = "출석 상태 [ 출석, 외출, 현체, 병결, 공결, 무단 ]", required = true)
     private String state;
-    @ApiParam(value = "Access Token", required = true)
-    private String token;
 
     public AttendanceStateRequestForm() {}
-    public AttendanceStateRequestForm(String number, String period, String state, String token) {
+    public AttendanceStateRequestForm(String number, String period, String state) {
         this.number = number;
         this.period = period;
         this.state = state;
-        this.token = token;
     }
 
     public String getNumber() {
@@ -43,13 +40,5 @@ public class AttendanceStateRequestForm {
 
     public void setState(String state) {
         this.state = state;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
     }
 }

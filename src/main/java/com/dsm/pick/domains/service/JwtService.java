@@ -11,10 +11,13 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
 import java.util.Date;
+import java.util.Map;
 
 @Service
 public class JwtService {
+    private static Map<String, String> env = System.getenv();
 
+    //private static final String SECURE_KEY = env.get("TOKEN_SECURE_KEY");
     private static final String SECURE_KEY = "dhwlddjgmanf";
     private static final byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(SECURE_KEY);
     private static final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;

@@ -5,12 +5,11 @@ import com.dsm.pick.utils.form.AccessTokenRequestForm;
 import com.dsm.pick.utils.form.AttendanceListResponseForm;
 import com.dsm.pick.utils.form.AttendanceNavigationResponseForm;
 import com.dsm.pick.utils.form.AttendanceStateRequestForm;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/attendance")
@@ -24,44 +23,67 @@ public class AttendanceController {
         this.attendanceService = attendanceService;
     }
 
+    @ApiOperation(value = "출석 페이지 네비게이션 정보", notes = "방과후 교실 정보 및 선생님 정보 반환")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Return Success"),
+            @ApiResponse(code = 404, message = "NOT User"),
+            @ApiResponse(code = 500, message = "500인데 이거 안 뜰듯")
+    })
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "token", dataType = "string", required = true, value = "Access Token")
+    })
     @GetMapping("/{activity}/{floor}")
     public AttendanceNavigationResponseForm attendanceNavigation(
             @ApiParam(value = "방과후[ club, self-study ]", required = true) @PathVariable("activity") String activity,
             @ApiParam(value = "층[ 1(자습실), 2, 3, 4 ]", required = true) @PathVariable("floor") String floorStr,
-            AccessTokenRequestForm accessTokenRequestForm) {
+            HttpServletRequest request) {
 
-        int floor = Integer.parseInt(floorStr);             // NumberFormatException
+        int floor = Integer.parseInt(floorStr);
 
-        System.out.println(activity);
-        System.out.println(floorStr);
-        System.out.println(accessTokenRequestForm.getToken());
-        System.out.println("------------------------------------------------------------");
-
-        return new AttendanceNavigationResponseForm();
+        return attendanceService.getNavigationInfomation(activity, floor);
     }
 
+    @ApiOperation(value = "출석 현황 요청", notes = "출석 현황 반환")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Return Success"),
+            @ApiResponse(code = 404, message = "NOT User"),
+            @ApiResponse(code = 500, message = "500인데 이거 안 뜰듯")
+    })
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "token", dataType = "string", required = true, value = "Access Token")
+    })
     @GetMapping("/{activity}/{floor}/{location}")
     public AttendanceListResponseForm attendanceList(
             @ApiParam(value = "방과후[ club, self-study ]", required = true) @PathVariable("activity") String activity,
             @ApiParam(value = "층[ 1(자습실), 2, 3, 4 ]", required = true) @PathVariable("floor") String floorStr,
             @ApiParam(value = "위치[ 왼쪽에서부터 0 ]", required = true) @PathVariable("location") String locationStr,
-            AccessTokenRequestForm accessTokenRequestForm) {
+            HttpServletRequest request) {
 
         System.out.println(activity);
         System.out.println(floorStr);
         System.out.println(locationStr);
-        System.out.println(accessTokenRequestForm.getToken());
+        System.out.println(request.getHeader("token"));
         System.out.println("------------------------------------------------------------");
 
         return new AttendanceListResponseForm();
     }
 
+    @ApiOperation(value = "출석", notes = "출석 상태 변환")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Return Success"),
+            @ApiResponse(code = 404, message = "NOT User"),
+            @ApiResponse(code = 500, message = "500인데 이거 안 뜰듯")
+    })
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "token", dataType = "string", required = true, value = "Access Token")
+    })
     @PostMapping("/{activity}/{floor}/{location}")
     public void changeAttendanceState(
             @ApiParam(value = "방과후[ club, self-study ]", required = true) @PathVariable("activity") String activity,
             @ApiParam(value = "층[ 1(자습실), 2, 3, 4 ]", required = true) @PathVariable("floor") String floorStr,
             @ApiParam(value = "위치[ 왼쪽에서부터 0 ]", required = true) @PathVariable("location") String locationStr,
-            AttendanceStateRequestForm attendanceStateRequestForm) {
+            AttendanceStateRequestForm attendanceStateRequestForm,
+            HttpServletRequest request) {
 
         System.out.println(activity);
         System.out.println(floorStr);
@@ -69,7 +91,7 @@ public class AttendanceController {
         System.out.println(attendanceStateRequestForm.getNumber());
         System.out.println(attendanceStateRequestForm.getPeriod());
         System.out.println(attendanceStateRequestForm.getState());
-        System.out.println(attendanceStateRequestForm.getToken());
+        System.out.println(request.getHeader("token"));
         System.out.println("------------------------------------------------------------");
     }
 }
