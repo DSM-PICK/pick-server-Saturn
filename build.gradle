@@ -8,18 +8,21 @@ plugins {
 group = 'com.dsm'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
+targetCompatibility = '11'
 
 repositories {
 	mavenCentral()
 }
 
 jacoco {
-	toolVersion = "0.8.5"
-	reportsDir = file("$buildDir/customJacocoReportDir")
+	toolVersion = '0.8.5'
+	sourceCompatibility = '11'
+	targetCompatibility = '11'
 }
 
 dependencies {
 	implementation 'io.jsonwebtoken:jjwt:0.9.1'
+	implementation 'junit:junit:4.12'
 	compile group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1'
 
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -37,26 +40,31 @@ dependencies {
 
 test {
 	useJUnitPlatform()
+	//finalizedBy 'jacocoTestReport'
 }
 
 jacocoTestReport {
 	reports {
+		html.enabled true
 		xml.enabled false
-		csv.enabled false
-		html.destination file("${buildDir}/jacocoHtml")
+		csv.enabled true
 	}
+	//finalizedBy 'jacocoTestCoverageVerification'
 }
 
 jacocoTestCoverageVerification {
 	violationRules {
 		rule {
+			enabled = true
 			element = 'CLASS'
 
 			limit {
-				counter = 'BRANCH'
+				counter = 'METHOD'
 				value = 'COVEREDRATIO'
 				minimum = 0.90
 			}
+
+			excludes = []
 		}
 	}
 }

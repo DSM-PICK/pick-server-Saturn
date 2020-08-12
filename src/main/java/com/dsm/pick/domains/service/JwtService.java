@@ -14,7 +14,7 @@ import java.security.Key;
 import java.util.Date;
 import java.util.Map;
 
-@Component
+@Service
 public class JwtService {
     private static Map<String, String> env = System.getenv();
 
@@ -24,7 +24,7 @@ public class JwtService {
     private static final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
     private static final Key KEY = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
 
-    public String createAccessToken(String teacherId){
+    public String createAccessToken(String teacherId) {
         return Jwts.builder()
                 .setHeaderParam("typ", "JWT")
                 .setSubject("access token")

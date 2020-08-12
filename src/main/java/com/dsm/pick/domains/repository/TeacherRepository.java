@@ -7,15 +7,15 @@ import javax.persistence.EntityManager;
 import java.util.Optional;
 
 @Repository
-public class UserRepository {
+public class TeacherRepository {
     private EntityManager entityManager;
 
-    public UserRepository(EntityManager entityManager) {
+    public TeacherRepository(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
 
-    public void save(Teacher user) {
-        entityManager.persist(user);
+    public void save(Teacher teacher) {
+        entityManager.persist(teacher);
     }
 
     public Optional<Teacher> findById(String id) {

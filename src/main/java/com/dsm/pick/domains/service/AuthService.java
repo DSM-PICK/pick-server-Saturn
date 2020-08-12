@@ -1,7 +1,7 @@
 package com.dsm.pick.domains.service;
 
 import com.dsm.pick.domains.domain.Teacher;
-import com.dsm.pick.domains.repository.UserRepository;
+import com.dsm.pick.domains.repository.TeacherRepository;
 import com.dsm.pick.utils.exception.IdOrPasswordMismatchException;
 import com.dsm.pick.utils.exception.RefreshTokenMismatchException;
 import com.dsm.pick.utils.exception.TokenExpirationException;
@@ -23,12 +23,12 @@ public class AuthService {
     private static final String ALGORITHM = "SHA-512";
     private static final String ENCODING = "UTF-8";
 
-    private UserRepository userRepository;
+    private TeacherRepository teacherRepository;
     private JwtService jwtService;
 
     @Autowired
-    public AuthService(UserRepository userRepository, JwtService jwtService) {
-        this.userRepository = userRepository;
+    public AuthService(TeacherRepository userRepository, JwtService jwtService) {
+        this.teacherRepository = userRepository;
         this.jwtService = jwtService;
     }
 
@@ -66,8 +66,8 @@ public class AuthService {
 
     public Teacher getSameRefreshTokenTeacher(String refreshToken) {
         if(jwtService.isUsableToken(refreshToken)) {
-            Teacher findTeacher = userRepository.findByRefreshToken(refreshToken)
-                    .orElseThrow(() -> new TokenExpirationException());
+            Teacher findTeacher = teacherRepository.findByRefreshToken(refreshToken)
+                    .orElseThrow(() -> new RefreshTokenMismatchException());
 
             String findRefreshToken = findTeacher.getRefreshToken();
             if(refreshToken.equals(findRefreshToken))
@@ -83,7 +83,7 @@ public class AuthService {
         // 계정 존재하는지 확인
         String userId = teacher.getId();
 
-        Teacher findTeacher = userRepository.findById(userId)
+        Teacher findTeacher = teacherRepository.findById(userId)
                 .orElseThrow(() -> new IdOrPasswordMismatchException());
 
         // 비밀번호 일치 확인
@@ -110,7 +110,7 @@ public class AuthService {
         if(jwtService.isUsableToken(accessToken)) {
             String teacherId = jwtService.getTeacherId(accessToken);
 
-            Teacher findTeacher = userRepository.findById(teacherId)
+            Teacher findTeacher = teacherRepository.findById(teacherId)
                     .orElseThrow(() -> new TokenExpirationException());
 
             String refreshToken = findTeacher.getRefreshToken();
@@ -126,6 +126,6 @@ public class AuthService {
 
     public void join(Teacher teacher) {
         teacher.setPw(encodingPassword(teacher.getPw()));
-        userRepository.save(teacher);
+        teacherRepository.save(teacher);
     }
 }
