@@ -42,7 +42,7 @@ public class AuthController {
 
             String accessToken = authService.getAccessToken(teacherId);
             String refreshToken = authService.getRefreshToken(teacherId);
-            LocalDateTime accessTokenExpiration = authService.getAccessTokenExpiration(teacherId);
+            LocalDateTime accessTokenExpiration = authService.getAccessTokenExpiration(accessToken);
 
             result = authService.formatLoginResponseForm(accessToken, refreshToken, accessTokenExpiration);
         }
@@ -62,8 +62,13 @@ public class AuthController {
     @PutMapping("/access-token")
     public AccessTokenReissuanceResponseForm accessTokenReissuance(HttpServletRequest request) {
         String refreshToken = request.getHeader("token");
-        System.out.println(refreshToken);
-        return authService.accessTokenReissuance(refreshToken);
+
+        Teacher findTeacher = authService.getSameRefreshTokenTeacher(refreshToken);
+
+        String accessToken = authService.getAccessToken(findTeacher.getId());
+        LocalDateTime accessTokenExpiration = authService.getAccessTokenExpiration(accessToken);
+
+        return authService.formatAccessTokenReissuanceResponseForm(accessToken, accessTokenExpiration);
     }
     
     @ApiOperation(value = "로그아웃", notes = "JWT 토큰 제거")

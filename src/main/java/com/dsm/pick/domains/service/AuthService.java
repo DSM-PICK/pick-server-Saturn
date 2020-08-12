@@ -68,8 +68,7 @@ public class AuthService {
         return jwtService.createRefreshToken(id);
     }
 
-    public LocalDateTime getAccessTokenExpiration(String id) {
-        String accessToken = getAccessToken(id);
+    public LocalDateTime getAccessTokenExpiration(String accessToken) {
         Date expiration = jwtService.getExpiration(accessToken);
         return LocalDateTime.ofInstant(expiration.toInstant(), ZoneId.of("Asia/Seoul"));
     }
@@ -92,20 +91,22 @@ public class AuthService {
         return resultHex;
     }
 
-    public AccessTokenReissuanceResponseForm accessTokenReissuance(String refreshToken) {
-        Teacher findUser = null;
-        if(jwtService.isUsableToken(refreshToken))
-            findUser = userRepository.findByRefreshToken(refreshToken)
+    public Teacher getSameRefreshTokenTeacher(String refreshToken) {
+        if(jwtService.isUsableToken(refreshToken)) {
+            Teacher findTeacher = userRepository.findByRefreshToken(refreshToken)
                     .orElseThrow(() -> new TokenExpirationException());
 
-        String accessToken = null;
-        if(refreshToken.equals(findUser.getRefreshToken()))
-            accessToken = jwtService.createAccessToken(findUser.getId());
-        else
-            throw new RefreshTokenMismatchException();
+            String findRefreshToken = findTeacher.getRefreshToken();
+            if(refreshToken.equals(findRefreshToken))
+                return findTeacher;
+            else
+                throw new RefreshTokenMismatchException();
+        } else {
+            throw new TokenExpirationException();
+        }
+    }
 
-        LocalDateTime accessTokenExpiration = LocalDateTime.ofInstant(jwtService.getExpiration(accessToken).toInstant(), ZoneId.of("Asia/Seoul"));
-
+    public AccessTokenReissuanceResponseForm formatAccessTokenReissuanceResponseForm(String accessToken, LocalDateTime accessTokenExpiration) {
         return new AccessTokenReissuanceResponseForm(accessToken, accessTokenExpiration);
     }
 
