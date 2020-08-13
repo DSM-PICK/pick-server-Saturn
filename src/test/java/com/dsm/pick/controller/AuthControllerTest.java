@@ -6,6 +6,7 @@ import com.dsm.pick.domains.service.AuthService;
 import com.dsm.pick.domains.service.JwtService;
 import com.dsm.pick.utils.form.AccessTokenReissuanceResponseForm;
 import com.dsm.pick.utils.form.LoginResponseForm;
+import com.dsm.pick.utils.form.TeacherResponseForm;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -23,9 +24,31 @@ class AuthControllerTest {
     private AuthController authController = new AuthController(authService);
 
     @Test
-    void login() {
+    void login_success() {
+        String teacherId = "aaa";
+        String teacherPw = "bbb";
+        TeacherResponseForm teacherResponseForm = new TeacherResponseForm(teacherId, teacherPw);
 
-        authController.login()
+        LoginResponseForm actual = authController.login(teacherResponseForm);
+
+        String expectedAccessToken = "987654321" + teacherId;
+        String expectedRefreshToken = "123456789" + teacherId;
+        LocalDateTime expectedAccessTokenExpiration = LocalDateTime.of(2003, 8, 16, 1, 2, 3);
+
+        assertEquals(expectedAccessToken, actual.getAccessToken());
+        assertEquals(expectedRefreshToken, actual.getRefreshToken());
+        assertEquals(expectedAccessTokenExpiration, actual.getAccessTokenExpiration());
+    }
+
+    @Test
+    void login_password_mismatch_return_null() {
+        String teacherId = "aaa";
+        String teacherPw = "null";
+        TeacherResponseForm teacherResponseForm = new TeacherResponseForm(teacherId, teacherPw);
+
+        LoginResponseForm actual = authController.login(teacherResponseForm);
+
+        assertNull(actual);
     }
 
     @Test
@@ -81,7 +104,6 @@ class AuthControllerTest {
             teachers.remove(teacher.getId());
             if(findTeacher == null) return false;
             else if(!findTeacher.getPw().equals(teacher.getPw())) return false;
-            else if(!findTeacher.getName().equals(teacher.getName())) return false;
             findTeacher.setRefreshToken(getRefreshToken(teacher.getId()));
             teachers.put(teacher.getId(), findTeacher);
             return true;
