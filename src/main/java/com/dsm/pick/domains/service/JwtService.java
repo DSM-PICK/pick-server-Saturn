@@ -69,13 +69,14 @@ public class JwtService {
 
     private boolean isValid(String token) {
         try {
-            Jws<Claims> jws = Jwts.parser()
+            Jwts.parser()
                     .setSigningKey(KEY)
                     .parseClaimsJws(token);
+            System.out.println("isValid - True");
 
             return true;
         } catch(Exception e) {
-            throw new TokenExpirationException();
+            return false;
         }
     }
 
@@ -91,18 +92,20 @@ public class JwtService {
             if(expiration.after(now))
                 return true;
 
+            System.out.println("isTimeOut - False");
             return false;
         } catch(Exception e) {
+            System.out.println("isTimeOut - Catch");
             return false;
         }
     }
 
-    public void killToken(String token) {
-        Jwts.parser()
-                .setSigningKey(KEY)
-                .parseClaimsJws(token)
-                .getBody()
-                .getExpiration()
-                .setTime(0);
-    }
+//    public void killToken(String token) {
+//        Jwts.parser()
+//                .setSigningKey(KEY)
+//                .parseClaimsJws(token)
+//                .getBody()
+//                .getExpiration()
+//                .setTime(0);
+//    }
 }

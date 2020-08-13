@@ -85,9 +85,9 @@ public class AuthController {
         authService.logout(request.getHeader("token"));
     }
 
-    @ApiOperation(value = "테스트라고 했다 이거 보고 뭐라 하지 마라", notes = "마마 이거 왜 여노?")
-    @PostMapping("/join")
-    public void join(Teacher teacher) {
-        authService.join(teacher);
-    }
+//    @ApiOperation(value = "테스트라고 했다 이거 보고 뭐라 하지 마라", notes = "마마 이거 왜 여노?")
+//    @PostMapping("/join")
+//    public void join(Teacher teacher) {
+//        authService.join(teacher);
+//    }
 }

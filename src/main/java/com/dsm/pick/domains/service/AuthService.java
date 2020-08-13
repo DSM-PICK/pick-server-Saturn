@@ -93,6 +93,7 @@ public class AuthService {
         if (!(userPw.equals(findUserPw)))
             throw new IdOrPasswordMismatchException();
 
+        // 선생님에게 리프레시 토큰 저장
         setTeacherRefreshToken(findTeacher);
 
         return true;
@@ -113,10 +114,10 @@ public class AuthService {
             Teacher findTeacher = teacherRepository.findById(teacherId)
                     .orElseThrow(() -> new TokenExpirationException());
 
-            String refreshToken = findTeacher.getRefreshToken();
+//            String refreshToken = findTeacher.getRefreshToken();
 
-            jwtService.killToken(refreshToken);
-            jwtService.killToken(accessToken);
+//            jwtService.killToken(refreshToken);
+//            jwtService.killToken(accessToken);
 
             findTeacher.setRefreshToken(null);
         } else {

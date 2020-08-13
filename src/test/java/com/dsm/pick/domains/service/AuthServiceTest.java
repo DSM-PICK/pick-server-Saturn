@@ -2,7 +2,10 @@ package com.dsm.pick.domains.service;
 
 import com.dsm.pick.domains.domain.Teacher;
 import com.dsm.pick.domains.repository.TeacherRepository;
+import com.dsm.pick.utils.exception.IdOrPasswordMismatchException;
 import com.dsm.pick.utils.exception.TokenExpirationException;
+import com.dsm.pick.utils.form.AccessTokenReissuanceResponseForm;
+import com.dsm.pick.utils.form.LoginResponseForm;
 import org.junit.jupiter.api.Test;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class AuthServiceTest {
 
     private TeacherRepository teacherRepository = new MockTeacherRepository(null);
-    private JwtService jwtService = new JwtService();
+    private JwtService jwtService = new MockJwtService();
     private AuthService authService = new AuthService(teacherRepository, jwtService);
 
     @Test
@@ -89,39 +92,120 @@ class AuthServiceTest {
     }
 
     @Test
-    void getSameRefreshTokenTeacher() {
-//        String teacherId = "grape";
-//        String teacherPw = "grape";
-//        String teacherName = "grape";
-//
-//        Teacher teacher = new Teacher();
-//        teacher.setId(teacherId);
-//        teacher.setPw(teacherPw);
-//        teacher.setName(teacherName);
-//
-//        authService.join(teacher);
-//
-//        if(authService.checkIdAndPw(teacher)) {
-//            Teacher findTeacher = authService.getSameRefreshTokenTeacher(teacher.getRefreshToken());
-//
-//            assertEquals(findTeacher.getRefreshToken(), teacher.getRefreshToken());
-//        }
+    void getSameRefreshTokenTeacher_checkIdAndPw() {
+        String teacherId = "grape";
+        String teacherPw = "grape";
+        String teacherName = "grape";
+
+        Teacher teacher = new Teacher();
+        teacher.setId(teacherId);
+        teacher.setPw(teacherPw);
+        teacher.setName(teacherName);
+
+        authService.join(teacher);
+
+        if(authService.checkIdAndPw(teacher)) {
+            Teacher findTeacher = authService.getSameRefreshTokenTeacher(teacher.getRefreshToken());
+
+            assertEquals(findTeacher.getRefreshToken(), teacher.getRefreshToken());
+        }
     }
 
     @Test
-    void checkIdAndPw() {
+    void checkIdAndPw_IdMismatchException_발생() {
+        String teacherId = "mango";
+        String teacherPw = "mango";
+        String teacherName = "mango";
+
+        Teacher teacher = new Teacher();
+        teacher.setId(teacherId);
+        teacher.setPw(teacherPw);
+        teacher.setName(teacherName);
+
+        assertThrows(IdOrPasswordMismatchException.class, () -> authService.checkIdAndPw(teacher));
+    }
+
+    @Test
+    void checkIdAndPw_PasswordMismatchException_발생() {
+        String teacherId = "raspberry";
+        String teacherPw = "raspberry";
+        String teacherName = "raspberry";
+
+        Teacher teacher = new Teacher();
+        teacher.setId(teacherId);
+        teacher.setPw(teacherPw);
+        teacher.setName(teacherName);
+
+        authService.join(teacher);
+
+        String wrongPw = "hello";
+
+        Teacher targetTeacher = new Teacher();
+        teacher.setId(teacherId);
+        teacher.setPw(wrongPw);
+        teacher.setName(teacherName);
+
+        assertThrows(IdOrPasswordMismatchException.class, () -> authService.checkIdAndPw(targetTeacher));
     }
 
     @Test
     void formatLoginResponseForm() {
+        String accessToken = "987654321peach";
+        String refreshToken = "123456789peach";
+        LocalDateTime expiration = LocalDateTime.of(2003, 8, 16, 1, 2, 3);
+
+        LoginResponseForm directlyForm = new LoginResponseForm(accessToken, refreshToken, expiration);
+        LoginResponseForm form = authService.formatLoginResponseForm(accessToken, refreshToken, expiration);
+
+        assertEquals(directlyForm.getAccessToken(), form.getAccessToken());
+        assertEquals(directlyForm.getRefreshToken(), form.getRefreshToken());
+        assertEquals(directlyForm.getAccessTokenExpiration(), form.getAccessTokenExpiration());
     }
 
     @Test
     void formatAccessTokenReissuanceResponseForm() {
+        String teacherId = "peach";
+        String accessToken = authService.getAccessToken(teacherId);
+        LocalDateTime expiration = LocalDateTime.of(2003, 8, 16, 1, 2, 3);
+
+        AccessTokenReissuanceResponseForm directlyForm = new AccessTokenReissuanceResponseForm(accessToken, expiration);
+        AccessTokenReissuanceResponseForm form = authService.formatAccessTokenReissuanceResponseForm(accessToken, expiration);
+
+        assertEquals(directlyForm.getAccessToken(), form.getAccessToken());
+        assertEquals(directlyForm.getAccessTokenExpiration(), form.getAccessTokenExpiration());
+    }
+
+    @Test
+    void logout_정상적인_토큰이_아님으로_인한_TokenExpirationException_발생() {
+        String accessToken = "pineapple";
+
+        assertThrows(TokenExpirationException.class, () -> authService.logout(accessToken));
+    }
+
+    @Test
+    void logout_토큰에_해당하는_Teacher가_없음으로_인한_TokenExpirationException_발생() {
+        String teacherId = "plum";
+        String accessToken = authService.getAccessToken(teacherId);
+
+        assertThrows(TokenExpirationException.class, () -> authService.logout(accessToken));
     }
 
     @Test
     void logout() {
+        String teacherId = "cherry";
+        String teacherPw = "cherry";
+        String teacherName = "cherry";
+
+        Teacher teacher = new Teacher();
+        teacher.setId(teacherId);
+        teacher.setPw(teacherPw);
+        teacher.setName(teacherName);
+
+        authService.join(teacher);
+
+        String accessToken = authService.getAccessToken(teacherId);
+
+        authService.logout(accessToken);
     }
 
     @Test
@@ -154,5 +238,42 @@ class AuthServiceTest {
                     .filter(t -> t.getRefreshToken().equals(refreshToken))
                     .findAny();
         }
+    }
+
+    static class MockJwtService extends JwtService {
+
+        private Date date = new Date();
+        private String teacherId = null;
+
+        @Override
+        public String createAccessToken(String teacherId) {
+            this.teacherId = teacherId;
+            return "987654321" + teacherId;
+        }
+
+        @Override
+        public String createRefreshToken(String teacherId) {
+            this.teacherId = teacherId;
+            return "123456789" + teacherId;
+        }
+
+        @Override
+        public String getTeacherId(String token) {
+            return token.substring(9);
+        }
+
+        @Override
+        public Date getExpiration(String token) {
+            return date;
+        }
+
+        @Override
+        public boolean isUsableToken(String token) {
+            return token.substring(9).equals(teacherId);
+        }
+
+//        @Override
+//        public void killToken(String token) {
+//        }
     }
 }
