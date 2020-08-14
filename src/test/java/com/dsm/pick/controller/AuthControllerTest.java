@@ -9,6 +9,9 @@ import com.dsm.pick.utils.form.LoginResponseForm;
 import com.dsm.pick.utils.form.TeacherResponseForm;
 import org.junit.jupiter.api.Test;
 
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -52,7 +55,21 @@ class AuthControllerTest {
     }
 
     @Test
+    void login_id_mismatch_return_null() {
+        String teacherId = "null";
+        String teacherPw = "bbb";
+        TeacherResponseForm teacherResponseForm = new TeacherResponseForm(teacherId, teacherPw);
+
+        LoginResponseForm actual = authController.login(teacherResponseForm);
+
+        assertNull(actual);
+    }
+
+    @Test
     void accessTokenReissuance() {
+        login_success();
+
+
     }
 
     @Test
