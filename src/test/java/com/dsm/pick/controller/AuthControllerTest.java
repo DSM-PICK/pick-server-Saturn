@@ -81,6 +81,10 @@ class AuthControllerTest {
 
     @Test
     void logout() {
+        login_success();
+        HttpServletRequest request = new MockHttpServletRequest();
+
+        authController.logout(request);
     }
 
     static class MockAuthService extends AuthService {
