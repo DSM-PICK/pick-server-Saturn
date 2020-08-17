@@ -3,30 +3,18 @@ package com.dsm.pick.domains.repository;
 import com.dsm.pick.domains.domain.Teacher;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.persistence.*;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaDelete;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.CriteriaUpdate;
-import javax.persistence.metamodel.Metamodel;
-
-import java.util.List;
-import java.util.Map;
-
-import static org.junit.jupiter.api.Assertions.*;
-
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(value = {"classpath:application.yml"})
+@DataJpaTest
 class TeacherRepositoryTest {
 
-    @Mock
-    EntityManager entityManager;
-
-    @InjectMocks
+    @Autowired
     TeacherRepository teacherRepository;
 
     @Test
@@ -40,6 +28,16 @@ class TeacherRepositoryTest {
 
     @Test
     void findById() {
+        Teacher teacher1 = new Teacher();
+        teacher1.setId("aaa");
+        teacher1.setPw("aaa");
+        teacher1.setName("aaa");
+        teacherRepository.save(teacher1);
+
+        Teacher teacher = teacherRepository.findById("aaa").get();
+        System.out.println(teacher.getId());
+        System.out.println(teacher.getPw());
+        System.out.println(teacher.getName());
     }
 
     @Test
