@@ -10,7 +10,7 @@ jobs:
   CI:
     runs-on: ubuntu-latest
     env:
-      CODECOV_TOKEN: ${{ secret.CODECOV_TOKEN }}
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
     steps:
       - uses: actions/checkout@v2
