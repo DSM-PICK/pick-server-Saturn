@@ -33,9 +33,9 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: use JDK 11
-          uses: actions/setup-java@v1
-          with:
-            java-version: 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
 
       - name: gradlew Full Authorization
         run: chmod 777 gradlew
