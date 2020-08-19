@@ -23,6 +23,9 @@ jobs:
       - name: gradlew Full Authorization
         run: chmod 777 gradlew
 
+      - name: Test
+        run: ./gradlew test
+
       - name: Clean and Build
         run: ./gradlew clean build
   CD:
