@@ -1,3 +1,2 @@
 # pick-server-Saturn
-![example workflow name](https://github.com/actions/hello-world/workflows/Greet%20Everyone/badge.svg)
-
+![CI/CD](https://github.com/DSM-PICK/pick-server-Saturn/workflows/CI/CD/badge.svg)
