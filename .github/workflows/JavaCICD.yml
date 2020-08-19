@@ -9,8 +9,8 @@ on:
 jobs:
   CI:
     runs-on: ubuntu-latest
-#    env:
-#      CODECOV_TOKEN: ${{ secret.CODECOV_TOKEN }}
+    env:
+      CODECOV_TOKEN: ${{ secret.CODECOV_TOKEN }}
 
     steps:
       - uses: actions/checkout@v2
