@@ -30,7 +30,18 @@ jobs:
     needs: CI
 
     steps:
-      #- uses: actions/checkout@v2
+      - uses: actions/checkout@v2
+
+      - name: use JDK 11
+          uses: actions/setup-java@v1
+          with:
+            java-version: 11
+
+      - name: gradlew Full Authorization
+        run: chmod 777 gradlew
+
+      - name: Clean and Build
+        run: ./gradlew clean build
 
       - name: Create Docker Image
         run: docker build --tag pick-saturn .
