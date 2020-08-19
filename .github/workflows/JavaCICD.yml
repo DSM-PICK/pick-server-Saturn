@@ -9,8 +9,6 @@ on:
 jobs:
   CI:
     runs-on: ubuntu-latest
-    env:
-      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
     steps:
       - uses: actions/checkout@v2
@@ -25,6 +23,11 @@ jobs:
 
       - name: Test
         run: ./gradlew test
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Clean and Build
         run: ./gradlew clean build
