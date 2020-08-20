@@ -27,7 +27,7 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     password: ${{ secrets.DATABASE_PASSWORD }}
-    url: jdbc:mysql://${{ secrets.DATABASE_HOSTADDR }}:3306/testdb_saturn?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC
+    url: ${{ secrets.DATABASE_HOSTADDR }}
     username: ${{ secrets.DATABASE_USERNAME }}
   jpa:
     database: mysql
