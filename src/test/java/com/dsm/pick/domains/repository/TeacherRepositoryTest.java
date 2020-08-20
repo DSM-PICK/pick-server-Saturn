@@ -1,32 +1,82 @@
 package com.dsm.pick.domains.repository;
 
+import com.dsm.pick.domains.domain.Teacher;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import javax.persistence.EntityManager;
 
 import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@DataJpaTest
+@ActiveProfiles("dev")
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class TeacherRepositoryTest {
 
     @Autowired
-    TestEntityManager entityManager;
+    EntityManager entityManager;
 
-    @Test
-    void save() {
-        assertNotNull(entityManager);
+    TeacherRepository teacherRepository;
+
+    @BeforeEach
+    void beforeEach() {
+        teacherRepository = new TeacherRepository(entityManager);
     }
 
     @Test
-    void findById() {
+    void save_AND_findById() {
+        String teacherId = "aaa";
+        String teacherPw = "bbb";
+        String teacherName = "ccc";
+
+        Teacher teacher = new Teacher();
+        teacher.setId(teacherId);
+        teacher.setPw(teacherPw);
+        teacher.setName(teacherName);
+
+        teacherRepository.save(teacher);
+
+        assertEquals(teacher, teacherRepository.findById(teacherId).get());
     }
+
+//    @Test
+//    void 같은_값의_Teacher_객체_저장() {
+//        String teacherId = "ccc";
+//        String teacherPw = "ddd";
+//
+//        Teacher teacher = new Teacher();
+//        teacher.setId(teacherId);
+//        teacher.setPw(teacherPw);
+//
+//        teacherRepository.save(teacher);
+//        teacherRepository.save(teacher);
+//    }
 
     @Test
     void findByRefreshToken() {
+        String teacherId = "ddd";
+        String teacherPw = "eee";
+        String teacherName = "fff";
+
+        Teacher teacher = new Teacher();
+        teacher.setId(teacherId);
+        teacher.setPw(teacherPw);
+        teacher.setName(teacherName);
+
+        teacherRepository.save(teacher);
+
+        String refreshToken = "adfasdf.asdfasd.asdfasdf";
+        teacher.setRefreshToken(refreshToken);
+
+        Teacher findTeacher = teacherRepository.findByRefreshToken(refreshToken).get();
+
+        assertEquals(teacher, findTeacher);
     }
 }

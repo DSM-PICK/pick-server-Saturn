@@ -26,8 +26,14 @@ jobs:
       - name: gradlew Full Authorization
         run: chmod 777 gradlew
 
-      - name: Test
+      - name: Test::test
         run: ./gradlew test
+
+      - name: Test::jacocoTestReport
+        run: ./gradlew jacocoTestReport
+
+      - name: Test::jacocoTestCoverageVerification
+        run: ./gradlew jacocoTestCoverageVerification
 
       - name: Clean and Build
         run: ./gradlew clean build

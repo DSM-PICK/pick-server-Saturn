@@ -1,6 +1,8 @@
 spring:
   profiles:
   active: default
+  main:
+    web-application-type: none
 server:
   address: localhost
   port: 8889
