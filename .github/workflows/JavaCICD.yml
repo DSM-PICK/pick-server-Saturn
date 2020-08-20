@@ -29,11 +29,11 @@ jobs:
       - name: Test::test
         run: ./gradlew test
 
-      - name: Test::jacocoTestReport
-        run: ./gradlew jacocoTestReport
-
-      - name: Test::jacocoTestCoverageVerification
-        run: ./gradlew jacocoTestCoverageVerification
+#      - name: Test::jacocoTestReport
+#        run: ./gradlew jacocoTestReport
+#
+#      - name: Test::jacocoTestCoverageVerification
+#        run: ./gradlew jacocoTestCoverageVerification
 
       - name: Clean and Build
         run: ./gradlew clean build
