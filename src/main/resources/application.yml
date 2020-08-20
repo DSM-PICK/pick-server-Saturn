@@ -9,8 +9,8 @@ spring:
   profiles: dev
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    password: 1111
-    url: jdbc:mysql://localhost:3306/pick_test?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC
+    password:
+    url: jdbc:mysql://localhost:3306/testdb_saturn?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC
     username: root
   jpa:
     database: mysql
@@ -24,9 +24,9 @@ spring:
   profiles: prod
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    password: 1111
-    url: jdbc:mysql://localhost:3306/pick?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC
-    username: root
+    password: ${{ secrets.DATABASE_PASSWORD }}
+    url: jdbc:mysql://${{ secrets.DATABASE_HOSTADDR }}:3306/testdb_saturn?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC
+    username: ${{ secrets.DATABASE_USERNAME }}
   jpa:
     database: mysql
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect

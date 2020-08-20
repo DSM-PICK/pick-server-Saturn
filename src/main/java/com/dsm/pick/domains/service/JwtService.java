@@ -1,11 +1,7 @@
 package com.dsm.pick.domains.service;
 
-import com.dsm.pick.utils.exception.TokenExpirationException;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.spec.SecretKeySpec;
