@@ -46,19 +46,6 @@ class TeacherRepositoryTest {
         assertEquals(teacher, teacherRepository.findById(teacherId).get());
     }
 
-//    @Test
-//    void 같은_값의_Teacher_객체_저장() {
-//        String teacherId = "ccc";
-//        String teacherPw = "ddd";
-//
-//        Teacher teacher = new Teacher();
-//        teacher.setId(teacherId);
-//        teacher.setPw(teacherPw);
-//
-//        teacherRepository.save(teacher);
-//        teacherRepository.save(teacher);
-//    }
-
     @Test
     void findByRefreshToken() {
         String teacherId = "ddd";

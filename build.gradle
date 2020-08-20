@@ -61,10 +61,14 @@ jacocoTestCoverageVerification {
 			limit {
 				counter = 'METHOD'
 				value = 'COVEREDRATIO'
-				minimum = 0.00
+				minimum = 0.90
 			}
 
-			excludes = []
+			excludes = [
+					'com.dsm.pick.PickApplication',
+					'com.dsm.pick.controller.AttendanceController',
+					'com.dsm.pick.domains.service.AttendanceService'
+			]
 		}
 	}
 }
