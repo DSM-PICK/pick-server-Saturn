@@ -2,6 +2,7 @@ package com.dsm.pick.domains.service;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.spec.SecretKeySpec;
@@ -12,13 +13,12 @@ import java.util.Map;
 
 @Service
 public class JwtService {
-    private static Map<String, String> env = System.getenv();
-
     //private static final String SECURE_KEY = env.get("TOKEN_SECURE_KEY");
-    private static final String SECURE_KEY = "dhwlddjgmanf";
-    private static final byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(SECURE_KEY);
-    private static final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
-    private static final Key KEY = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
+    @Value("${TOKEN_SECURE_KEY:dhwlddjgmanf}")
+    private String SECURE_KEY = "dhwlddjgmanf";
+    private byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(SECURE_KEY);
+    private SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
+    private Key KEY = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
 
     public String createAccessToken(String teacherId) {
         return Jwts.builder()
