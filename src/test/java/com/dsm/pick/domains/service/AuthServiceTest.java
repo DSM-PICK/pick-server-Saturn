@@ -7,6 +7,10 @@ import com.dsm.pick.utils.exception.TokenExpirationException;
 import com.dsm.pick.utils.form.AccessTokenReissuanceResponseForm;
 import com.dsm.pick.utils.form.LoginResponseForm;
 import org.junit.jupiter.api.Test;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -21,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @Transactional
 class AuthServiceTest {
 
-    private TeacherRepository teacherRepository = new MockTeacherRepository(null);
+    private TeacherRepository teacherRepository = new MockTeacherRepository();
     private JwtService jwtService = new MockJwtService();
     private AuthService authService = new AuthService(teacherRepository, jwtService);
 
@@ -212,22 +216,47 @@ class AuthServiceTest {
     void join() {
     }
 
-    static class MockTeacherRepository extends TeacherRepository {
+//    static class MockTeacherRepository extends TeacherRepository {
+//
+//        Map<String, Teacher> teachers = new HashMap<>();
+//
+//        public MockTeacherRepository(EntityManager entityManager) {
+//            super(entityManager);
+//        }
+//
+//        @Override
+//        public void save(Teacher teacher) {
+//            teachers.put(teacher.getId(), teacher);
+//        }
+//
+//        @Override
+//        public Optional<Teacher> findById(String id) {
+//            Teacher findTeacher = teachers.get(id);
+//            return Optional.ofNullable(findTeacher);
+//        }
+//
+//        @Override
+//        public Optional<Teacher> findByRefreshToken(String refreshToken) {
+//            return teachers.values()
+//                    .stream()
+//                    .filter(t -> t.getRefreshToken().equals(refreshToken))
+//                    .findAny();
+//        }
+//    }
+
+    static class MockTeacherRepository implements TeacherRepository {
 
         Map<String, Teacher> teachers = new HashMap<>();
 
-        public MockTeacherRepository(EntityManager entityManager) {
-            super(entityManager);
+        @Override
+        public <S extends Teacher> S save(S entity) {
+            teachers.put(entity.getId(), entity);
+            return entity;
         }
 
         @Override
-        public void save(Teacher teacher) {
-            teachers.put(teacher.getId(), teacher);
-        }
-
-        @Override
-        public Optional<Teacher> findById(String id) {
-            Teacher findTeacher = teachers.get(id);
+        public Optional<Teacher> findById(String s) {
+            Teacher findTeacher = teachers.get(s);
             return Optional.ofNullable(findTeacher);
         }
 
@@ -237,6 +266,116 @@ class AuthServiceTest {
                     .stream()
                     .filter(t -> t.getRefreshToken().equals(refreshToken))
                     .findAny();
+        }
+
+        @Override
+        public List<Teacher> findAll() {
+            return null;
+        }
+
+        @Override
+        public List<Teacher> findAll(Sort sort) {
+            return null;
+        }
+
+        @Override
+        public Page<Teacher> findAll(Pageable pageable) {
+            return null;
+        }
+
+        @Override
+        public List<Teacher> findAllById(Iterable<String> strings) {
+            return null;
+        }
+
+        @Override
+        public long count() {
+            return 0;
+        }
+
+        @Override
+        public void deleteById(String s) {
+
+        }
+
+        @Override
+        public void delete(Teacher entity) {
+
+        }
+
+        @Override
+        public void deleteAll(Iterable<? extends Teacher> entities) {
+
+        }
+
+        @Override
+        public void deleteAll() {
+
+        }
+
+        @Override
+        public <S extends Teacher> List<S> saveAll(Iterable<S> entities) {
+            return null;
+        }
+
+        @Override
+        public boolean existsById(String s) {
+            return false;
+        }
+
+        @Override
+        public void flush() {
+
+        }
+
+        @Override
+        public <S extends Teacher> S saveAndFlush(S entity) {
+            return null;
+        }
+
+        @Override
+        public void deleteInBatch(Iterable<Teacher> entities) {
+
+        }
+
+        @Override
+        public void deleteAllInBatch() {
+
+        }
+
+        @Override
+        public Teacher getOne(String s) {
+            return null;
+        }
+
+        @Override
+        public <S extends Teacher> Optional<S> findOne(Example<S> example) {
+            return Optional.empty();
+        }
+
+        @Override
+        public <S extends Teacher> List<S> findAll(Example<S> example) {
+            return null;
+        }
+
+        @Override
+        public <S extends Teacher> List<S> findAll(Example<S> example, Sort sort) {
+            return null;
+        }
+
+        @Override
+        public <S extends Teacher> Page<S> findAll(Example<S> example, Pageable pageable) {
+            return null;
+        }
+
+        @Override
+        public <S extends Teacher> long count(Example<S> example) {
+            return 0;
+        }
+
+        @Override
+        public <S extends Teacher> boolean exists(Example<S> example) {
+            return false;
         }
     }
 
