@@ -38,8 +38,6 @@
 #    add-mappings: true
 
 spring:
-  main:
-    web-application-type: none
   jpa:
     database: mysql
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
