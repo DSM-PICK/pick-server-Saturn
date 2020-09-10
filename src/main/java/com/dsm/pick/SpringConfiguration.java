@@ -26,6 +26,10 @@ public class SpringConfiguration {
 
     @Bean
     public DataSource dataSource() {
+        System.out.println("DriverClassName : " + driverClassName);
+        System.out.println("URL : " + url);
+        System.out.println("UserName : " + username);
+        System.out.println("Password : " + password);
         return DataSourceBuilder
                 .create()
                 .url(url)

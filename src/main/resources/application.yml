@@ -38,8 +38,6 @@
 #    add-mappings: true
 
 spring:
-#  profiles:
-#  active: default
   main:
     web-application-type: none
   jpa:
