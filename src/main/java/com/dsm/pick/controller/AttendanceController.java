@@ -1,14 +1,18 @@
 package com.dsm.pick.controller;
 
 import com.dsm.pick.domains.service.AttendanceService;
+import com.dsm.pick.domains.service.JwtService;
+import com.dsm.pick.utils.exception.TokenExpirationException;
 import com.dsm.pick.utils.form.AttendanceListResponseForm;
 import com.dsm.pick.utils.form.AttendanceNavigationResponseForm;
 import com.dsm.pick.utils.form.AttendanceStateRequestForm;
+import com.dsm.pick.utils.form.ClubInformationForm;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @RestController
 @RequestMapping("/attendance")
@@ -16,10 +20,12 @@ import javax.servlet.http.HttpServletRequest;
 public class AttendanceController {
 
     private AttendanceService attendanceService;
+    private JwtService jwtService;
 
     @Autowired
-    public AttendanceController(AttendanceService attendanceService) {
+    public AttendanceController(AttendanceService attendanceService, JwtService jwtService) {
         this.attendanceService = attendanceService;
+        this.jwtService = jwtService;
     }
 
     @ApiOperation(value = "출석 페이지 네비게이션 정보", notes = "방과후 교실 정보 및 선생님 정보 반환")
@@ -37,9 +43,11 @@ public class AttendanceController {
             @ApiParam(value = "층[ 1(자습실), 2, 3, 4 ]", required = true) @PathVariable("floor") String floorStr,
             HttpServletRequest request) {
 
+        tokenValidation(request.getHeader("token"));
+
         int floor = Integer.parseInt(floorStr);
 
-        return attendanceService.getNavigationInfomation(activity, floor);
+        List<ClubInformationForm> clubInformationForms = attendanceService.getNavigationInformation(activity, floor);
     }
 
     @ApiOperation(value = "출석 현황 요청", notes = "출석 현황 반환")
@@ -92,5 +100,16 @@ public class AttendanceController {
         System.out.println(attendanceStateRequestForm.getState());
         System.out.println(request.getHeader("token"));
         System.out.println("------------------------------------------------------------");
+    }
+
+    private void tokenValidation(String token) {
+        boolean isTokenValidation = jwtService.isUsableToken(token);
+        try {
+            if(!isTokenValidation) {
+                throw new TokenExpirationException();
+            }
+        } catch(Exception e) {
+            throw new TokenExpirationException();
+        }
     }
 }

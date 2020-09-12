@@ -6,12 +6,15 @@
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 //import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+//import org.springframework.boot.test.context.SpringBootTest;
+//import org.springframework.test.context.ActiveProfiles;
 //import org.springframework.test.context.junit4.SpringRunner;
 //
 //import static org.junit.jupiter.api.Assertions.*;
 //
 //@RunWith(SpringRunner.class)
 //@DataJpaTest
+//@ActiveProfiles("com.dsm.pick.SpringConfiguration")
 //@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 //class TeacherCustomRepositoryImplTest {
 //
@@ -20,6 +23,7 @@
 //
 //    @Test
 //    void findByRefreshToken() {
+//        System.out.println(teacherRepository);
 ////        String teacherId = "ddd";
 ////        String teacherPw = "eee";
 ////        String teacherName = "fff";

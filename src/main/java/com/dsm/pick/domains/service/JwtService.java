@@ -68,7 +68,6 @@ public class JwtService {
             Jwts.parser()
                     .setSigningKey(KEY)
                     .parseClaimsJws(token);
-            System.out.println("isValid - True");
 
             return true;
         } catch(Exception e) {
@@ -87,11 +86,8 @@ public class JwtService {
 
             if(expiration.after(now))
                 return true;
-
-            System.out.println("isTimeOut - False");
             return false;
         } catch(Exception e) {
-            System.out.println("isTimeOut - Catch");
             return false;
         }
     }

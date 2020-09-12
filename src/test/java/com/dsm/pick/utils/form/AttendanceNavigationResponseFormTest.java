@@ -14,7 +14,7 @@ class AttendanceNavigationResponseFormTest {
         String date = "0816";
         String dayOfWeek = "일";
         String teacherName = "김정은";
-        List<String> locations = new ArrayList<>();
+        List<ClubInformationForm> locations = new ArrayList<>();
 
         AttendanceNavigationResponseForm noArgsForm = new AttendanceNavigationResponseForm();
         noArgsForm.setDate(date);
@@ -27,7 +27,7 @@ class AttendanceNavigationResponseFormTest {
         String findDate = noArgsForm.getDate();
         String findDayOfWeek = noArgsForm.getDayOfWeek();
         String findTeacherName = noArgsForm.getTeacherName();
-        List<String> findLocations = noArgsForm.getLocations();
+        List<ClubInformationForm> findLocations = noArgsForm.getLocations();
 
         assertEquals(date, findDate);
         assertEquals(dayOfWeek, findDayOfWeek);
