@@ -6,6 +6,7 @@ import javax.persistence.Id;
 
 @Entity
 public class Teacher {
+
     @Id
     private String id;
 
@@ -15,6 +16,14 @@ public class Teacher {
 
     @Column(name = "token")
     private String refreshToken;
+
+    public Teacher() {}
+    public Teacher(String id, String pw, String name, String refreshToken) {
+        this.id = id;
+        this.pw = pw;
+        this.name = name;
+        this.refreshToken = refreshToken;
+    }
 
     public String getId() {
         return id;

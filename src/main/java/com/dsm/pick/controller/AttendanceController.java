@@ -48,6 +48,8 @@ public class AttendanceController {
         int floor = Integer.parseInt(floorStr);
 
         List<ClubInformationForm> clubInformationForms = attendanceService.getNavigationInformation(activity, floor);
+
+
     }
 
     @ApiOperation(value = "출석 현황 요청", notes = "출석 현황 반환")
