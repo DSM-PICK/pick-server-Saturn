@@ -1,11 +1,9 @@
 package com.dsm.pick;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 
 import javax.sql.DataSource;
 
@@ -26,10 +24,6 @@ public class SpringConfiguration {
 
     @Bean
     public DataSource dataSource() {
-        System.out.println("DriverClassName : " + driverClassName);
-        System.out.println("URL : " + url);
-        System.out.println("UserName : " + username);
-        System.out.println("Password : " + password);
         return DataSourceBuilder
                 .create()
                 .url(url)

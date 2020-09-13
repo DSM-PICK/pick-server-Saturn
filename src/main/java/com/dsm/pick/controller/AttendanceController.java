@@ -50,6 +50,7 @@ public class AttendanceController {
         List<ClubInformationForm> clubInformationForms = attendanceService.getNavigationInformation(activity, floor);
 
 
+        return new AttendanceNavigationResponseForm();
     }
 
     @ApiOperation(value = "출석 현황 요청", notes = "출석 현황 반환")

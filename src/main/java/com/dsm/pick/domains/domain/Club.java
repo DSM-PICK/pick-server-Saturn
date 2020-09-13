@@ -10,7 +10,7 @@ public class Club {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "location")
+//    @Column(name = "location")
     @OneToOne
     @JoinColumn(name = "location")
     private ClubLocation location;
