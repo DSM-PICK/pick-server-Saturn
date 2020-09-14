@@ -2,13 +2,14 @@ package com.dsm.pick.domains.service;
 
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Service
 public class ServerTimeService {
 
     public String getMonthAndDate() {
-        LocalDateTime date = LocalDateTime.now();
+        LocalDate date = LocalDate.now();
         int intDayOfMonth = date.getDayOfMonth();
         int intMonth = date.getMonth().getValue();
 
@@ -28,5 +29,13 @@ public class ServerTimeService {
         }
 
         return month + dayOfMonth;
+    }
+
+    public String getDayOfWeek() {
+        String dayOfWeeks[] = {"월", "화", "수", "목", "금", "토", "일"};
+        LocalDateTime date = LocalDateTime.now();
+
+        int intDayOfWeek = date.getDayOfWeek().getValue();
+        return dayOfWeeks[intDayOfWeek - 1];
     }
 }

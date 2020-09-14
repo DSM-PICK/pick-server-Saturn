@@ -2,6 +2,7 @@ package com.dsm.pick.controller;
 
 import com.dsm.pick.domains.service.AttendanceService;
 import com.dsm.pick.domains.service.JwtService;
+import com.dsm.pick.domains.service.ServerTimeService;
 import com.dsm.pick.utils.exception.TokenExpirationException;
 import com.dsm.pick.utils.form.AttendanceListResponseForm;
 import com.dsm.pick.utils.form.AttendanceNavigationResponseForm;
@@ -20,12 +21,14 @@ import java.util.List;
 public class AttendanceController {
 
     private AttendanceService attendanceService;
+    private ServerTimeService serverTimeService;
     private JwtService jwtService;
 
     @Autowired
-    public AttendanceController(AttendanceService attendanceService, JwtService jwtService) {
+    public AttendanceController(AttendanceService attendanceService, JwtService jwtService, ServerTimeService serverTimeService) {
         this.attendanceService = attendanceService;
         this.jwtService = jwtService;
+        this.serverTimeService = serverTimeService;
     }
 
     @ApiOperation(value = "출석 페이지 네비게이션 정보", notes = "방과후 교실 정보 및 선생님 정보 반환")
@@ -48,9 +51,11 @@ public class AttendanceController {
         int floor = Integer.parseInt(floorStr);
 
         List<ClubInformationForm> clubInformationForms = attendanceService.getNavigationInformation(activity, floor);
+        String date = serverTimeService.getMonthAndDate();
+        String dayOfWeek = serverTimeService.getDayOfWeek();
+        String teacherName = attendanceService.getTodayTeacherName(date, floor);
 
-
-        return new AttendanceNavigationResponseForm();
+        return new AttendanceNavigationResponseForm(date, dayOfWeek, teacherName, clubInformationForms);
     }
 
     @ApiOperation(value = "출석 현황 요청", notes = "출석 현황 반환")
