@@ -1,5 +1,6 @@
 package com.dsm.pick.domains.domain;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -9,10 +10,13 @@ import javax.persistence.Table;
 public class SchoolClass {
 
     @Id
+    @Column(name = "name")
     private String name;
 
+    @Column(name = "floor")
     private int floor;
 
+    @Column(name = "priority")
     private int priority;
 
     public SchoolClass() {}

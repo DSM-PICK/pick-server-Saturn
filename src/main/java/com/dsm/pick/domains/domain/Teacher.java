@@ -8,10 +8,13 @@ import javax.persistence.Id;
 public class Teacher {
 
     @Id
+    @Column(name = "id")
     private String id;
 
+    @Column(name = "pw")
     private String pw;
 
+    @Column(name = "name")
     private String name;
 
     @Column(name = "token")

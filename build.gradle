@@ -67,9 +67,9 @@ jacocoTestCoverageVerification {
 			excludes = [
 					'com.dsm.pick.PickApplication',
 					'com.dsm.pick.SpringConfiguration',
-					'com.dsm.pick.domains.repository.TeacherCustomRepositoryImpl',
-					'com.dsm.pick.controller.AttendanceController',
-					'com.dsm.pick.domains.service.AttendanceService'
+					'com.dsm.pick.SwaggerConfiguration',
+					'com.dsm.pick.utils.*',
+					'com.dsm.pick.domains.domain.*'
 			]
 		}
 	}

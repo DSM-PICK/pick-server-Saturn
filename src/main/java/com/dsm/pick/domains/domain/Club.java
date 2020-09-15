@@ -10,9 +10,8 @@ public class Club {
     @Column(name = "name")
     private String name;
 
-//    @Column(name = "location")
     @OneToOne
-    @JoinColumn(name = "location")
+    @JoinColumn(name = "location", referencedColumnName = "location")
     private ClubLocation location;
 
     @Column(name = "teacher")
