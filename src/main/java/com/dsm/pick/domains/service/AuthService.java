@@ -43,6 +43,7 @@ public class AuthService {
             System.out.println("존재하지 않는 인코딩 : " + ENCODING);
             System.out.println("존재하지 않는 암호화 : " + ALGORITHM);
         }
+        System.out.println(original + " -> " + resultHex);
         return resultHex;
     }
 
