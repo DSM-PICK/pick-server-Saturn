@@ -10,24 +10,25 @@ public class ServerTimeService {
 
     public String getMonthAndDate() {
         LocalDate date = LocalDate.now();
-        int intDayOfMonth = date.getDayOfMonth();
         int intMonth = date.getMonth().getValue();
+        int intDayOfMonth = date.getDayOfMonth();
 
-        String dayOfMonth;
         String month;
+        String dayOfMonth;
 
         if(intMonth < 10) {
-            dayOfMonth = "0" + String.valueOf(intMonth);
+            month = "0" + String.valueOf(intMonth);
         } else {
-            dayOfMonth = String.valueOf(intMonth);
+            month = String.valueOf(intMonth);
         }
 
         if(intDayOfMonth < 10) {
-            month = "0" + String.valueOf(intDayOfMonth);
+            dayOfMonth = "0" + String.valueOf(intDayOfMonth);
         } else {
-            month = String.valueOf(intDayOfMonth);
+            dayOfMonth = String.valueOf(intDayOfMonth);
         }
 
+        System.out.println("Month + DayOfMonth : " + month + dayOfMonth);
         return month + dayOfMonth;
     }
 

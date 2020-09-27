@@ -19,7 +19,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.stream.Stream;
 
 @Service
 @Transactional
@@ -30,8 +29,9 @@ public class AttendanceService {
     private ActivityRepository activityRepository;
 
     @Autowired
-    public AttendanceService(ClassRepository classRepository, ActivityRepository activityRepository) {
+    public AttendanceService(ClassRepository classRepository, ClubRepository clubRepository, ActivityRepository activityRepository) {
         this.classRepository = classRepository;
+        this.clubRepository = clubRepository;
         this.activityRepository = activityRepository;
     }
 
@@ -53,6 +53,7 @@ public class AttendanceService {
                         element.setLocation(c.getLocation().getLocation());
                         if(isFirst.get()) {
                             element.setDone(true);
+                            isFirst.set(false);
                         } else {
                             element.setDone(false);
                         }
