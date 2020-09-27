@@ -32,14 +32,14 @@ class ClubCustomRepositoryImplTest {
     void findByFloor() {
         int floor = 3;
         List<Club> clubList = clubRepository.findByFloor(floor);
-        clubList.stream()
-                .forEach(c -> {
-                    System.out.println("name : " + c.getName());
-                    System.out.println("teacher : " + c.getTeacher());
-                    System.out.println("location : " + c.getLocation().getLocation());
-                    System.out.println("floor : " + c.getLocation().getFloor());
-                    System.out.println("priority : " + c.getLocation().getPriority());
-                    System.out.println("---------------------------------------");
-                });
+//        clubList.stream()
+//                .forEach(c -> {
+//                    System.out.println("name : " + c.getName());
+//                    System.out.println("teacher : " + c.getTeacher());
+//                    System.out.println("location : " + c.getLocation().getLocation());
+//                    System.out.println("floor : " + c.getLocation().getFloor());
+//                    System.out.println("priority : " + c.getLocation().getPriority());
+//                    System.out.println("---------------------------------------");
+//                });
     }
 }
