@@ -2,7 +2,7 @@ package com.dsm.pick.utils.form;
 
 import io.swagger.annotations.ApiModelProperty;
 
-public class ClubInformationForm {
+public class ClubAndClassInformationForm {
     @ApiModelProperty(example = "정보보안 2실", required = true)
     private String location;
     @ApiModelProperty(example = "UP", required = true)
@@ -10,8 +10,8 @@ public class ClubInformationForm {
     @ApiModelProperty(example = "false", required = true)
     private boolean done;
 
-    public ClubInformationForm() {}
-    public ClubInformationForm(String location, String name, boolean done) {
+    public ClubAndClassInformationForm() {}
+    public ClubAndClassInformationForm(String location, String name, boolean done) {
         this.location = location;
         this.name = name;
         this.done = done;

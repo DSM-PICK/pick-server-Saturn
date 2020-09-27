@@ -7,7 +7,7 @@ import com.dsm.pick.utils.exception.TokenExpirationException;
 import com.dsm.pick.utils.form.AttendanceListResponseForm;
 import com.dsm.pick.utils.form.AttendanceNavigationResponseForm;
 import com.dsm.pick.utils.form.AttendanceStateRequestForm;
-import com.dsm.pick.utils.form.ClubInformationForm;
+import com.dsm.pick.utils.form.ClubAndClassInformationForm;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -50,12 +50,12 @@ public class AttendanceController {
 
         int floor = Integer.parseInt(floorStr);
 
-        List<ClubInformationForm> clubInformationForms = attendanceService.getNavigationInformation(activity, floor);
+        List<ClubAndClassInformationForm> clubAndClassInformationForms = attendanceService.getNavigationInformation(activity, floor);
         String date = serverTimeService.getMonthAndDate();
         String dayOfWeek = serverTimeService.getDayOfWeek();
         String teacherName = attendanceService.getTodayTeacherName(date, floor);
 
-        return new AttendanceNavigationResponseForm(date, dayOfWeek, teacherName, clubInformationForms);
+        return new AttendanceNavigationResponseForm(date, dayOfWeek, teacherName, clubAndClassInformationForms);
     }
 
     @ApiOperation(value = "출석 현황 요청", notes = "출석 현황 반환")

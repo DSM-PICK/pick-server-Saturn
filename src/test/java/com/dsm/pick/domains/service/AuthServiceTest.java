@@ -13,8 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import java.awt.font.TextHitInfo;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.time.LocalDateTime;

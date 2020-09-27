@@ -1,6 +1,6 @@
 package com.dsm.pick.domains.repository;
 
-import com.dsm.pick.domains.domain.SchoolClass;
+import com.dsm.pick.domains.domain.Club;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,19 +23,22 @@ import static org.junit.jupiter.api.Assertions.*;
         "spring.datasource.password=1111"
 })
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class ClassCustomRepositoryImplTest {
+class ClubCustomRepositoryImplTest {
 
     @Autowired
-    ClassRepository classRepository;
+    ClubRepository clubRepository;
 
     @Test
     void findByFloor() {
-        List<SchoolClass> floorList = classRepository.findByFloor(3);
-//        floorList.stream()
-//                .forEach(e -> {
-//                    System.out.println("name : " + e.getName());
-//                    System.out.println("floor : " + e.getFloor());
-//                    System.out.println("priority : " + e.getPriority());
+        int floor = 3;
+        List<Club> clubList = clubRepository.findByFloor(floor);
+//        clubList.stream()
+//                .forEach(c -> {
+//                    System.out.println("name : " + c.getName());
+//                    System.out.println("teacher : " + c.getTeacher());
+//                    System.out.println("location : " + c.getLocation().getLocation());
+//                    System.out.println("floor : " + c.getLocation().getFloor());
+//                    System.out.println("priority : " + c.getLocation().getPriority());
 //                });
     }
 }
