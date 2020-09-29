@@ -41,7 +41,7 @@ jobs:
 #        run: ./gradlew jacocoTestCoverageVerification
 
       - name: Clean and Build
-        run: ./gradlew clean build
+        run: ./gradlew clean build -x test
   CD:
     runs-on: ubuntu-latest
     needs: CI
@@ -58,7 +58,7 @@ jobs:
         run: chmod 777 gradlew
 
       - name: Clean and Build
-        run: ./gradlew clean build
+        run: ./gradlew clean build -x test
 
       - name: Create Docker Image
         run: docker build --tag pick-saturn .
