@@ -61,7 +61,8 @@ jobs:
         run: ./gradlew clean build -x test
 
       - name: Create Docker Image
-        run: docker build --tag pick-saturn .
+        run: docker build --tag saturn .
+#        run: docker build --tag pick-saturn .
 
       - name: Upload to Registry
         uses: elgohr/Publish-Docker-Github-Action@master
