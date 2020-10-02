@@ -1,8 +1,5 @@
 package com.dsm.pick.domains.service;
 
-import com.dsm.pick.utils.exception.TokenExpirationException;
-import io.jsonwebtoken.Jwt;
-import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.junit.jupiter.api.Test;
 

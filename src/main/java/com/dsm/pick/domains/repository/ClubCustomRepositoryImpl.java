@@ -1,7 +1,6 @@
 package com.dsm.pick.domains.repository;
 
 import com.dsm.pick.domains.domain.Club;
-import com.dsm.pick.domains.domain.SchoolClass;
 import com.dsm.pick.utils.exception.ClubNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
