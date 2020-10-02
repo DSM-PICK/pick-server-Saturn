@@ -4,8 +4,6 @@ import io.swagger.annotations.ApiModelProperty;
 
 public class AttendanceListForm {
 
-    @ApiModelProperty(example = "1", required = true)
-    private String sequence;
     @ApiModelProperty(example = "2417", required = true)
     private String gradeClassNumber;
     @ApiModelProperty(example = "이진혁", required = true)
@@ -13,19 +11,10 @@ public class AttendanceListForm {
     private AttendanceStateForm state;
 
     public AttendanceListForm() {}
-    public AttendanceListForm(String sequence, String gradeClassNumber, String name, AttendanceStateForm state) {
-        this.sequence = sequence;
+    public AttendanceListForm(String gradeClassNumber, String name, AttendanceStateForm state) {
         this.gradeClassNumber = gradeClassNumber;
         this.name = name;
         this.state = state;
-    }
-
-    public String getSequence() {
-        return sequence;
-    }
-
-    public void setSequence(String sequence) {
-        this.sequence = sequence;
     }
 
     public String getGradeClassNumber() {

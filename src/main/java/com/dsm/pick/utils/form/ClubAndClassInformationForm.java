@@ -9,12 +9,15 @@ public class ClubAndClassInformationForm {
     private String name;
     @ApiModelProperty(example = "false", required = true)
     private boolean done;
+    @ApiModelProperty(example = "3", required = true)
+    private int priority;
 
     public ClubAndClassInformationForm() {}
-    public ClubAndClassInformationForm(String location, String name, boolean done) {
+    public ClubAndClassInformationForm(String location, String name, boolean done, int priority) {
         this.location = location;
         this.name = name;
         this.done = done;
+        this.priority = priority;
     }
 
     public String getLocation() {
@@ -39,5 +42,13 @@ public class ClubAndClassInformationForm {
 
     public void setDone(boolean done) {
         this.done = done;
+    }
+
+    public int getPriority() {
+        return priority;
+    }
+
+    public void setPriority(int priority) {
+        this.priority = priority;
     }
 }

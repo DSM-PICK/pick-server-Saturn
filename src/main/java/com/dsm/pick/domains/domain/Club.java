@@ -17,11 +17,15 @@ public class Club {
     @Column(name = "teacher")
     private String teacher;
 
+    @Column(name = "club_head")
+    private String head;
+
     public Club() {}
-    public Club(String name, ClubLocation location, String teacher) {
+    public Club(String name, ClubLocation location, String teacher, String head) {
         this.name = name;
         this.location = location;
         this.teacher = teacher;
+        this.head = head;
     }
 
     public String getName() {
@@ -46,5 +50,13 @@ public class Club {
 
     public void setTeacher(String teacher) {
         this.teacher = teacher;
+    }
+
+    public String getHead() {
+        return head;
+    }
+
+    public void setHead(String head) {
+        this.head = head;
     }
 }
