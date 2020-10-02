@@ -1,6 +1,7 @@
 package com.dsm.pick.domains.repository;
 
 import com.dsm.pick.domains.domain.Club;
+import com.dsm.pick.utils.exception.ClubNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,5 +44,19 @@ class ClubCustomRepositoryImplTest {
 //                    System.out.println("priority : " + c.getLocation().getPriority());
 //                    System.out.println("---------------------------------------");
 //                });
+    }
+
+    @Test
+    void findByFloorAndPriority() {
+        int floor = 3;
+        int priority = 4;
+        Club club = clubRepository.findByFloorAndPriority(floor, priority);
+    }
+
+    @Test
+    void 클럽낫파운드익셉션() {
+        int floor = 0;
+        int priority = 0;
+        assertThrows(ClubNotFoundException.class, () -> clubRepository.findByFloorAndPriority(floor, priority));
     }
 }
