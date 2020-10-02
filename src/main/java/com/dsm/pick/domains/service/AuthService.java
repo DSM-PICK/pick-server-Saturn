@@ -4,7 +4,6 @@ import com.dsm.pick.domains.domain.Teacher;
 import com.dsm.pick.domains.repository.TeacherRepository;
 import com.dsm.pick.utils.exception.IdOrPasswordMismatchException;
 import com.dsm.pick.utils.exception.RefreshTokenMismatchException;
-import com.dsm.pick.utils.exception.TokenExpirationException;
 import com.dsm.pick.utils.form.AccessTokenReissuanceResponseForm;
 import com.dsm.pick.utils.form.LoginResponseForm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,84 +45,74 @@ public class AuthService {
         return resultHex;
     }
 
-    private void setTeacherRefreshToken(Teacher teacher) {
-        String refreshToken = getRefreshToken(teacher.getId());
-        teacher.setRefreshToken(refreshToken);
-    }
+//    public String getAccessToken(String id) {
+//        return jwtService.createAccessToken(id);
+//    }
+//
+//    public String getRefreshToken(String id) {
+//        return jwtService.createRefreshToken(id);
+//    }
 
-    public String getAccessToken(String id) {
-        return jwtService.createAccessToken(id);
-    }
+//    public LocalDateTime getAccessTokenExpiration(String accessToken) {
+//        Date expiration = jwtService.getExpiration(accessToken);
+//        return LocalDateTime.ofInstant(expiration.toInstant(), ZoneId.of("Asia/Seoul"));
+//    }
 
-    public String getRefreshToken(String id) {
-        return jwtService.createRefreshToken(id);
-    }
-
-    public LocalDateTime getAccessTokenExpiration(String accessToken) {
-        Date expiration = jwtService.getExpiration(accessToken);
-        return LocalDateTime.ofInstant(expiration.toInstant(), ZoneId.of("Asia/Seoul"));
-    }
-
-    public Teacher getSameRefreshTokenTeacher(String refreshToken) {
-        if(jwtService.isUsableToken(refreshToken)) {
-            Teacher findTeacher = teacherRepository.findByRefreshToken(refreshToken)
-                    .orElseThrow(() -> new RefreshTokenMismatchException());
-
-            String findRefreshToken = findTeacher.getRefreshToken();
-            if(refreshToken.equals(findRefreshToken))
-                return findTeacher;
-            else
-                throw new RefreshTokenMismatchException();
-        } else {
-            throw new TokenExpirationException();
-        }
-    }
+//    public Teacher getSameRefreshTokenTeacher(String refreshToken) {
+//        if(jwtService.isUsableToken(refreshToken)) {
+//            Teacher findTeacher = teacherRepository.findByRefreshToken(refreshToken)
+//                    .orElseThrow(() -> new RefreshTokenMismatchException());
+//
+//            String findRefreshToken = findTeacher.getRefreshToken();
+//            if(refreshToken.equals(findRefreshToken))
+//                return findTeacher;
+//            else
+//                throw new RefreshTokenMismatchException();
+//        } else {
+//            throw new TokenExpirationException();
+//        }
+//    }
 
     public boolean checkIdAndPw(Teacher teacher) {
-        // 계정 존재하는지 확인
         String userId = teacher.getId();
 
         Teacher findTeacher = teacherRepository.findById(userId)
                 .orElseThrow(() -> new IdOrPasswordMismatchException());
 
-        // 비밀번호 일치 확인
         String userPw = teacher.getPw();
         String findUserPw = findTeacher.getPw();
 
         if (!(userPw.equals(findUserPw)))
             throw new IdOrPasswordMismatchException();
 
-        // 선생님에게 리프레시 토큰 저장
-        setTeacherRefreshToken(findTeacher);
-
         return true;
     }
 
-    public LoginResponseForm formatLoginResponseForm(String accessToken, String refreshToken, LocalDateTime accessTokenExpiration) {
-        return new LoginResponseForm(accessToken, refreshToken, accessTokenExpiration);
-    }
+//    public LoginResponseForm formatLoginResponseForm(String accessToken, String refreshToken) {
+//        return new LoginResponseForm(accessToken, refreshToken);
+//    }
+//
+//    public AccessTokenReissuanceResponseForm formatAccessTokenReissuanceResponseForm(String accessToken, LocalDateTime accessTokenExpiration) {
+//        return new AccessTokenReissuanceResponseForm(accessToken, accessTokenExpiration);
+//    }
 
-    public AccessTokenReissuanceResponseForm formatAccessTokenReissuanceResponseForm(String accessToken, LocalDateTime accessTokenExpiration) {
-        return new AccessTokenReissuanceResponseForm(accessToken, accessTokenExpiration);
-    }
-
-    public void logout(String accessToken) {
-        if(jwtService.isUsableToken(accessToken)) {
-            String teacherId = jwtService.getTeacherId(accessToken);
-
-            Teacher findTeacher = teacherRepository.findById(teacherId)
-                    .orElseThrow(() -> new TokenExpirationException());
-
-//            String refreshToken = findTeacher.getRefreshToken();
-
-//            jwtService.killToken(refreshToken);
-//            jwtService.killToken(accessToken);
-
-            findTeacher.setRefreshToken(null);
-        } else {
-            throw new TokenExpirationException();
-        }
-    }
+//    public void logout(String accessToken) {
+//        if(jwtService.isUsableToken(accessToken)) {
+//            String teacherId = jwtService.getTeacherId(accessToken);
+//
+//            Teacher findTeacher = teacherRepository.findById(teacherId)
+//                    .orElseThrow(() -> new TokenExpirationException());
+//
+////            String refreshToken = findTeacher.getRefreshToken();
+//
+////            jwtService.killToken(refreshToken);
+////            jwtService.killToken(accessToken);
+//
+//            findTeacher.setRefreshToken(null);
+//        } else {
+//            throw new TokenExpirationException();
+//        }
+//    }
 
     public void join(Teacher teacher) {
         teacher.setPw(encodingPassword(teacher.getPw()));

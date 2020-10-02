@@ -4,7 +4,7 @@ import com.dsm.pick.domains.domain.Club;
 import com.dsm.pick.domains.service.AttendanceService;
 import com.dsm.pick.domains.service.JwtService;
 import com.dsm.pick.domains.service.ServerTimeService;
-import com.dsm.pick.utils.exception.TokenExpirationException;
+import com.dsm.pick.utils.exception.TokenInvalid;
 import com.dsm.pick.utils.form.*;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -126,10 +126,10 @@ public class AttendanceController {
         boolean isTokenValidation = jwtService.isUsableToken(token);
         try {
             if(!isTokenValidation) {
-                throw new TokenExpirationException();
+                throw new TokenInvalid();
             }
         } catch(Exception e) {
-            throw new TokenExpirationException();
+            throw new TokenInvalid();
         }
     }
 }

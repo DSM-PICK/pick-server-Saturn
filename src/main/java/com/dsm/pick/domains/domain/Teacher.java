@@ -17,15 +17,11 @@ public class Teacher {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "token")
-    private String refreshToken;
-
     public Teacher() {}
-    public Teacher(String id, String pw, String name, String refreshToken) {
+    public Teacher(String id, String pw, String name) {
         this.id = id;
         this.pw = pw;
         this.name = name;
-        this.refreshToken = refreshToken;
     }
 
     public String getId() {
@@ -50,13 +46,5 @@ public class Teacher {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getRefreshToken() {
-        return refreshToken;
-    }
-
-    public void setRefreshToken(String refreshToken) {
-        this.refreshToken = refreshToken;
     }
 }

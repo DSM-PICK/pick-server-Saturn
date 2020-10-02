@@ -8,13 +8,10 @@ public class AccessTokenReissuanceResponseForm {
 
     @ApiModelProperty(example = "H1H1H1H1H1H.H1H1H1H1H.HH1HH1H1HH1H", required = true)
     private String accessToken;
-    @ApiModelProperty(example = "2003-08-16T21:30:32", required = true)
-    private LocalDateTime accessTokenExpiration;
 
     public AccessTokenReissuanceResponseForm() {}
-    public AccessTokenReissuanceResponseForm(String accessToken, LocalDateTime accessTokenExpiration) {
+    public AccessTokenReissuanceResponseForm(String accessToken) {
         this.accessToken = accessToken;
-        this.accessTokenExpiration = accessTokenExpiration;
     }
 
     public String getAccessToken() {
@@ -23,13 +20,5 @@ public class AccessTokenReissuanceResponseForm {
 
     public void setAccessToken(String accessToken) {
         this.accessToken = accessToken;
-    }
-
-    public LocalDateTime getAccessTokenExpiration() {
-        return accessTokenExpiration;
-    }
-
-    public void setAccessTokenExpiration(LocalDateTime accessTokenExpiration) {
-        this.accessTokenExpiration = accessTokenExpiration;
     }
 }

@@ -8,6 +8,7 @@ import com.dsm.pick.utils.form.AccessTokenReissuanceResponseForm;
 import com.dsm.pick.utils.form.LoginResponseForm;
 import com.dsm.pick.utils.form.TeacherResponseForm;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -24,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class AuthControllerTest {
 
     private AuthService authService = new MockAuthService(null, null);
-    private AuthController authController = new AuthController(authService);
+    private AuthController authController = new AuthController(authService, new MockJwtService());
 
     @Test
     void login_success() {
@@ -36,11 +37,9 @@ class AuthControllerTest {
 
         String expectedAccessToken = "987654321" + teacherId;
         String expectedRefreshToken = "123456789" + teacherId;
-        LocalDateTime expectedAccessTokenExpiration = LocalDateTime.of(2003, 8, 16, 1, 2, 3);
 
         assertEquals(expectedAccessToken, actual.getAccessToken());
         assertEquals(expectedRefreshToken, actual.getRefreshToken());
-        assertEquals(expectedAccessTokenExpiration, actual.getAccessTokenExpiration());
     }
 
     @Test
@@ -67,24 +66,9 @@ class AuthControllerTest {
 
     @Test
     void accessTokenReissuance() {
-        login_success();
         HttpServletRequest request = new MockHttpServletRequest();
-
-        AccessTokenReissuanceResponseForm expected = new AccessTokenReissuanceResponseForm();
-        expected.setAccessToken("987654321aaa");
-        expected.setAccessTokenExpiration(LocalDateTime.of(2003, 8, 16, 1, 2, 3));
-        AccessTokenReissuanceResponseForm actual = authController.accessTokenReissuance(request);
-
-        assertEquals(expected.getAccessToken(), actual.getAccessToken());
-        assertEquals(expected.getAccessTokenExpiration(), actual.getAccessTokenExpiration());
-    }
-
-    @Test
-    void logout() {
-        login_success();
-        HttpServletRequest request = new MockHttpServletRequest();
-
-        authController.logout(request);
+        AccessTokenReissuanceResponseForm result = authController.accessTokenReissuance(request);
+        System.out.println(result.getAccessToken());
     }
 
     static class MockAuthService extends AuthService {
@@ -106,29 +90,6 @@ class AuthControllerTest {
             return original;
         }
 
-        @Override
-        public String getAccessToken(String id) {
-            return "987654321" + id;
-        }
-
-        @Override
-        public String getRefreshToken(String id) {
-            return "123456789" + id;
-        }
-
-        @Override
-        public LocalDateTime getAccessTokenExpiration(String accessToken) {
-            return LocalDateTime.of(2003, 8, 16, 1, 2, 3);
-        }
-
-        @Override
-        public Teacher getSameRefreshTokenTeacher(String refreshToken) {
-            return teachers.values()
-                    .stream()
-                    .filter(t -> t.getRefreshToken().equals(refreshToken))
-                    .findAny()
-                    .get();
-        }
 
         @Override
         public boolean checkIdAndPw(Teacher teacher) {
@@ -136,28 +97,8 @@ class AuthControllerTest {
             teachers.remove(teacher.getId());
             if(findTeacher == null) return false;
             else if(!findTeacher.getPw().equals(teacher.getPw())) return false;
-            findTeacher.setRefreshToken(getRefreshToken(teacher.getId()));
             teachers.put(teacher.getId(), findTeacher);
             return true;
-        }
-
-        @Override
-        public LoginResponseForm formatLoginResponseForm(String accessToken, String refreshToken, LocalDateTime accessTokenExpiration) {
-            return new LoginResponseForm(accessToken, refreshToken, accessTokenExpiration);
-        }
-
-        @Override
-        public AccessTokenReissuanceResponseForm formatAccessTokenReissuanceResponseForm(String accessToken, LocalDateTime accessTokenExpiration) {
-            return new AccessTokenReissuanceResponseForm(accessToken, accessTokenExpiration);
-        }
-
-        @Override
-        public void logout(String accessToken) {
-            String teacherId = accessToken.substring(9);
-            Teacher findTeacher = teachers.get(teacherId);
-            teachers.remove(teacherId);
-            findTeacher.setRefreshToken(null);
-            teachers.put(findTeacher.getId(), findTeacher);
         }
     }
 
@@ -506,6 +447,39 @@ class AuthControllerTest {
         @Override
         public DispatcherType getDispatcherType() {
             return null;
+        }
+    }
+
+    static class MockJwtService extends JwtService {
+
+        private Date date = new Date();
+        private String teacherId = "aaa";
+
+        @Override
+        public String createAccessToken(String teacherId) {
+            this.teacherId = teacherId;
+            return "987654321" + teacherId;
+        }
+
+        @Override
+        public String createRefreshToken(String teacherId) {
+            this.teacherId = teacherId;
+            return "123456789" + teacherId;
+        }
+
+        @Override
+        public String getTeacherId(String token) {
+            return token.substring(9);
+        }
+
+        @Override
+        public Date getExpiration(String token) {
+            return date;
+        }
+
+        @Override
+        public boolean isUsableToken(String token) {
+            return token.substring(9).equals(teacherId);
         }
     }
 }
