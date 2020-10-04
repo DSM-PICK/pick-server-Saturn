@@ -17,12 +17,10 @@ public class AuthService {
     private static final String ENCODING = "UTF-8";
 
     private TeacherRepository teacherRepository;
-    private JwtService jwtService;
 
     @Autowired
-    public AuthService(TeacherRepository userRepository, JwtService jwtService) {
+    public AuthService(TeacherRepository userRepository) {
         this.teacherRepository = userRepository;
-        this.jwtService = jwtService;
     }
 
     public String encodingPassword(String original) {

@@ -68,7 +68,6 @@ class AuthControllerTest {
     void accessTokenReissuance() {
         HttpServletRequest request = new MockHttpServletRequest();
         AccessTokenReissuanceResponseForm result = authController.accessTokenReissuance(request);
-        System.out.println(result.getAccessToken());
     }
 
     static class MockAuthService extends AuthService {
@@ -76,7 +75,7 @@ class AuthControllerTest {
         private Map<String, Teacher> teachers = new HashMap<>();
 
         public MockAuthService(TeacherRepository userRepository, JwtService jwtService) {
-            super(userRepository, jwtService);
+            super(userRepository);
 
             Teacher teacher = new Teacher();
             teacher.setId("aaa");

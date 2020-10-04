@@ -20,8 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class AuthServiceTest {
 
     private TeacherRepository teacherRepository = new MockTeacherRepository();
-    private JwtService jwtService = new MockJwtService();
-    private AuthService authService = new AuthService(teacherRepository, jwtService);
+    private AuthService authService = new AuthService(teacherRepository);
 
     @Test
     void encodingPassword_단방향_해시_암호화_체크() {
@@ -243,39 +242,6 @@ class AuthServiceTest {
         @Override
         public <S extends Teacher> boolean exists(Example<S> example) {
             return false;
-        }
-    }
-
-    static class MockJwtService extends JwtService {
-
-        private Date date = new Date();
-        private String teacherId = null;
-
-        @Override
-        public String createAccessToken(String teacherId) {
-            this.teacherId = teacherId;
-            return "987654321" + teacherId;
-        }
-
-        @Override
-        public String createRefreshToken(String teacherId) {
-            this.teacherId = teacherId;
-            return "123456789" + teacherId;
-        }
-
-        @Override
-        public String getTeacherId(String token) {
-            return token.substring(9);
-        }
-
-        @Override
-        public Date getExpiration(String token) {
-            return date;
-        }
-
-        @Override
-        public boolean isUsableToken(String token) {
-            return token.substring(9).equals(teacherId);
         }
     }
 }

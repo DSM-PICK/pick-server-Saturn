@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Repository
 @Transactional
@@ -18,7 +19,7 @@ public class AttendanceCustomRepositoryImpl implements AttendanceCustomRepositor
 
     @Override
     public List<Attendance> findByDateAndFloorAndPriority(LocalDate date, int floor, int priority) {
-        return entityManager.createQuery("SELECT a FROM Attendance a INNER JOIN a.student s " +
+        List<Attendance> result = entityManager.createQuery("SELECT a FROM Attendance a INNER JOIN a.student s " +
                 "WHERE s.club.location.floor = :floor " +
                 "AND s.club.location.priority = :priority " +
                 "AND a.activity.date = :date", Attendance.class)
@@ -26,6 +27,9 @@ public class AttendanceCustomRepositoryImpl implements AttendanceCustomRepositor
                 .setParameter("priority", priority)
                 .setParameter("date", date)
                 .getResultList();
+        if(result.size() <= 0)
+            throw new NoSuchElementException("일치하는 요소가 존재하지 않음");
+        return result;
     }
 
     @Override
@@ -44,6 +48,6 @@ public class AttendanceCustomRepositoryImpl implements AttendanceCustomRepositor
                 .getResultList()
                 .stream()
                 .findAny()
-                .get();
+                .orElseThrow(() -> new NoSuchElementException("일치하는 요소가 존재하지 않음"));
     }
 }
