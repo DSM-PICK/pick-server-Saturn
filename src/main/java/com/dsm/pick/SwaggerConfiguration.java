@@ -24,7 +24,7 @@ public class SwaggerConfiguration {
     private String host;
 
     @Bean
-    public Docket api(ServletContext servletContext) {
+    public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .useDefaultResponseMessages(false)
                 .consumes(getConsumeContentTypes())
