@@ -45,6 +45,9 @@ spring:
     show-sql: true
   resources:
     add-mappings: true
+  output:
+    ansi:
+      enabled: always
 server:
   address: 0.0.0.0
   port: 8889
@@ -53,3 +56,5 @@ server:
 logging:
   level:
     root: info
+  file:
+    path: logs

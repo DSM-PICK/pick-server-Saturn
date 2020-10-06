@@ -6,6 +6,8 @@ import com.dsm.pick.domains.service.JwtService;
 import com.dsm.pick.utils.exception.TokenInvalid;
 import com.dsm.pick.utils.form.*;
 import io.swagger.annotations.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +17,8 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/auth")
 @Api(value = "Auth Controller")
 public class AuthController {
+
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private AuthService authService;
     private JwtService jwtService;
@@ -50,6 +54,7 @@ public class AuthController {
             result = new LoginResponseForm(accessToken, refreshToken);
         }
 
+        logger.info("LOGIN::LOGIN::LOGIN::LOGIN::LOGIN::LOGIN::LOGIN::LOGIN::LOGIN::LOGIN::LOGIN");
         return result;
     }
 
