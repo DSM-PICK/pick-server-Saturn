@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping("/saturn/auth")
+@RequestMapping("/auth")
 @Api(value = "Auth Controller")
 public class AuthController {
 

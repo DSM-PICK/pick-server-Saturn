@@ -15,7 +15,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping("/saturn/attendance")
+@RequestMapping("/attendance")
 @Api(value = "Attendance Controller")
 public class AttendanceController {
 
