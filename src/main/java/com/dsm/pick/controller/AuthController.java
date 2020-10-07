@@ -3,7 +3,7 @@ package com.dsm.pick.controller;
 import com.dsm.pick.domains.domain.Teacher;
 import com.dsm.pick.domains.service.AuthService;
 import com.dsm.pick.domains.service.JwtService;
-import com.dsm.pick.utils.exception.TokenInvalid;
+import com.dsm.pick.utils.exception.TokenInvalidException;
 import com.dsm.pick.utils.form.*;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
@@ -31,15 +31,17 @@ public class AuthController {
 
     @ApiOperation(value = "로그인", notes = "JWT 토큰 반환")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "Login Success"),
-            @ApiResponse(code = 404, message = "ID Mismatch OR Password Mismatch"),
-            @ApiResponse(code = 500, message = "500인데 이거 안 뜰듯")
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 400, message = "Non Exist ID or Password"),
+            @ApiResponse(code = 404, message = "Mismatch ID or Password"),
+            @ApiResponse(code = 500, message = "500???")
     })
     @PostMapping("/access-refresh-token")
     public LoginResponseForm login(TeacherResponseForm userForm) {
         Teacher teacher = new Teacher();
         teacher.setId(userForm.getId());
         teacher.setPw(userForm.getPw());
+        teacher.existIdOrPassword();
 
         String encodedPassword = authService.encodingPassword(teacher.getPw());
         teacher.setPw(encodedPassword);
@@ -78,7 +80,7 @@ public class AuthController {
             String accessToken = jwtService.createAccessToken(teacherId);
             return new AccessTokenReissuanceResponseForm(accessToken);
         } else {
-            throw new TokenInvalid();
+            throw new TokenInvalidException();
         }
     }
 

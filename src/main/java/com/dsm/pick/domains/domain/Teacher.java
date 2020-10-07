@@ -1,5 +1,7 @@
 package com.dsm.pick.domains.domain;
 
+import com.dsm.pick.utils.exception.NonExistIdOrPasswordException;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -46,5 +48,12 @@ public class Teacher {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void existIdOrPassword() {
+        if(this.id == null)
+            throw new NonExistIdOrPasswordException();
+        else if(this.pw == null)
+            throw new NonExistIdOrPasswordException();
     }
 }
