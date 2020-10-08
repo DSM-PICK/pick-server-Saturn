@@ -55,14 +55,7 @@ public class JwtService {
                 .getExpiration();
     }
 
-    public boolean isUsableToken(String token) {
-        boolean isValid = isValid(token);
-        boolean isTimeOut = isTimeOut(token);
-
-        return isValid && isTimeOut;
-    }
-
-    private boolean isValid(String token) {
+    public boolean isValid(String token) {
         try {
             Jwts.parser()
                     .setSigningKey(KEY)
@@ -74,7 +67,7 @@ public class JwtService {
         }
     }
 
-    private boolean isTimeOut(String token) {
+    public boolean isNotTimeOut(String token) {
         try {
             Date now = new Date();
             Date expiration = Jwts.parser()

@@ -31,7 +31,7 @@ public class AuthController {
 
     @ApiOperation(value = "로그인", notes = "JWT 토큰 반환")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 200, message = "OK!!"),
             @ApiResponse(code = 400, message = "Non Exist ID or Password"),
             @ApiResponse(code = 404, message = "Mismatch ID or Password"),
             @ApiResponse(code = 500, message = "500???")
@@ -60,27 +60,49 @@ public class AuthController {
         return result;
     }
 
+    @ApiOperation(value = "정상적인 토큰인지 확인", notes = "정상적인 토큰인지 확인")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK!!"),
+            @ApiResponse(code = 403, message = "Token Invalid"),
+            @ApiResponse(code = 500, message = "500???")
+    })
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "token", dataType = "string", required = true, value = "Token")
+    })
+    @PostMapping("/token")
+    public void isUsableToken(HttpServletRequest request) {
+        String token = request.getHeader("token");
+
+        boolean isValid = jwtService.isValid(token);
+
+        if(!isValid) {
+            throw new TokenInvalidException("토큰이 잘못 되었습니다.");
+        }
+    }
+
     @ApiOperation(value = "엑세스 토큰 만료", notes = "엑세스 토큰 재발급")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "Return Success"),
-            @ApiResponse(code = 404, message = "Refresh Token Mismatch"),
-            @ApiResponse(code = 500, message = "500인데 이거 안 뜰듯")
+            @ApiResponse(code = 200, message = "OK!!"),
+            @ApiResponse(code = 403, message = "Token Invalid"),
+            @ApiResponse(code = 404, message = "Mismatch Refresh Token"),
+            @ApiResponse(code = 500, message = "500???")
     })
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "header", name = "token", dataType = "string", required = true, value = "Refresh Token")
     })
-    @PutMapping("/access-token")
+    @GetMapping("/access-token")
     public AccessTokenReissuanceResponseForm accessTokenReissuance(HttpServletRequest request) {
         String refreshToken = request.getHeader("token");
 
-        boolean isUsable = jwtService.isUsableToken(refreshToken);
+        boolean isValid = jwtService.isValid(refreshToken);
+//        boolean isNotTimeOut = jwtService.isNotTimeOut(refreshToken);
 
-        if(isUsable) {
+        if(isValid) {
             String teacherId = jwtService.getTeacherId(refreshToken);
             String accessToken = jwtService.createAccessToken(teacherId);
             return new AccessTokenReissuanceResponseForm(accessToken);
         } else {
-            throw new TokenInvalidException();
+            throw new TokenInvalidException("토큰이 잘못 되었습니다.");
         }
     }
 

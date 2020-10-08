@@ -123,13 +123,15 @@ public class AttendanceController {
     }
 
     private void tokenValidation(String token) {
-        boolean isTokenValidation = jwtService.isUsableToken(token);
+        boolean isValid = jwtService.isValid(token);
+        boolean isTimeOut = jwtService.isNotTimeOut(token);
+
         try {
-            if(!isTokenValidation) {
-                throw new TokenInvalidException();
+            if(!(isValid && isTimeOut)) {
+                throw new TokenInvalidException("토큰이 잘못되었거나 만료되었습니다.");
             }
         } catch(Exception e) {
-            throw new TokenInvalidException();
+            throw new TokenInvalidException("토큰을 검증하는 과정에서 예외가 발생하였습니다.");
         }
     }
 }

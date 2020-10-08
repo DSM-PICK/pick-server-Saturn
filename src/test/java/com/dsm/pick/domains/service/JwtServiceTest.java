@@ -53,9 +53,10 @@ class JwtServiceTest {
         String teacherId = "jujube";
         String accessToken = jwtService.createAccessToken(teacherId);
 
-        boolean usableToken = jwtService.isUsableToken(accessToken);
+        boolean isValid = jwtService.isValid(accessToken);
+        boolean isTimeOut = jwtService.isNotTimeOut(accessToken);
 
-        assertTrue(usableToken);
+        assertTrue(isValid && isTimeOut);
     }
 
     @Test

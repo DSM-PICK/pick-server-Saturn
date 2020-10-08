@@ -65,6 +65,12 @@ class AuthControllerTest {
     }
 
     @Test
+    void isUsable() {
+        HttpServletRequest request = new MockHttpServletRequest();
+        authController.isUsableToken(request);
+    }
+
+    @Test
     void accessTokenReissuance() {
         HttpServletRequest request = new MockHttpServletRequest();
         AccessTokenReissuanceResponseForm result = authController.accessTokenReissuance(request);
@@ -477,8 +483,13 @@ class AuthControllerTest {
         }
 
         @Override
-        public boolean isUsableToken(String token) {
+        public boolean isValid(String token) {
             return token.substring(9).equals(teacherId);
+        }
+
+        @Override
+        public boolean isNotTimeOut(String token) {
+            return true;
         }
     }
 }
