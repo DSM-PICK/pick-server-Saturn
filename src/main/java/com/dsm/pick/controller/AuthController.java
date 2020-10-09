@@ -38,7 +38,7 @@ public class AuthController {
             @ApiResponse(code = 500, message = "500???")
     })
     @PostMapping("/access-refresh-token")
-    public LoginResponseForm login(TeacherRequestForm userForm) {
+    public LoginResponseForm login(@RequestBody TeacherRequestForm userForm) {
         Teacher teacher = new Teacher();
         teacher.setId(userForm.getId());
         teacher.setPw(userForm.getPw());
