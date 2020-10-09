@@ -38,10 +38,10 @@ public class AuthController {
             @ApiResponse(code = 500, message = "500???")
     })
     @PostMapping("/access-refresh-token")
-    public LoginResponseForm login(@RequestBody TeacherRequestForm userForm) {
+    public LoginResponseForm login(@RequestBody TeacherRequestForm teacherRequestForm) {
         Teacher teacher = new Teacher();
-        teacher.setId(userForm.getId());
-        teacher.setPw(userForm.getPw());
+        teacher.setId(teacherRequestForm.getId());
+        teacher.setPw(teacherRequestForm.getPw());
         teacher.existIdOrPassword();
 
         String encodedPassword = authService.encodingPassword(teacher.getPw());
