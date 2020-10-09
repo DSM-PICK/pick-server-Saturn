@@ -6,7 +6,7 @@ import com.dsm.pick.domains.service.AuthService;
 import com.dsm.pick.domains.service.JwtService;
 import com.dsm.pick.utils.form.AccessTokenReissuanceResponseForm;
 import com.dsm.pick.utils.form.LoginResponseForm;
-import com.dsm.pick.utils.form.TeacherResponseForm;
+import com.dsm.pick.utils.form.TeacherRequestForm;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 
@@ -31,7 +31,7 @@ class AuthControllerTest {
     void login_success() {
         String teacherId = "aaa";
         String teacherPw = "bbb";
-        TeacherResponseForm teacherResponseForm = new TeacherResponseForm(teacherId, teacherPw);
+        TeacherRequestForm teacherResponseForm = new TeacherRequestForm(teacherId, teacherPw);
 
         LoginResponseForm actual = authController.login(teacherResponseForm);
 
@@ -46,7 +46,7 @@ class AuthControllerTest {
     void login_password_mismatch_return_null() {
         String teacherId = "aaa";
         String teacherPw = "null";
-        TeacherResponseForm teacherResponseForm = new TeacherResponseForm(teacherId, teacherPw);
+        TeacherRequestForm teacherResponseForm = new TeacherRequestForm(teacherId, teacherPw);
 
         LoginResponseForm actual = authController.login(teacherResponseForm);
 
@@ -57,7 +57,7 @@ class AuthControllerTest {
     void login_id_mismatch_return_null() {
         String teacherId = "null";
         String teacherPw = "bbb";
-        TeacherResponseForm teacherResponseForm = new TeacherResponseForm(teacherId, teacherPw);
+        TeacherRequestForm teacherResponseForm = new TeacherRequestForm(teacherId, teacherPw);
 
         LoginResponseForm actual = authController.login(teacherResponseForm);
 
@@ -95,9 +95,8 @@ class AuthControllerTest {
             return original;
         }
 
-
         @Override
-        public boolean checkIdAndPw(Teacher teacher) {
+        public boolean checkIdAndPassword(Teacher teacher) {
             Teacher findTeacher = teachers.get(teacher.getId());
             teachers.remove(teacher.getId());
             if(findTeacher == null) return false;

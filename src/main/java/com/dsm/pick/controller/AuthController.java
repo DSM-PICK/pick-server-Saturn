@@ -29,15 +29,16 @@ public class AuthController {
         this.jwtService = jwtService;
     }
 
-    @ApiOperation(value = "로그인", notes = "JWT 토큰 반환")
+    @ApiOperation(value = "로그인", notes = "AccessToken 및 RefreshToken 생성")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK!!"),
             @ApiResponse(code = 400, message = "Non Exist ID or Password"),
             @ApiResponse(code = 404, message = "Mismatch ID or Password"),
+            @ApiResponse(code = 410, message = "Incorrect Encoding or Algorithm"),
             @ApiResponse(code = 500, message = "500???")
     })
     @PostMapping("/access-refresh-token")
-    public LoginResponseForm login(TeacherResponseForm userForm) {
+    public LoginResponseForm login(TeacherRequestForm userForm) {
         Teacher teacher = new Teacher();
         teacher.setId(userForm.getId());
         teacher.setPw(userForm.getPw());
@@ -47,7 +48,7 @@ public class AuthController {
         teacher.setPw(encodedPassword);
 
         LoginResponseForm result = null;
-        if(authService.checkIdAndPw(teacher)) {
+        if(authService.checkIdAndPassword(teacher)) {
             String teacherId = teacher.getId();
 
             String accessToken = jwtService.createAccessToken(teacherId);
@@ -67,11 +68,11 @@ public class AuthController {
             @ApiResponse(code = 500, message = "500???")
     })
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "header", name = "token", dataType = "string", required = true, value = "Token")
+            @ApiImplicitParam(paramType = "header", name = "Authorization", dataType = "string", required = true, value = "Token")
     })
     @PostMapping("/token")
     public void isUsableToken(HttpServletRequest request) {
-        String token = request.getHeader("token");
+        String token = request.getHeader("Authorization");
 
         boolean isValid = jwtService.isValid(token);
 
@@ -88,11 +89,11 @@ public class AuthController {
             @ApiResponse(code = 500, message = "500???")
     })
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "header", name = "token", dataType = "string", required = true, value = "Refresh Token")
+            @ApiImplicitParam(paramType = "header", name = "Authorization", dataType = "string", required = true, value = "Refresh Token")
     })
-    @GetMapping("/access-token")
+    @PostMapping("/access-token")
     public AccessTokenReissuanceResponseForm accessTokenReissuance(HttpServletRequest request) {
-        String refreshToken = request.getHeader("token");
+        String refreshToken = request.getHeader("Authorization");
 
         boolean isValid = jwtService.isValid(refreshToken);
 //        boolean isNotTimeOut = jwtService.isNotTimeOut(refreshToken);

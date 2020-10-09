@@ -9,7 +9,8 @@ import com.dsm.pick.domains.repository.AttendanceRepository;
 import com.dsm.pick.domains.repository.ClassRepository;
 import com.dsm.pick.domains.repository.ClubRepository;
 import com.dsm.pick.utils.exception.ActivityNotFoundException;
-import com.dsm.pick.utils.exception.NonExistentActivityException;
+import com.dsm.pick.utils.exception.NonExistActivityException;
+import com.dsm.pick.utils.exception.NonExistFloorException;
 import com.dsm.pick.utils.form.AttendanceListForm;
 import com.dsm.pick.utils.form.AttendanceStateForm;
 import com.dsm.pick.utils.form.ClubAndClassInformationForm;
@@ -43,6 +44,11 @@ public class AttendanceService {
         List<ClubAndClassInformationForm> form = new ArrayList<>();
 
         if(activity.equals("club")) {
+
+            if(!(1 <= floor && floor <= 4)) {
+                throw new NonExistFloorException("1, 2, 3, 4층이 아닙니다.");
+            }
+
             List<Club> clubList = clubRepository.findByFloor(floor);
             AtomicBoolean isFirst = new AtomicBoolean(true);
             final Comparator<Club> comparator =
@@ -67,6 +73,11 @@ public class AttendanceService {
                     });
 
         } else if(activity.equals("self-study")) {
+
+            if(!(2 <= floor && floor <= 4)) {
+                throw new NonExistFloorException("2, 3, 4층이 아닙니다.");
+            }
+
             List<SchoolClass> classList = classRepository.findByFloor(floor);
             AtomicBoolean isFirst = new AtomicBoolean(true);
 
@@ -88,7 +99,7 @@ public class AttendanceService {
                         form.add(element);
                     });
         } else {
-            throw new NonExistentActivityException();
+            throw new NonExistActivityException("Activity 가 club 또는 self-study 가 아닙니다.");
         }
 
         return form;

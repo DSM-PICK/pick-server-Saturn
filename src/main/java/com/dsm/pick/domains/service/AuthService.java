@@ -3,6 +3,7 @@ package com.dsm.pick.domains.service;
 import com.dsm.pick.domains.domain.Teacher;
 import com.dsm.pick.domains.repository.TeacherRepository;
 import com.dsm.pick.utils.exception.IdOrPasswordMismatchException;
+import com.dsm.pick.utils.exception.NonExistEncodingOrCryptographicAlgorithmException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,8 +32,7 @@ public class AuthService {
             digest.update(original.getBytes(ENCODING));
             resultHex = String.format("%0128x", new BigInteger(1, digest.digest()));
         } catch(Exception e) {
-            System.out.println("존재하지 않는 인코딩 : " + ENCODING);
-            System.out.println("존재하지 않는 암호화 : " + ALGORITHM);
+            throw new NonExistEncodingOrCryptographicAlgorithmException("현재 인코딩 방식 또는 암호화 알고리즘이 잘못되었습니다.");
         }
         return resultHex;
     }
@@ -65,7 +65,7 @@ public class AuthService {
 //        }
 //    }
 
-    public boolean checkIdAndPw(Teacher teacher) {
+    public boolean checkIdAndPassword(Teacher teacher) {
         String userId = teacher.getId();
 
         Teacher findTeacher = teacherRepository.findById(userId)

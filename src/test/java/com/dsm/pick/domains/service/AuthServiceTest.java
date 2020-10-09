@@ -60,7 +60,7 @@ class AuthServiceTest {
         teacher.setPw(teacherPw);
         teacher.setName(teacherName);
 
-        assertThrows(IdOrPasswordMismatchException.class, () -> authService.checkIdAndPw(teacher));
+        assertThrows(IdOrPasswordMismatchException.class, () -> authService.checkIdAndPassword(teacher));
     }
 
     @Test
@@ -83,7 +83,7 @@ class AuthServiceTest {
         teacher.setPw(wrongPw);
         teacher.setName(teacherName);
 
-        assertThrows(IdOrPasswordMismatchException.class, () -> authService.checkIdAndPw(targetTeacher));
+        assertThrows(IdOrPasswordMismatchException.class, () -> authService.checkIdAndPassword(targetTeacher));
     }
 
     @Test

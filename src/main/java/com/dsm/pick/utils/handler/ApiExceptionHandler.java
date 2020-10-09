@@ -1,10 +1,7 @@
 package com.dsm.pick.utils.handler;
 
 import antlr.Token;
-import com.dsm.pick.utils.exception.ActivityNotFoundException;
-import com.dsm.pick.utils.exception.IdOrPasswordMismatchException;
-import com.dsm.pick.utils.exception.NonExistIdOrPasswordException;
-import com.dsm.pick.utils.exception.TokenInvalidException;
+import com.dsm.pick.utils.exception.*;
 import com.dsm.pick.utils.form.ApiErrorResponseForm;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,8 +35,15 @@ public class ApiExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.BAD_GATEWAY);
     }
 
+    @ExceptionHandler(ActivityNotFoundException.class)
     public ResponseEntity<ApiErrorResponseForm> activityNotFoundExceptionHandler(ActivityNotFoundException ex) {
         ApiErrorResponseForm response = new ApiErrorResponseForm("Activity Not Found Exception", "Activity 테이블에서 원하는 값을 찾을 수 없음");
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(NonExistEncodingOrCryptographicAlgorithmException.class)
+    public ResponseEntity<ApiErrorResponseForm> nonExistEncodingOrCryptographicAlgorithmExceptionHandler(NonExistEncodingOrCryptographicAlgorithmException ex) {
+        ApiErrorResponseForm response = new ApiErrorResponseForm("Non Exist ENCODING or ALGORITHM Exception", "인코딩 방식이나 암호화 알고리즘이 잘못됨");
+        return new ResponseEntity<>(response, HttpStatus.GONE);
     }
 }

@@ -37,7 +37,7 @@ public class AttendanceController {
             @ApiResponse(code = 500, message = "500인데 이거 안 뜰듯")
     })
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "header", name = "token", dataType = "string", required = true, value = "Access Token")
+            @ApiImplicitParam(paramType = "header", name = "Authorization", dataType = "string", required = true, value = "Access Token")
     })
     @GetMapping("/{activity}/{floor}")
     public AttendanceNavigationResponseForm attendanceNavigation(
@@ -45,7 +45,7 @@ public class AttendanceController {
             @ApiParam(value = "층[ 1(자습실), 2, 3, 4 ]", required = true) @PathVariable("floor") String floorStr,
             HttpServletRequest request) {
 
-        tokenValidation(request.getHeader("token"));
+        tokenValidation(request.getHeader("Authorization"));
 
         int floor = Integer.parseInt(floorStr);
 
@@ -68,7 +68,7 @@ public class AttendanceController {
             @ApiResponse(code = 500, message = "500인데 이거 안 뜰듯")
     })
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "header", name = "token", dataType = "string", required = true, value = "Access Token")
+            @ApiImplicitParam(paramType = "header", name = "Authorization", dataType = "string", required = true, value = "Access Token")
     })
     @GetMapping("/{activity}/{floor}/{priority}")
     public AttendanceListResponseForm attendanceList(
@@ -77,7 +77,7 @@ public class AttendanceController {
             @ApiParam(value = "위치[ 왼쪽에서부터 0 ]", required = true) @PathVariable("priority") String priorityStr,
             HttpServletRequest request) {
 
-        tokenValidation(request.getHeader("token"));
+        tokenValidation(request.getHeader("Authorization"));
 
         int floor = Integer.parseInt(floorStr);
         int priority = Integer.parseInt(priorityStr);
@@ -97,7 +97,7 @@ public class AttendanceController {
             @ApiResponse(code = 500, message = "500인데 이거 안 뜰듯")
     })
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "header", name = "token", dataType = "string", required = true, value = "Access Token")
+            @ApiImplicitParam(paramType = "header", name = "Authorization", dataType = "string", required = true, value = "Access Token")
     })
     @PostMapping("/{activity}/{floor}/{priority}")
     public void changeAttendanceState(
@@ -107,7 +107,7 @@ public class AttendanceController {
             AttendanceStateRequestForm attendanceStateRequestForm,
             HttpServletRequest request) {
 
-        tokenValidation(request.getHeader("token"));
+        tokenValidation(request.getHeader("Authorization"));
 
         int floor = Integer.parseInt(floorStr);
         int priority = Integer.parseInt(priorityStr);
