@@ -40,15 +40,11 @@ class AttendanceCustomRepositoryImplTest {
     @Test
     void findByDateAndFloorAndPriorityAndNumberAndPeriod() {
         LocalDate date = LocalDate.of(2003, 8, 16);
-        int floor = 3;
-        int priority = 4;
         String number = "2417";
-        String period = "8";
+        int period = 8;
         assertThrows(NoSuchElementException.class,
                 () -> attendanceRepository.findByDateAndFloorAndPriorityAndNumberAndPeriod(
                         date,
-                        floor,
-                        priority,
                         number,
                         period
                 )

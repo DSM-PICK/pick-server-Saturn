@@ -18,10 +18,10 @@ import javax.servlet.http.HttpServletRequest;
 @Api(value = "Auth Controller")
 public class AuthController {
 
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private AuthService authService;
-    private JwtService jwtService;
+    private final AuthService authService;
+    private final JwtService jwtService;
 
     @Autowired
     public AuthController(AuthService authService, JwtService jwtService) {

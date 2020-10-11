@@ -14,7 +14,7 @@ public class Activity {
     @Column(name = "schedule")
     private String schedule;
 
-    @ManyToOne()
+    @ManyToOne
 //    @JoinColumn(name = "id", referencedColumnName = "second_floor_teacher_id")
     @JoinColumn(name = "second_floor_teacher_id", referencedColumnName = "id")
     private Teacher secondFloorTeacher;

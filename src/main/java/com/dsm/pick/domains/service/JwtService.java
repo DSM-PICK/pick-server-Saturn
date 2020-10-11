@@ -15,9 +15,9 @@ public class JwtService {
     //private static final String SECURE_KEY = env.get("TOKEN_SECURE_KEY");
     @Value("${TOKEN_SECURE_KEY:dhwlddjgmanf}")
     private String SECURE_KEY = "dhwlddjgmanf";
-    private byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(SECURE_KEY);
-    private SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
-    private Key KEY = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
+    private final byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(SECURE_KEY);
+    private final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
+    private final Key KEY = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
 
     public String createAccessToken(String teacherId) {
         return Jwts.builder()
@@ -32,7 +32,7 @@ public class JwtService {
     public String createRefreshToken(String teacherId) {
         return Jwts.builder()
                 .setHeaderParam("typ", "JWT")
-                .setSubject("reflash token")
+                .setSubject("refresh token")
                 .claim("id", teacherId)
                 .setExpiration(new Date(System.currentTimeMillis() + (1000 * 60 * 60 * 24 * 7)))    // 2주
                 .signWith(signatureAlgorithm, KEY)
@@ -76,20 +76,9 @@ public class JwtService {
                     .getBody()
                     .getExpiration();
 
-            if(expiration.after(now))
-                return true;
-            return false;
+            return expiration.after(now);
         } catch(Exception e) {
             return false;
         }
     }
-
-//    public void killToken(String token) {
-//        Jwts.parser()
-//                .setSigningKey(KEY)
-//                .parseClaimsJws(token)
-//                .getBody()
-//                .getExpiration()
-//                .setTime(0);
-//    }
 }

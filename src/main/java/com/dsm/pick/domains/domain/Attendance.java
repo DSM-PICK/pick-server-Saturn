@@ -8,6 +8,7 @@ import java.time.LocalDate;
 public class Attendance {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
 
@@ -20,7 +21,7 @@ public class Attendance {
     private Student student;
 
     @Column(name = "period")
-    private String period;
+    private int period;
 
     @ManyToOne
     @JoinColumn(name = "teacher_id", referencedColumnName = "id")
@@ -30,7 +31,7 @@ public class Attendance {
     private String state;
 
     public Attendance() {}
-    public Attendance(int id, Activity activity, Student student, String period, Teacher teacher, String state) {
+    public Attendance(int id, Activity activity, Student student, int period, Teacher teacher, String state) {
         this.id = id;
         this.activity = activity;
         this.student = student;
@@ -63,11 +64,11 @@ public class Attendance {
         this.student = student;
     }
 
-    public String getPeriod() {
+    public int getPeriod() {
         return period;
     }
 
-    public void setPeriod(String period) {
+    public void setPeriod(int period) {
         this.period = period;
     }
 

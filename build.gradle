@@ -71,6 +71,7 @@ jacocoTestCoverageVerification {
 					'com.dsm.pick.SwaggerConfiguration',
 					'com.dsm.pick.utils.*',
 					'com.dsm.pick.domains.domain.*',
+					'com.dsm.pick.component.*',
 
 					'com.dsm.pick.controller.AttendanceController',
 					'com.dsm.pick.domains.service.AttendanceService'

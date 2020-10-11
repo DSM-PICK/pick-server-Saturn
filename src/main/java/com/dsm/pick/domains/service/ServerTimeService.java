@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 public class ServerTimeService {
 
     public String getMonthAndDate() {
+
         LocalDate date = LocalDate.now();
         int intMonth = date.getMonth().getValue();
         int intDayOfMonth = date.getDayOfMonth();
@@ -28,7 +29,6 @@ public class ServerTimeService {
             dayOfMonth = String.valueOf(intDayOfMonth);
         }
 
-        System.out.println("Month + DayOfMonth : " + month + dayOfMonth);
         return month + dayOfMonth;
     }
 

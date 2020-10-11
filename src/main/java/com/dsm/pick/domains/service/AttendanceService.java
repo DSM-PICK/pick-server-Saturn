@@ -26,10 +26,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @Transactional
 public class AttendanceService {
 
-    private ClassRepository classRepository;
-    private ClubRepository clubRepository;
-    private ActivityRepository activityRepository;
-    private AttendanceRepository attendanceRepository;
+    private final ClassRepository classRepository;
+    private final ClubRepository clubRepository;
+    private final ActivityRepository activityRepository;
+    private final AttendanceRepository attendanceRepository;
 
     @Autowired
     public AttendanceService(ClassRepository classRepository, ClubRepository clubRepository, ActivityRepository activityRepository, AttendanceRepository attendanceRepository) {
@@ -52,7 +52,7 @@ public class AttendanceService {
             List<Club> clubList = clubRepository.findByFloor(floor);
             AtomicBoolean isFirst = new AtomicBoolean(true);
             final Comparator<Club> comparator =
-                    (c1, c2) -> Integer.compare(c1.getLocation().getPriority(), c2.getLocation().getPriority());
+                    Comparator.comparingInt(c -> c.getLocation().getPriority());
 
             clubList.stream()
                     .sorted(comparator)
@@ -107,8 +107,8 @@ public class AttendanceService {
 
     public String getTodayTeacherName(String date, int floor) {
         int todayYear = LocalDate.now().getYear();
-        int todayMonth = Integer.valueOf(date.substring(0, 2));
-        int todayDayOfMonth = Integer.valueOf(date.substring(2, 4));
+        int todayMonth = Integer.valueOf(date.substring(0, 2)).intValue();
+        int todayDayOfMonth = Integer.valueOf(date.substring(2, 4)).intValue();
 
         LocalDate id = LocalDate.of(todayYear, todayMonth, todayDayOfMonth);
 
@@ -116,15 +116,15 @@ public class AttendanceService {
         String teacherName;
         if(floor == 2) {
             teacherName = activity.map(a -> a.getSecondFloorTeacher().getName())
-                    .orElseThrow(() -> new ActivityNotFoundException());
+                    .orElseThrow(ActivityNotFoundException::new);
         } else if(floor == 3) {
             teacherName = activity.map(a -> a.getThirdFloorTeacher().getName())
-                    .orElseThrow(() -> new ActivityNotFoundException());
+                    .orElseThrow(ActivityNotFoundException::new);
         } else if(floor == 4) {
             teacherName = activity.map(a -> a.getForthFloorTeacher().getName())
-                    .orElseThrow(() -> new ActivityNotFoundException());
+                    .orElseThrow(ActivityNotFoundException::new);
         } else {
-            throw new ActivityNotFoundException();
+            throw new NonExistFloorException("floor 가 2, 3, 4가 아님");
         }
 
         return teacherName;
@@ -138,7 +138,7 @@ public class AttendanceService {
         } else if(activity.equals("self-study")) {
             club = null;
         } else {
-            throw new ActivityNotFoundException();
+            throw new NonExistActivityException("Activity 가 club 또는 self-study 가 아닙니다.");
         }
 
         return club;
@@ -147,10 +147,11 @@ public class AttendanceService {
     public List<AttendanceListForm> getAttendanceList(LocalDate date, int floor, int priority) {
         List<AttendanceListForm> form = new ArrayList<>();
         final Comparator<Attendance> comparator =
-                (c1, c2) -> c1.getStudent().getNum().compareTo(c2.getStudent().getNum());
+                Comparator.comparing(c -> c.getStudent().getNum());
 
         List<Attendance> attendanceList = attendanceRepository.findByDateAndFloorAndPriority(date, floor, priority);
-        attendanceList.stream().sorted(comparator);
+        attendanceList.stream()
+                .sorted(comparator);
 
         AttendanceListForm attendanceListForm = null;
         for(Attendance a : attendanceList) {
@@ -168,13 +169,14 @@ public class AttendanceService {
             if(attendanceListForm.getState() == null)
                 attendanceListForm.setState(new AttendanceStateForm());
 
-            if(a.getPeriod().equals("7"))
+            int period = a.getPeriod();
+            if(period == 7)
                 attendanceListForm.getState().setSeven(a.getState());
-            else if(a.getPeriod().equals("8"))
+            else if(period == 8)
                 attendanceListForm.getState().setEight(a.getState());
-            else if(a.getPeriod().equals("9"))
+            else if(period == 9)
                 attendanceListForm.getState().setNine(a.getState());
-            else if(a.getPeriod().equals("10"))
+            else if(period == 10)
                 attendanceListForm.getState().setTen(a.getState());
         }
         if(attendanceListForm != null)
@@ -183,11 +185,9 @@ public class AttendanceService {
         return form;
     }
 
-    public void updateAttendance(LocalDate date, int floor, int priority, String number, String period, String state) {
+    public void updateAttendance(LocalDate date, String number, int period, String state) {
         Attendance attendance = attendanceRepository.findByDateAndFloorAndPriorityAndNumberAndPeriod(
                 date,
-                floor,
-                priority,
                 number,
                 period
         );

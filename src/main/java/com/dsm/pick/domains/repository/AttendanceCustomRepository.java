@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface AttendanceCustomRepository {
     List<Attendance> findByDateAndFloorAndPriority(LocalDate date, int floor, int priority);
-    Attendance findByDateAndFloorAndPriorityAndNumberAndPeriod(LocalDate date, int floor, int priority, String number, String period);
+    Attendance findByDateAndFloorAndPriorityAndNumberAndPeriod(LocalDate date, String number, int period);
 }

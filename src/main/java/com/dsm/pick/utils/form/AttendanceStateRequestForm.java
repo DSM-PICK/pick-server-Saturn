@@ -7,12 +7,12 @@ public class AttendanceStateRequestForm {
     @ApiParam(value = "학반번호 [ 2417 ]", required = true)
     private String number;
     @ApiParam(value = "요일 [ '7', '8', '9', '10' ]", required = true)
-    private String period;
+    private int period;
     @ApiParam(value = "출석 상태 [ 출석, 외출, 현체, 병결, 공결, 무단 ]", required = true)
     private String state;
 
     public AttendanceStateRequestForm() {}
-    public AttendanceStateRequestForm(String number, String period, String state) {
+    public AttendanceStateRequestForm(String number, int period, String state) {
         this.number = number;
         this.period = period;
         this.state = state;
@@ -26,11 +26,11 @@ public class AttendanceStateRequestForm {
         this.number = number;
     }
 
-    public String getPeriod() {
+    public int getPeriod() {
         return period;
     }
 
-    public void setPeriod(String period) {
+    public void setPeriod(int period) {
         this.period = period;
     }
 
