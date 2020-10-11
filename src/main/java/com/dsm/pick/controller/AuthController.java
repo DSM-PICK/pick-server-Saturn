@@ -37,7 +37,7 @@ public class AuthController {
             @ApiResponse(code = 410, message = "Incorrect Encoding or Algorithm"),
             @ApiResponse(code = 500, message = "500???")
     })
-    @PostMapping("/access-refresh-token")
+    @PostMapping("/login")
     public LoginResponseForm login(@RequestBody TeacherRequestForm teacherRequestForm) {
         Teacher teacher = new Teacher();
         teacher.setId(teacherRequestForm.getId());
@@ -91,7 +91,7 @@ public class AuthController {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "header", name = "Authorization", dataType = "string", required = true, value = "Refresh Token")
     })
-    @PostMapping("/access-token")
+    @GetMapping("/access-token")
     public AccessTokenReissuanceResponseForm accessTokenReissuance(HttpServletRequest request) {
         String refreshToken = request.getHeader("Authorization");
 
