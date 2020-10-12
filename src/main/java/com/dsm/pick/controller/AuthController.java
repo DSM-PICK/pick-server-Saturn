@@ -3,6 +3,7 @@ package com.dsm.pick.controller;
 import com.dsm.pick.domains.domain.Teacher;
 import com.dsm.pick.domains.service.AuthService;
 import com.dsm.pick.domains.service.JwtService;
+import com.dsm.pick.utils.exception.TokenExpirationException;
 import com.dsm.pick.utils.exception.TokenInvalidException;
 import com.dsm.pick.utils.form.*;
 import io.swagger.annotations.*;
@@ -64,6 +65,7 @@ public class AuthController {
     @ApiOperation(value = "정상적인 토큰인지 확인", notes = "정상적인 토큰인지 확인")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK!!"),
+            @ApiResponse(code = 401, message = "Token Expiration"),
             @ApiResponse(code = 403, message = "Token Invalid"),
             @ApiResponse(code = 500, message = "500???")
     })
@@ -75,9 +77,13 @@ public class AuthController {
         String token = request.getHeader("Authorization");
 
         boolean isValid = jwtService.isValid(token);
-
         if(!isValid) {
             throw new TokenInvalidException("토큰이 잘못 되었습니다.");
+        }
+
+        boolean isNotTimeOut = jwtService.isNotTimeOut(token);
+        if(!isNotTimeOut) {
+            throw new TokenExpirationException("토큰이 만료 되었습니다.");
         }
     }
 

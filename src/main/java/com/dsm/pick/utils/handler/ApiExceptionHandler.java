@@ -38,8 +38,14 @@ public class ApiExceptionHandler {
 
     @ExceptionHandler(TokenInvalidException.class)
     public ResponseEntity<ApiErrorResponseForm> tokenInvalidExceptionHandler(TokenInvalidException ex) {
-        ApiErrorResponseForm response = new ApiErrorResponseForm("Token Invalid Exception", "토큰이 잘못 됨");
+        ApiErrorResponseForm response = new ApiErrorResponseForm("Token Invalid Exception", "토큰이 잘못됨");
         return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(TokenExpirationException.class)
+    public ResponseEntity<ApiErrorResponseForm> tokenExpirationExceptionHandler(TokenExpirationException ex) {
+        ApiErrorResponseForm response = new ApiErrorResponseForm("Token Expiration Exception", "토큰이 만료됨");
+        return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(ActivityNotFoundException.class)
