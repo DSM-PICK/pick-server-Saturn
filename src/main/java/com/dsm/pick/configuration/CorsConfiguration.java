@@ -16,6 +16,7 @@ public class CorsConfiguration {
                 registry.addMapping("/saturn/**")
                         .allowedOrigins("*")
                         .allowedMethods("*")
+                        .allowCredentials(false)
                         .maxAge(3000);
             }
         };
