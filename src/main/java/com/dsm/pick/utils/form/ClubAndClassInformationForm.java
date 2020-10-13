@@ -36,7 +36,7 @@ public class ClubAndClassInformationForm {
         this.name = name;
     }
 
-    public String setDone() {
+    public String getDone() {
         return done;
     }
 
