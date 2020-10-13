@@ -87,6 +87,21 @@ class AuthServiceTest {
     }
 
     @Test
+    void getTeacherName() {
+        String teacherId = "abcd";
+        String teacherPw = "abcd";
+        String teacherName = "abcd";
+
+        Teacher teacher = new Teacher(teacherId, teacherPw, teacherName);
+
+        authService.join(teacher);
+
+        String findTeacherName = authService.getTeacherName(teacherId);
+
+        assertEquals(findTeacherName, teacherName);
+    }
+
+    @Test
     void join() {
     }
 

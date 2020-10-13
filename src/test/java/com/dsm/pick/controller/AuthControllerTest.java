@@ -103,6 +103,12 @@ class AuthControllerTest {
             teachers.put(teacher.getId(), findTeacher);
             return true;
         }
+
+        @Override
+        public String getTeacherName(String teacherId) {
+            Teacher findTeacher = teachers.get(teacherId);
+            return findTeacher.getName();
+        }
     }
 
     static class MockHttpServletRequest implements HttpServletRequest {

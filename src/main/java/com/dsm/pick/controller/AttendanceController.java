@@ -35,7 +35,7 @@ public class AttendanceController {
     @ApiOperation(value = "출석 페이지 네비게이션 정보", notes = "방과후 교실 정보 및 선생님 정보 반환")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK!!"),
-            @ApiResponse(code = 400, message = "floor is not in (1, 2, 3, 4) or activity is not in ('club', 'self-study')"),
+            @ApiResponse(code = 400, message = "floor is not in (1, 2, 3, 4)"),
             @ApiResponse(code = 403, message = "token invalid"),
             @ApiResponse(code = 500, message = "500???")
     })
@@ -71,7 +71,7 @@ public class AttendanceController {
     @ApiOperation(value = "출석 현황 요청", notes = "출석 현황 반환")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK!!"),
-            @ApiResponse(code = 400, message = "floor is not in (1, 2, 3, 4) or activity is not in ('club', 'self-study') or priority is not a number"),
+            @ApiResponse(code = 400, message = "floor is not in (1, 2, 3, 4) or priority is not a number"),
             @ApiResponse(code = 403, message = "token invalid"),
             @ApiResponse(code = 404, message = "activity not found or club not found or attendance not found"),
             @ApiResponse(code = 500, message = "500???")
@@ -107,7 +107,7 @@ public class AttendanceController {
     @ApiOperation(value = "출석", notes = "출석 상태 변환")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK!!"),
-            @ApiResponse(code = 400, message = "floor is not in (1, 2, 3, 4) or activity is not in ('club', 'self-study') or priority is not a number"),
+            @ApiResponse(code = 400, message = "floor is not in (1, 2, 3, 4) or priority is not a number"),
             @ApiResponse(code = 404, message = "attendance not found"),
             @ApiResponse(code = 500, message = "500???")
     })

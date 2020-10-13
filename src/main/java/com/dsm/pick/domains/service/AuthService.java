@@ -4,15 +4,16 @@ import com.dsm.pick.domains.domain.Teacher;
 import com.dsm.pick.domains.repository.TeacherRepository;
 import com.dsm.pick.utils.exception.IdOrPasswordMismatchException;
 import com.dsm.pick.utils.exception.NonExistEncodingOrCryptographicAlgorithmException;
+import com.dsm.pick.utils.exception.TeacherNameNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;
+import java.util.Optional;
 
 @Service
-@Transactional
 public class AuthService {
     private static final String ALGORITHM = "SHA-512";
     private static final String ENCODING = "UTF-8";
@@ -20,8 +21,8 @@ public class AuthService {
     private TeacherRepository teacherRepository;
 
     @Autowired
-    public AuthService(TeacherRepository userRepository) {
-        this.teacherRepository = userRepository;
+    public AuthService(TeacherRepository teacherRepository) {
+        this.teacherRepository = teacherRepository;
     }
 
     public String encodingPassword(String original) {
@@ -35,6 +36,12 @@ public class AuthService {
             throw new NonExistEncodingOrCryptographicAlgorithmException("현재 인코딩 방식 또는 암호화 알고리즘이 잘못되었습니다.");
         }
         return resultHex;
+    }
+
+    public String getTeacherName(String teacherId) {
+        return teacherRepository.findById(teacherId)
+                .orElseThrow(TeacherNameNotFoundException::new)
+                .getName();
     }
 
 //    public String getAccessToken(String id) {

@@ -103,7 +103,7 @@ public class AttendanceService {
                         form.add(element);
                     });
         } else {
-            throw new NonExistActivityException("오늘의 schedule 이 club 또는 self-study 가 아닙니다.");
+            throw new NonExistActivityException("데이터의 Activity.schedule in ('club', 'self-study')");
         }
 
         return form;
@@ -148,7 +148,7 @@ public class AttendanceService {
         } else if(schedule.equals("self-study")) {
             club = null;
         } else {
-            throw new NonExistActivityException("schedule 이 club 또는 self-study 가 아닙니다.");
+            throw new NonExistActivityException("데이터의 Activity.schedule in ('club', 'self-study')");
         }
 
         return club;
