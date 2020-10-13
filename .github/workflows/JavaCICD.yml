@@ -14,6 +14,7 @@ jobs:
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
       DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
       DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+      TOKEN_SECURE_KEY: ${{ secrets.TOKEN_SECURE_KEY }}
       SERVER_HOST: ${{ secrets.SERVER_HOST }}
 
     steps:
