@@ -59,7 +59,6 @@ public class AuthController {
             result = new LoginResponseForm(accessToken, refreshToken, teacherName);
         }
 
-        logger.info("LOGIN::LOGIN::LOGIN::LOGIN::LOGIN::LOGIN::LOGIN::LOGIN::LOGIN::LOGIN::LOGIN");
         return result;
     }
 

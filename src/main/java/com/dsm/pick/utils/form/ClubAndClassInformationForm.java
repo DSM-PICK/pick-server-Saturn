@@ -7,7 +7,7 @@ public class ClubAndClassInformationForm {
     private String location;
     @ApiModelProperty(example = "UP", required = true)
     private String name;
-    @ApiModelProperty(example = "false", required = true)
+    @ApiModelProperty(example = "done", required = true)
     private String done;
     @ApiModelProperty(example = "3", required = true)
     private int priority;
