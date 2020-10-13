@@ -14,7 +14,7 @@ import java.util.Date;
 public class JwtService {
     //private static final String SECURE_KEY = env.get("TOKEN_SECURE_KEY");
     @Value("${TOKEN_SECURE_KEY:dhwlddjgmanf}")
-    private String SECURE_KEY;
+    private String SECURE_KEY = "";
     private final byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(SECURE_KEY);
     private final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
     private final Key KEY = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
