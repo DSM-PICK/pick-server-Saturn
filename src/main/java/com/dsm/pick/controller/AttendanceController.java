@@ -42,9 +42,8 @@ public class AttendanceController {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "header", name = "Authorization", dataType = "string", required = true, value = "Access Token")
     })
-    @GetMapping("/{activity}/{floor}")
+    @GetMapping("/navigation/{floor}")
     public AttendanceNavigationResponseForm attendanceNavigation(
-            @ApiParam(value = "방과후[ club, self-study ]", required = true) @PathVariable("activity") String activity,
             @ApiParam(value = "층[ 1(자습실), 2, 3, 4 ]", required = true) @PathVariable("floor") String floorStr,
             HttpServletRequest request) {
 
@@ -58,7 +57,7 @@ public class AttendanceController {
         }
 
         List<ClubAndClassInformationForm> clubAndClassInformationForms =
-                attendanceService.getNavigationInformation(activity, floor);
+                attendanceService.getNavigationInformation(floor);
         String date =
                 serverTimeService.getMonthAndDate();
         String dayOfWeek =
@@ -80,9 +79,8 @@ public class AttendanceController {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "header", name = "Authorization", dataType = "string", required = true, value = "Access Token")
     })
-    @GetMapping("/{activity}/{floor}/{priority}")
+    @GetMapping("/student-state/{floor}/{priority}")
     public AttendanceListResponseForm attendanceList(
-            @ApiParam(value = "방과후[ club, self-study ]", required = true) @PathVariable("activity") String activity,
             @ApiParam(value = "층[ 1(자습실), 2, 3, 4 ]", required = true) @PathVariable("floor") String floorStr,
             @ApiParam(value = "위치[ 왼쪽에서부터 0 ]", required = true) @PathVariable("priority") String priorityStr,
             HttpServletRequest request) {
@@ -99,7 +97,7 @@ public class AttendanceController {
         }
 
         Club club =
-                attendanceService.getClubHeadAndName(activity, floor, priority);
+                attendanceService.getClubHeadAndName(floor, priority);
         List<AttendanceListForm> attendanceList =
                 attendanceService.getAttendanceList(LocalDate.now(), floor, priority);
 

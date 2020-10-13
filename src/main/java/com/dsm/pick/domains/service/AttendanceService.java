@@ -39,11 +39,15 @@ public class AttendanceService {
         this.attendanceRepository = attendanceRepository;
     }
 
-    public List<ClubAndClassInformationForm> getNavigationInformation(String activity, int floor) {
+    public List<ClubAndClassInformationForm> getNavigationInformation(int floor) {
 
         List<ClubAndClassInformationForm> form = new ArrayList<>();
 
-        if(activity.equals("club")) {
+        Activity activity = activityRepository.findById(LocalDate.now())
+                .orElseThrow(ActivityNotFoundException::new);
+
+        String schedule = activity.getSchedule();
+        if(schedule.equals("club")) {
 
             if(!(1 <= floor && floor <= 4)) {
                 throw new NonExistFloorException("1, 2, 3, 4층이 아닙니다.");
@@ -72,7 +76,7 @@ public class AttendanceService {
                         form.add(element);
                     });
 
-        } else if(activity.equals("self-study")) {
+        } else if(schedule.equals("self-study")) {
 
             if(!(2 <= floor && floor <= 4)) {
                 throw new NonExistFloorException("2, 3, 4층이 아닙니다.");
@@ -99,7 +103,7 @@ public class AttendanceService {
                         form.add(element);
                     });
         } else {
-            throw new NonExistActivityException("Activity 가 club 또는 self-study 가 아닙니다.");
+            throw new NonExistActivityException("오늘의 schedule 이 club 또는 self-study 가 아닙니다.");
         }
 
         return form;
@@ -132,15 +136,19 @@ public class AttendanceService {
         return teacherName;
     }
 
-    public Club getClubHeadAndName(String activity, int floor, int priority) {
-        Club club;
+    public Club getClubHeadAndName(int floor, int priority) {
 
-        if(activity.equals("club")) {
+        Activity activity = activityRepository.findById(LocalDate.now())
+                .orElseThrow(ActivityNotFoundException::new);
+
+        String schedule = activity.getSchedule();
+        Club club;
+        if(schedule.equals("club")) {
             club = clubRepository.findByFloorAndPriority(floor, priority);
-        } else if(activity.equals("self-study")) {
+        } else if(schedule.equals("self-study")) {
             club = null;
         } else {
-            throw new NonExistActivityException("Activity 가 club 또는 self-study 가 아닙니다.");
+            throw new NonExistActivityException("schedule 이 club 또는 self-study 가 아닙니다.");
         }
 
         return club;
