@@ -24,8 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class AuthControllerTest {
 
-    private AuthService authService = new MockAuthService(null, null);
-    private AuthController authController = new AuthController(authService, new MockJwtService());
+    private AuthController authController = new AuthController(new MockAuthService(null, null), new MockJwtService("dhwlddjgmanf"));
 
     @Test
     void login_success() {
@@ -458,6 +457,10 @@ class AuthControllerTest {
 
         private Date date = new Date();
         private String teacherId = "aaa";
+
+        public MockJwtService(String secure_key) {
+            super(secure_key);
+        }
 
         @Override
         public String createAccessToken(String teacherId) {

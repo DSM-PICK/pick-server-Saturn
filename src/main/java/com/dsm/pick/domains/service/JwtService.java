@@ -2,6 +2,7 @@ package com.dsm.pick.domains.service;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -13,11 +14,19 @@ import java.util.Date;
 @Service
 public class JwtService {
     //private static final String SECURE_KEY = env.get("TOKEN_SECURE_KEY");
-    @Value("${TOKEN_SECURE_KEY:dhwlddjgmanf}")
-    private String SECURE_KEY = "";
-    private final byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(SECURE_KEY);
-    private final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
-    private final Key KEY = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
+//    @Value("${TOKEN_SECURE_KEY:dhwlddjgmanf}")
+//    private String SECURE_KEY;
+//    private final byte[] apiKeySecretBytes;
+//    private final SignatureAlgorithm signatureAlgorithm;
+//    private final Key KEY;
+    private final SignatureAlgorithm signatureAlgorithm;
+    private final Key KEY;
+
+    public JwtService(@Value("${TOKEN_SECURE_KEY:dhwlddjgmanf}") String secure_key) {
+        byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(secure_key);
+        signatureAlgorithm = SignatureAlgorithm.HS256;
+        KEY = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
+    }
 
     public String createAccessToken(String teacherId) {
         return Jwts.builder()

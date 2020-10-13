@@ -1,7 +1,10 @@
 package com.dsm.pick.domains.service;
 
+import io.jsonwebtoken.Jwt;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
@@ -12,12 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class JwtServiceTest {
 
-    private static final String SECURE_KEY = "dhwlddjgmanf";
-    private static final byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(SECURE_KEY);
-    private static final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
-    private static final Key KEY = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
-
-    JwtService jwtService = new JwtService();
+    JwtService jwtService = new JwtService("dhwlddjgmanf");
 
     @Test
     void createAccessToken() {
@@ -58,27 +56,4 @@ class JwtServiceTest {
 
         assertTrue(isValid && isTimeOut);
     }
-
-    @Test
-    void isUsableToken_죽은_토큰으로_인한_TokenExpirationException_발생() {
-//        String teacherId = "citron";
-//        String accessToken = jwtService.createAccessToken(teacherId);
-//
-//        jwtService.killToken(accessToken);
-//        try {
-//            Thread.sleep(5000);
-//        } catch(Exception e) {}
-//        boolean usableToken = jwtService.isUsableToken(accessToken);
-//
-//        assertFalse(usableToken);
-    }
-
-//    @Test
-//    void killToken() {
-//        String teacherId = "avocado";
-//
-//        String accessToken = jwtService.createAccessToken(teacherId);
-//
-//        jwtService.killToken(accessToken);
-//    }
 }
