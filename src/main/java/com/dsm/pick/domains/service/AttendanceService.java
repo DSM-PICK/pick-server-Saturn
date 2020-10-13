@@ -66,10 +66,10 @@ public class AttendanceService {
                         element.setName(c.getName());
                         element.setLocation(c.getLocation().getLocation());
                         if(isFirst.get()) {
-                            element.setDone(true);
+                            element.setDone("done");
                             isFirst.set(false);
                         } else {
-                            element.setDone(false);
+                            element.setDone("none");
                         }
                         element.setPriority(c.getLocation().getPriority());
 
@@ -93,10 +93,10 @@ public class AttendanceService {
                         element.setName(c.getName());
                         element.setLocation(c.getName());
                         if(isFirst.get()) {
-                            element.setDone(true);
+                            element.setDone("done");
                             isFirst.set(false);
                         } else {
-                            element.setDone(false);
+                            element.setDone("none");
                         }
                         element.setPriority(c.getPriority());
 

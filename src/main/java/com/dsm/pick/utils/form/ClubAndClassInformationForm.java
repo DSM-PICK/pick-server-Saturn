@@ -8,12 +8,12 @@ public class ClubAndClassInformationForm {
     @ApiModelProperty(example = "UP", required = true)
     private String name;
     @ApiModelProperty(example = "false", required = true)
-    private boolean done;
+    private String done;
     @ApiModelProperty(example = "3", required = true)
     private int priority;
 
     public ClubAndClassInformationForm() {}
-    public ClubAndClassInformationForm(String location, String name, boolean done, int priority) {
+    public ClubAndClassInformationForm(String location, String name, String done, int priority) {
         this.location = location;
         this.name = name;
         this.done = done;
@@ -36,11 +36,11 @@ public class ClubAndClassInformationForm {
         this.name = name;
     }
 
-    public boolean isDone() {
+    public String isDone() {
         return done;
     }
 
-    public void setDone(boolean done) {
+    public void setDone(String done) {
         this.done = done;
     }
 
