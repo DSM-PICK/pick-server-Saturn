@@ -81,7 +81,7 @@ public class AttendanceScheduler {
                     } else if(schedule.equals("self-study")) {
                         floor = s.getSchoolClass().getFloor();
                     } else {
-                        throw new NonExistActivityException("데이터의 Activity.schedule in ('club', 'self-study')");
+                        throw new NotClubAndSelfStudyException("schedule 이 club 또는 self-study 가 아닙니다.");
                     }
                     attendanceTeacherSetting(attendance1, floor, activity);
                     attendanceTeacherSetting(attendance2, floor, activity);

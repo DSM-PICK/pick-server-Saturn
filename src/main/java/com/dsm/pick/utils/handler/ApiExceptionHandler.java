@@ -60,11 +60,11 @@ public class ApiExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(NonExistActivityException.class)
-    public ResponseEntity<ApiErrorResponseForm> nonExistActivityExceptionHandler(NonExistActivityException ex) {
-        ApiErrorResponseForm response = new ApiErrorResponseForm("Non Exist Activity Exception", "Activity 가 club 또는 self-study 가 아님");
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-    }
+//    @ExceptionHandler(NonExistActivityException.class)
+//    public ResponseEntity<ApiErrorResponseForm> nonExistActivityExceptionHandler(NonExistActivityException ex) {
+//        ApiErrorResponseForm response = new ApiErrorResponseForm("Non Exist Activity Exception", "Activity 가 club 또는 self-study 가 아님");
+//        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+//    }
 
     @ExceptionHandler(NonExistFloorException.class)
     public ResponseEntity<ApiErrorResponseForm> nonExistFloorExceptionHandler(NonExistFloorException ex) {
@@ -76,5 +76,11 @@ public class ApiExceptionHandler {
     public ResponseEntity<ApiErrorResponseForm> nonExistFloorOrPriorityExceptionHandler(NonExistFloorOrPriorityException ex) {
         ApiErrorResponseForm response = new ApiErrorResponseForm("Non Exist floor or priority Exception", "floor 또는 priority 가 숫자가 아님");
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(NotClubAndSelfStudyException.class)
+    public ResponseEntity<ApiErrorResponseForm> notClubAndSelfStudyExceptionHandler(NotClubAndSelfStudyException ex) {
+        ApiErrorResponseForm response = new ApiErrorResponseForm("not a club and self-study exception", "schedule 이 club 또는 self-study 가 아닙니다.");
+        return new ResponseEntity<>(response, HttpStatus.UNPROCESSABLE_ENTITY);
     }
 }

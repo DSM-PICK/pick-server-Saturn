@@ -9,8 +9,8 @@ import com.dsm.pick.domains.repository.AttendanceRepository;
 import com.dsm.pick.domains.repository.ClassRepository;
 import com.dsm.pick.domains.repository.ClubRepository;
 import com.dsm.pick.utils.exception.ActivityNotFoundException;
-import com.dsm.pick.utils.exception.NonExistActivityException;
 import com.dsm.pick.utils.exception.NonExistFloorException;
+import com.dsm.pick.utils.exception.NotClubAndSelfStudyException;
 import com.dsm.pick.utils.form.AttendanceListForm;
 import com.dsm.pick.utils.form.AttendanceStateForm;
 import com.dsm.pick.utils.form.ClubAndClassInformationForm;
@@ -103,7 +103,7 @@ public class AttendanceService {
                         form.add(element);
                     });
         } else {
-            throw new NonExistActivityException("데이터의 Activity.schedule in ('club', 'self-study')");
+            throw new NotClubAndSelfStudyException("schedule 이 club 또는 self-study 가 아닙니다.");
         }
 
         return form;
@@ -148,7 +148,7 @@ public class AttendanceService {
         } else if(schedule.equals("self-study")) {
             club = null;
         } else {
-            throw new NonExistActivityException("데이터의 Activity.schedule in ('club', 'self-study')");
+            throw new NotClubAndSelfStudyException("schedule 이 club 또는 self-study 가 아닙니다.");
         }
 
         return club;
