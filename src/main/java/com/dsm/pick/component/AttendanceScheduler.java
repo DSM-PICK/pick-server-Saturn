@@ -40,6 +40,11 @@ public class AttendanceScheduler {
         this.preAbsenceRepository = preAbsenceRepository;
     }
 
+    @Scheduled(fixedDelay = 5000)
+    public void test() {
+        logger.info("1");
+    }
+
     //    @Scheduled(cron = "0/1 * * * * *")        => TEST
 //    @Scheduled(cron = "1 0 0/1 * * MON-FRI")      => REAL
     @Scheduled(cron = "1 20 0 * * MON-FRI")
