@@ -42,7 +42,7 @@ public class AttendanceScheduler {
 
     //    @Scheduled(cron = "0/1 * * * * *")        => TEST
 //    @Scheduled(cron = "1 0 0/1 * * MON-FRI")      => REAL
-    @Scheduled(cron = "0 40 22 * * WED")
+    @Scheduled(cron = "0 50 22 * * WED")
     public void createTodayAttendance() {
         final LocalDate date = LocalDate.now();
         final Activity activity = activityRepository.findById(date)
