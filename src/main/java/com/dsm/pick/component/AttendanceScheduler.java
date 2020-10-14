@@ -42,11 +42,13 @@ public class AttendanceScheduler {
 
     //    @Scheduled(cron = "0/1 * * * * *")        => TEST
 //    @Scheduled(cron = "1 0 0/1 * * MON-FRI")      => REAL
-    @Scheduled(cron = "0 30 23 * * WED")
+    @Scheduled(cron = "1 0 0 * * MON-FRI")
     public void createTodayAttendance() {
         final LocalDate date = LocalDate.now();
+        logger.info("date : " + date.toString());
         final Activity activity = activityRepository.findById(date)
                 .orElseThrow(ActivityNotFoundException::new);
+        logger.info("schedule : " + activity.getSchedule());
         final List<Student> students = studentRepository.findAll();
         final List<PreAbsence> preAbsencePeriods = preAbsenceRepository.findByCurrentDate();
 
