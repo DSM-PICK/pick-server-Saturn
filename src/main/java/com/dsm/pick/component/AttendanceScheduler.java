@@ -41,7 +41,7 @@ public class AttendanceScheduler {
     }
 
     //    @Scheduled(cron = "0/1 * * * * *")        // TEST
-    @Scheduled(cron = "1 0 0 * * MON-FRI")          // REAL
+    @Scheduled(cron = "1 22 14 * * MON-FRI")          // REAL
 //    @Scheduled(cron = "0 50 13 * * MON-FRI")
     public void createTodayAttendance() {
         logger.info("local date time now : " + LocalDateTime.now());
