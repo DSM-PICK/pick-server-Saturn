@@ -18,7 +18,11 @@ public class ClubCustomRepositoryImpl implements ClubCustomRepository {
 
     @Override
     public List<Club> findByFloor(int floor) {
-        return entityManager.createQuery("SELECT c FROM Club c INNER JOIN c.location l WHERE l.floor = :floor", Club.class)
+//        return entityManager.createQuery("SELECT c FROM Club c INNER JOIN c.location l WHERE l.floor = :floor", Club.class)
+//                .setParameter("floor", floor)
+//                .getResultList();
+        return entityManager.createQuery("SELECT c FROM Club c " +
+                "WHERE c.location.floor = floor")
                 .setParameter("floor", floor)
                 .getResultList();
     }
