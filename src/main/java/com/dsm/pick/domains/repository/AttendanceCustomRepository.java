@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface AttendanceCustomRepository {
-    List<Attendance> findByDateAndFloorAndPriority(LocalDate date, int floor, int priority);
+    List<Attendance> findByDateAndFloorAndPriorityWithClub(LocalDate date, int floor, int priority);
+    List<Attendance> findByDateAndFloorAndPriorityWithClass(LocalDate date, int floor, int priority);
     Attendance findByDateAndNumberAndPeriod(LocalDate date, String number, int period);
 }

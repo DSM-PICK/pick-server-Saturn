@@ -18,12 +18,24 @@ public class AttendanceCustomRepositoryImpl implements AttendanceCustomRepositor
     EntityManager entityManager;
 
     @Override
-    public List<Attendance> findByDateAndFloorAndPriority(LocalDate date, int floor, int priority) {
-        System.out.println("date : " + date);
-        System.out.println("floor : " + floor);
-        System.out.println("priority : " + priority);
+    public List<Attendance> findByDateAndFloorAndPriorityWithClub(LocalDate date, int floor, int priority) {
         List<Attendance> result = entityManager.createQuery("SELECT a FROM Attendance a " +
                 "WHERE a.student.club.location.floor = :floor " +
+                "AND a.student.location.priority = :priority " +
+                "AND a.activity.date = :date", Attendance.class)
+                .setParameter("floor", floor)
+                .setParameter("priority", priority)
+                .setParameter("date", date)
+                .getResultList();
+        if(result.size() <= 0)
+            throw new NoSuchElementException("일치하는 요소가 존재하지 않음");
+        return result;
+    }
+
+    @Override
+    public List<Attendance> findByDateAndFloorAndPriorityWithClass(LocalDate date, int floor, int priority) {
+        List<Attendance> result = entityManager.createQuery("SELECT a FROM Attendance a " +
+                "WHERE a.student.schoolClass.location.floor = :floor " +
                 "AND a.student.location.priority = :priority " +
                 "AND a.activity.date = :date", Attendance.class)
                 .setParameter("floor", floor)

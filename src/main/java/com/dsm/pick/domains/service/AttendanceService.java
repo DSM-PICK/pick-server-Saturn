@@ -147,7 +147,16 @@ public class AttendanceService {
         final Comparator<Attendance> comparator =
                 Comparator.comparing(c -> c.getStudent().getNum());
 
-        List<Attendance> attendanceList = attendanceRepository.findByDateAndFloorAndPriority(date, floor, priority);
+        List<Attendance> attendanceList;
+        String schedule = getTodaySchedule();
+        if(schedule.equals("club")) {
+            attendanceList = attendanceRepository.findByDateAndFloorAndPriorityWithClub(date, floor, priority);
+        } else if(schedule.equals("self-study")) {
+            attendanceList = attendanceRepository.findByDateAndFloorAndPriorityWithClass(date, floor, priority);
+        } else {
+            throw new NotClubAndSelfStudyException("schedule is not club or self-study");
+        }
+
         attendanceList.stream()
                 .sorted(comparator);
 
