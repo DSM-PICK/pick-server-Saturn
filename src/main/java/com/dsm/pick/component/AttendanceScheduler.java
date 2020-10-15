@@ -42,7 +42,7 @@ public class AttendanceScheduler {
 
     //    @Scheduled(cron = "0/1 * * * * *")        => TEST
 //    @Scheduled(cron = "1 0 0/1 * * MON-FRI")      => REAL
-    @Scheduled(cron = "0 55 10 * * MON-FRI")
+    @Scheduled(cron = "0 50 13 * * MON-FRI")
     public void createTodayAttendance() {
         logger.info("local date time now : " + LocalDateTime.now(ZoneId.of("Asia/Seoul")));
         final LocalDate date = LocalDate.now(ZoneId.of("Asia/Seoul"));
