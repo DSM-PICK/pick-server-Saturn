@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -43,7 +44,7 @@ public class AttendanceService {
 
         List<ClubAndClassInformationForm> form = new ArrayList<>();
 
-        Activity activity = activityRepository.findById(LocalDate.now())
+        Activity activity = activityRepository.findById(LocalDate.now(ZoneId.of("Asia/Seoul")))
                 .orElseThrow(ActivityNotFoundException::new);
 
         String schedule = activity.getSchedule();
@@ -110,7 +111,7 @@ public class AttendanceService {
     }
 
     public String getTodayTeacherName(String date, int floor) {
-        int todayYear = LocalDate.now().getYear();
+        int todayYear = LocalDate.now(ZoneId.of("Asia/Seoul")).getYear();
         int todayMonth = Integer.valueOf(date.substring(0, 2)).intValue();
         int todayDayOfMonth = Integer.valueOf(date.substring(2, 4)).intValue();
 
@@ -138,7 +139,7 @@ public class AttendanceService {
 
     public Club getClubHeadAndName(int floor, int priority) {
 
-        Activity activity = activityRepository.findById(LocalDate.now())
+        Activity activity = activityRepository.findById(LocalDate.now(ZoneId.of("Asia/Seoul")))
                 .orElseThrow(ActivityNotFoundException::new);
 
         String schedule = activity.getSchedule();

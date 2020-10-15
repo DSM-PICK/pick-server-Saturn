@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 
 @RestController
@@ -101,7 +102,7 @@ public class AttendanceController {
         Club club =
                 attendanceService.getClubHeadAndName(floor, priority);
         List<AttendanceListForm> attendanceList =
-                attendanceService.getAttendanceList(LocalDate.now(), floor, priority);
+                attendanceService.getAttendanceList(LocalDate.now(ZoneId.of("Asia/Seoul")), floor, priority);
 
         return new AttendanceListResponseForm(club.getName(), club.getHead(), attendanceList);
     }
@@ -124,7 +125,7 @@ public class AttendanceController {
         tokenValidation(request.getHeader("Authorization"));
 
         attendanceService.updateAttendance(
-                LocalDate.now(),
+                LocalDate.now(ZoneId.of("Asia/Seoul")),
                 attendanceStateRequestForm.getNumber(),
                 attendanceStateRequestForm.getPeriod(),
                 attendanceStateRequestForm.getState()

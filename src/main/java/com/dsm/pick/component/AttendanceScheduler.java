@@ -11,10 +11,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 
 @Component
@@ -42,9 +41,9 @@ public class AttendanceScheduler {
 
     //    @Scheduled(cron = "0/1 * * * * *")        => TEST
 //    @Scheduled(cron = "1 0 0/1 * * MON-FRI")      => REAL
-    @Scheduled(cron = "1 38 8 * * MON-FRI")
+    @Scheduled(cron = "1 30 9 * * MON-FRI")
     public void createTodayAttendance() {
-        final LocalDate date = LocalDate.now();
+        final LocalDate date = LocalDate.now(ZoneId.of("Asia/Seoul"));
         logger.info("date : " + date.toString());
         final Activity activity = activityRepository.findById(date)
                 .orElseThrow(ActivityNotFoundException::new);
@@ -165,14 +164,6 @@ public class AttendanceScheduler {
                     attendanceRepository.save(attendance3);
                     attendanceRepository.save(attendance4);
                 });
-
-        logger.info("Schedule : " + LocalDateTime.now().toString());
-        logger.info("Schedule : " + LocalDateTime.now().toString());
-        logger.info("Schedule : " + LocalDateTime.now().toString());
-        logger.info("Schedule : " + LocalDateTime.now().toString());
-        logger.info("Schedule : " + LocalDateTime.now().toString());
-        logger.info("Schedule : " + LocalDateTime.now().toString());
-        logger.info("Schedule : " + LocalDateTime.now().toString());
     }
 
     private int todayStartPeriod(LocalDate date) {
