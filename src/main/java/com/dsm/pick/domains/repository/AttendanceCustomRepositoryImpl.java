@@ -21,7 +21,7 @@ public class AttendanceCustomRepositoryImpl implements AttendanceCustomRepositor
     public List<Attendance> findByDateAndFloorAndPriorityWithClub(LocalDate date, int floor, int priority) {
         List<Attendance> result = entityManager.createQuery("SELECT a FROM Attendance a " +
                 "WHERE a.student.club.location.floor = :floor " +
-                "AND a.student.location.priority = :priority " +
+                "AND a.student.club.location.priority = :priority " +
                 "AND a.activity.date = :date", Attendance.class)
                 .setParameter("floor", floor)
                 .setParameter("priority", priority)
@@ -36,7 +36,7 @@ public class AttendanceCustomRepositoryImpl implements AttendanceCustomRepositor
     public List<Attendance> findByDateAndFloorAndPriorityWithClass(LocalDate date, int floor, int priority) {
         List<Attendance> result = entityManager.createQuery("SELECT a FROM Attendance a " +
                 "WHERE a.student.schoolClass.floor = :floor " +
-                "AND a.student.location.priority = :priority " +
+                "AND a.student.schoolClass.priority = :priority " +
                 "AND a.activity.date = :date", Attendance.class)
                 .setParameter("floor", floor)
                 .setParameter("priority", priority)
