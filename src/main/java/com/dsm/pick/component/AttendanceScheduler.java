@@ -40,9 +40,9 @@ public class AttendanceScheduler {
         this.preAbsenceRepository = preAbsenceRepository;
     }
 
-    //    @Scheduled(cron = "0/1 * * * * *")        // TEST
-    @Scheduled(cron = "1 0 0 * * MON-FRI")          // REAL
-//    @Scheduled(cron = "0 50 13 * * MON-FRI")
+//    @Scheduled(cron = "0/1 * * * * *")              // TEST
+//    @Scheduled(cron = "1 0 0 * * MON-FRI")          // REAL
+    @Scheduled(cron = "0 45 8 * * *")        // TEST
     public void createTodayAttendance() {
         final LocalDate date = LocalDate.now();
         final Activity activity = activityRepository.findById(date)
