@@ -68,6 +68,7 @@ jacocoTestCoverageVerification {
 					'com.dsm.pick.configuration.*',
 					'com.dsm.pick.utils.*',
 					'com.dsm.pick.domains.domain.*',
+					'com.dsm.pick.domains.repository.*',
 					'com.dsm.pick.component.*',
 					'com.dsm.pick.PickApplication',
 

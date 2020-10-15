@@ -44,10 +44,7 @@ public class AttendanceService {
 
         List<ClubAndClassInformationForm> form = new ArrayList<>();
 
-        Activity activity = activityRepository.findById(LocalDate.now())
-                .orElseThrow(ActivityNotFoundException::new);
-
-        String schedule = activity.getSchedule();
+        String schedule = getTodaySchedule();
         if(schedule.equals("club")) {
 
             if(!(1 <= floor && floor <= 4)) {
@@ -138,21 +135,11 @@ public class AttendanceService {
     }
 
     public Club getClubHeadAndName(int floor, int priority) {
+        return clubRepository.findByFloorAndPriority(floor, priority);
+    }
 
-        Activity activity = activityRepository.findById(LocalDate.now())
-                .orElseThrow(ActivityNotFoundException::new);
-
-        String schedule = activity.getSchedule();
-        Club club;
-        if(schedule.equals("club")) {
-            club = clubRepository.findByFloorAndPriority(floor, priority);
-        } else if(schedule.equals("self-study")) {
-            club = null;
-        } else {
-            throw new NotClubAndSelfStudyException("schedule 이 club 또는 self-study 가 아닙니다.");
-        }
-
-        return club;
+    public SchoolClass getClassName(int floor, int priority) {
+        return classRepository.findByFloorAndPriority(floor, priority);
     }
 
     public List<AttendanceListForm> getAttendanceList(LocalDate date, int floor, int priority) {
@@ -197,11 +184,17 @@ public class AttendanceService {
     }
 
     public void updateAttendance(LocalDate date, String number, int period, String state) {
-        Attendance attendance = attendanceRepository.findByDateAndFloorAndPriorityAndNumberAndPeriod(
+        Attendance attendance = attendanceRepository.findByDateAndNumberAndPeriod(
                 date,
                 number,
                 period
         );
         attendance.setState(state);
+    }
+
+    public String getTodaySchedule() {
+        Activity activity = activityRepository.findById(LocalDate.now())
+                .orElseThrow(ActivityNotFoundException::new);
+        return activity.getSchedule();
     }
 }

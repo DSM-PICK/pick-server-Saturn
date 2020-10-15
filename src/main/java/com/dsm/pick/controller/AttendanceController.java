@@ -1,12 +1,13 @@
 package com.dsm.pick.controller;
 
+import com.dsm.pick.domains.domain.Activity;
 import com.dsm.pick.domains.domain.Club;
+import com.dsm.pick.domains.domain.SchoolClass;
+import com.dsm.pick.domains.repository.ActivityRepository;
 import com.dsm.pick.domains.service.AttendanceService;
 import com.dsm.pick.domains.service.JwtService;
 import com.dsm.pick.domains.service.ServerTimeService;
-import com.dsm.pick.utils.exception.NonExistFloorException;
-import com.dsm.pick.utils.exception.NonExistFloorOrPriorityException;
-import com.dsm.pick.utils.exception.TokenInvalidException;
+import com.dsm.pick.utils.exception.*;
 import com.dsm.pick.utils.form.*;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +15,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/attendance")
@@ -23,12 +24,14 @@ import java.util.List;
 public class AttendanceController {
 
     private final AttendanceService attendanceService;
+    private final ActivityRepository activityRepository;
     private final ServerTimeService serverTimeService;
     private final JwtService jwtService;
 
     @Autowired
-    public AttendanceController(AttendanceService attendanceService, JwtService jwtService, ServerTimeService serverTimeService) {
+    public AttendanceController(AttendanceService attendanceService, ActivityRepository activityRepository, JwtService jwtService, ServerTimeService serverTimeService) {
         this.attendanceService = attendanceService;
+        this.activityRepository = activityRepository;
         this.jwtService = jwtService;
         this.serverTimeService = serverTimeService;
     }
@@ -99,12 +102,19 @@ public class AttendanceController {
             throw new NonExistFloorOrPriorityException("floor 또는 priority 가 숫자가 아님");
         }
 
-        Club club =
-                attendanceService.getClubHeadAndName(floor, priority);
         List<AttendanceListForm> attendanceList =
                 attendanceService.getAttendanceList(LocalDate.now(), floor, priority);
 
-        return new AttendanceListResponseForm(club.getName(), club.getHead(), attendanceList);
+        String schedule = attendanceService.getTodaySchedule();
+        if(schedule.equals("club")) {
+            Club club = attendanceService.getClubHeadAndName(floor, priority);
+            return new AttendanceListResponseForm(club.getName(), club.getHead(), attendanceList);
+        } else if(schedule.equals("self-study")) {
+            SchoolClass schoolClass = attendanceService.getClassName(floor, priority);
+            return new AttendanceListResponseForm(schoolClass.getName(), null, attendanceList);
+        } else {
+            throw new NotClubAndSelfStudyException("schedule 이 club 또는 self-study 가 아닙니다.");
+        }
     }
 
     @ApiOperation(value = "출석", notes = "출석 상태 변환")

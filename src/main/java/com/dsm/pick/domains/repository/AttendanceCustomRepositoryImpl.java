@@ -36,7 +36,7 @@ public class AttendanceCustomRepositoryImpl implements AttendanceCustomRepositor
     }
 
     @Override
-    public Attendance findByDateAndFloorAndPriorityAndNumberAndPeriod(LocalDate date, String number, int period) {
+    public Attendance findByDateAndNumberAndPeriod(LocalDate date, String number, int period) {
         return entityManager.createQuery("SELECT a FROM Attendance a " +
                 "WHERE a.activity.date = :date " +
                 "AND a.student.num = :number " +
