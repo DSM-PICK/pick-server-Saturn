@@ -40,12 +40,12 @@ public class AttendanceScheduler {
         this.preAbsenceRepository = preAbsenceRepository;
     }
 
-    //    @Scheduled(cron = "0/1 * * * * *")        => TEST
-//    @Scheduled(cron = "1 0 0/1 * * MON-FRI")      => REAL
-    @Scheduled(cron = "0 50 13 * * MON-FRI")
+    //    @Scheduled(cron = "0/1 * * * * *")        // TEST
+    @Scheduled(cron = "1 0 0 * * MON-FRI")          // REAL
+//    @Scheduled(cron = "0 50 13 * * MON-FRI")
     public void createTodayAttendance() {
-        logger.info("local date time now : " + LocalDateTime.now(ZoneId.of("Asia/Seoul")));
-        final LocalDate date = LocalDate.now(ZoneId.of("Asia/Seoul"));
+        logger.info("local date time now : " + LocalDateTime.now());
+        final LocalDate date = LocalDate.now();
         logger.info("date : " + date.toString());
         final Activity activity = activityRepository.findById(date)
                 .orElseThrow(ActivityNotFoundException::new);

@@ -44,7 +44,7 @@ public class AttendanceService {
 
         List<ClubAndClassInformationForm> form = new ArrayList<>();
 
-        Activity activity = activityRepository.findById(LocalDate.now(ZoneId.of("Asia/Seoul")))
+        Activity activity = activityRepository.findById(LocalDate.now())
                 .orElseThrow(ActivityNotFoundException::new);
 
         String schedule = activity.getSchedule();
@@ -111,7 +111,7 @@ public class AttendanceService {
     }
 
     public String getTodayTeacherName(String date, int floor) {
-        int todayYear = LocalDate.now(ZoneId.of("Asia/Seoul")).getYear();
+        int todayYear = LocalDate.now().getYear();
         int todayMonth = Integer.valueOf(date.substring(0, 2)).intValue();
         int todayDayOfMonth = Integer.valueOf(date.substring(2, 4)).intValue();
 
@@ -139,7 +139,7 @@ public class AttendanceService {
 
     public Club getClubHeadAndName(int floor, int priority) {
 
-        Activity activity = activityRepository.findById(LocalDate.now(ZoneId.of("Asia/Seoul")))
+        Activity activity = activityRepository.findById(LocalDate.now())
                 .orElseThrow(ActivityNotFoundException::new);
 
         String schedule = activity.getSchedule();

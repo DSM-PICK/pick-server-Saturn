@@ -102,7 +102,7 @@ public class AttendanceController {
         Club club =
                 attendanceService.getClubHeadAndName(floor, priority);
         List<AttendanceListForm> attendanceList =
-                attendanceService.getAttendanceList(LocalDate.now(ZoneId.of("Asia/Seoul")), floor, priority);
+                attendanceService.getAttendanceList(LocalDate.now(), floor, priority);
 
         return new AttendanceListResponseForm(club.getName(), club.getHead(), attendanceList);
     }
@@ -125,7 +125,7 @@ public class AttendanceController {
         tokenValidation(request.getHeader("Authorization"));
 
         attendanceService.updateAttendance(
-                LocalDate.now(ZoneId.of("Asia/Seoul")),
+                LocalDate.now(),
                 attendanceStateRequestForm.getNumber(),
                 attendanceStateRequestForm.getPeriod(),
                 attendanceStateRequestForm.getState()

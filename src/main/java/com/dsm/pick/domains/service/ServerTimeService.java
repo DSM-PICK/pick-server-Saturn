@@ -11,7 +11,7 @@ public class ServerTimeService {
 
     public String getMonthAndDate() {
 
-        LocalDate date = LocalDate.now(ZoneId.of("Asia/Seoul"));
+        LocalDate date = LocalDate.now();
         int intMonth = date.getMonth().getValue();
         int intDayOfMonth = date.getDayOfMonth();
 
@@ -35,7 +35,7 @@ public class ServerTimeService {
 
     public String getDayOfWeek() {
         String dayOfWeeks[] = {"월", "화", "수", "목", "금", "토", "일"};
-        LocalDateTime date = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
+        LocalDateTime date = LocalDateTime.now();
 
         int intDayOfWeek = date.getDayOfWeek().getValue();
         return dayOfWeeks[intDayOfWeek - 1];
