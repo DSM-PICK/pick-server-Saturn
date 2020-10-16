@@ -22,19 +22,28 @@ public class ClubCustomRepositoryImpl implements ClubCustomRepository {
 //                .setParameter("floor", floor)
 //                .getResultList();
         return entityManager.createQuery("SELECT c FROM Club c " +
-                "WHERE c.location.floor = floor")
+                "WHERE c.location.floor = :floor")
                 .setParameter("floor", floor)
                 .getResultList();
     }
 
     @Override
     public Club findByFloorAndPriority(int floor, int priority) {
-        return entityManager.createQuery("SELECT c FROM Club c INNER JOIN c.location l WHERE l.floor = :floor AND l.priority = :priority", Club.class)
+//        return entityManager.createQuery("SELECT c FROM Club c INNER JOIN c.location l WHERE l.floor = :floor AND l.priority = :priority", Club.class)
+//                .setParameter("floor", floor)
+//                .setParameter("priority", priority)
+//                .getResultList()
+//                .stream()
+//                .findAny()
+//                .orElseThrow(() -> new ClubNotFoundException());
+        return entityManager.createQuery("SELECT c FROM Club c " +
+                "WHERE c.location.floor = :floor " +
+                "AND c.location.priority = :priority", Club.class)
                 .setParameter("floor", floor)
                 .setParameter("priority", priority)
                 .getResultList()
                 .stream()
                 .findAny()
-                .orElseThrow(() -> new ClubNotFoundException());
+                .orElseThrow(ClubNotFoundException::new);
     }
 }
