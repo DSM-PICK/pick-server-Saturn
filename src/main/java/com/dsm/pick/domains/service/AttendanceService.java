@@ -69,7 +69,7 @@ public class AttendanceService {
                         } else {
                             element.setDone("none");
                         }
-                        element.setPriority(c.getLocation().getPriority());
+                        element.setPriority(String.valueOf(c.getLocation().getPriority()));
 
                         form.add(element);
                     });
@@ -96,7 +96,7 @@ public class AttendanceService {
                         } else {
                             element.setDone("none");
                         }
-                        element.setPriority(c.getPriority());
+                        element.setPriority(String.valueOf(c.getPriority()));
 
                         form.add(element);
                     });

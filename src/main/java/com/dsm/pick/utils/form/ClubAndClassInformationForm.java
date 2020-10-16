@@ -10,10 +10,10 @@ public class ClubAndClassInformationForm {
     @ApiModelProperty(example = "done", required = true)
     private String done;
     @ApiModelProperty(example = "3", required = true)
-    private int priority;
+    private String priority;
 
     public ClubAndClassInformationForm() {}
-    public ClubAndClassInformationForm(String location, String name, String done, int priority) {
+    public ClubAndClassInformationForm(String location, String name, String done, String priority) {
         this.location = location;
         this.name = name;
         this.done = done;
@@ -44,11 +44,11 @@ public class ClubAndClassInformationForm {
         this.done = done;
     }
 
-    public int getPriority() {
+    public String getPriority() {
         return priority;
     }
 
-    public void setPriority(int priority) {
+    public void setPriority(String priority) {
         this.priority = priority;
     }
 }
