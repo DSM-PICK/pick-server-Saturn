@@ -7,11 +7,9 @@ import com.dsm.pick.utils.exception.NonExistEncodingOrCryptographicAlgorithmExce
 import com.dsm.pick.utils.exception.TeacherNameNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;
-import java.util.Optional;
 
 @Service
 public class AuthService {

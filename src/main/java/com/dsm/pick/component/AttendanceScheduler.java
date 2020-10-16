@@ -13,8 +13,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.List;
 
 @Component
@@ -42,7 +40,7 @@ public class AttendanceScheduler {
 
 //    @Scheduled(cron = "0/1 * * * * *")              // TEST
 //    @Scheduled(cron = "1 0 0 * * MON-FRI")          // REAL
-    @Scheduled(cron = "0 26 14 * * *")        // TEST
+    @Scheduled(cron = "0 2 15 * * *")        // TEST
     public void createTodayAttendance() {
         final LocalDate date = LocalDate.now();
         final Activity activity = activityRepository.findById(date)
