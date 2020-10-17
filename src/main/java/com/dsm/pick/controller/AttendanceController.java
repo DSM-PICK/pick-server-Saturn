@@ -69,8 +69,9 @@ public class AttendanceController {
                 serverTimeService.getDayOfWeek();
         String teacherName =
                 attendanceService.getTodayTeacherName(date, floor);
+        String schedule = attendanceService.getTodaySchedule();
 
-        return new AttendanceNavigationResponseForm(date, dayOfWeek, teacherName, clubAndClassInformationForms);
+        return new AttendanceNavigationResponseForm(date, dayOfWeek, teacherName, schedule, clubAndClassInformationForms);
     }
 
     @ApiOperation(value = "출석 현황 요청", notes = "출석 현황 반환")

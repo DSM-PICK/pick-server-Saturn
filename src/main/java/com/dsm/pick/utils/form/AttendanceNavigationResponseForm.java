@@ -11,13 +11,16 @@ public class AttendanceNavigationResponseForm {
     private String dayOfWeek;
     @ApiModelProperty(example = "김정은", required = true)
     private String teacherName;
+    @ApiModelProperty(example = "club", required = true)
+    private String schedule;
     private List<ClubAndClassInformationForm> locations;
 
     public AttendanceNavigationResponseForm() {}
-    public AttendanceNavigationResponseForm(String date, String dayOfWeek, String teacherName, List<ClubAndClassInformationForm> locations) {
+    public AttendanceNavigationResponseForm(String date, String dayOfWeek, String teacherName, String schedule, List<ClubAndClassInformationForm> locations) {
         this.date = date;
         this.dayOfWeek = dayOfWeek;
         this.teacherName = teacherName;
+        this.schedule = schedule;
         this.locations = locations;
     }
 
@@ -51,5 +54,13 @@ public class AttendanceNavigationResponseForm {
 
     public void setLocations(List<ClubAndClassInformationForm> locations) {
         this.locations = locations;
+    }
+
+    public String getSchedule() {
+        return schedule;
+    }
+
+    public void setSchedule(String schedule) {
+        this.schedule = schedule;
     }
 }
