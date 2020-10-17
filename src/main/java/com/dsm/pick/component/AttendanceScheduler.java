@@ -40,7 +40,7 @@ public class AttendanceScheduler {
 
 //    @Scheduled(cron = "0/1 * * * * *")              // TEST
 //    @Scheduled(cron = "1 0 0 * * MON-FRI")          // REAL
-    @Scheduled(cron = "0 20 18 * * *")        // TEST
+    @Scheduled(cron = "0 22 18 * * *")        // TEST
     public void createTodayAttendance() {
         final LocalDate date = LocalDate.now();
         final Activity activity = activityRepository.findById(date)
@@ -164,15 +164,16 @@ public class AttendanceScheduler {
     }
 
     private int todayStartPeriod(LocalDate date) {
-        int dayOfWeek = date.getDayOfWeek().getValue();
-
-        if(1 <= dayOfWeek && dayOfWeek <= 4) {
-            return 8;
-        } else if(dayOfWeek == 5) {
-            return 7;
-        } else {
-            throw new WeekendException("오늘이 주말이라니!!!");
-        }
+        return 8;
+//        int dayOfWeek = date.getDayOfWeek().getValue();
+//
+//        if(1 <= dayOfWeek && dayOfWeek <= 4) {
+//            return 8;
+//        } else if(dayOfWeek == 5) {
+//            return 7;
+//        } else {
+//            throw new WeekendException("오늘이 주말이라니!!!");
+//        }
     }
 
     private void attendanceTeacherSetting(Attendance attendance, int floor, Activity activity) {
