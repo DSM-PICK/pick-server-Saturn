@@ -130,7 +130,7 @@ public class AttendanceController {
     })
     @PostMapping("/student-state")
     public void changeAttendanceState(
-            AttendanceStateRequestForm attendanceStateRequestForm,
+            @RequestBody AttendanceStateRequestForm attendanceStateRequestForm,
             HttpServletRequest request) {
 
         tokenValidation(request.getHeader("Authorization"));
