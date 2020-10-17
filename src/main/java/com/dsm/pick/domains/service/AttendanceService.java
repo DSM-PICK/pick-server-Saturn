@@ -1,13 +1,7 @@
 package com.dsm.pick.domains.service;
 
-import com.dsm.pick.domains.domain.Activity;
-import com.dsm.pick.domains.domain.Attendance;
-import com.dsm.pick.domains.domain.Club;
-import com.dsm.pick.domains.domain.SchoolClass;
-import com.dsm.pick.domains.repository.ActivityRepository;
-import com.dsm.pick.domains.repository.AttendanceRepository;
-import com.dsm.pick.domains.repository.ClassRepository;
-import com.dsm.pick.domains.repository.ClubRepository;
+import com.dsm.pick.domains.domain.*;
+import com.dsm.pick.domains.repository.*;
 import com.dsm.pick.utils.exception.ActivityNotFoundException;
 import com.dsm.pick.utils.exception.NonExistFloorException;
 import com.dsm.pick.utils.exception.NotClubAndSelfStudyException;
@@ -30,13 +24,15 @@ public class AttendanceService {
     private final ClubRepository clubRepository;
     private final ActivityRepository activityRepository;
     private final AttendanceRepository attendanceRepository;
+    private final StudentRepository studentRepository;
 
     @Autowired
-    public AttendanceService(ClassRepository classRepository, ClubRepository clubRepository, ActivityRepository activityRepository, AttendanceRepository attendanceRepository) {
+    public AttendanceService(ClassRepository classRepository, ClubRepository clubRepository, ActivityRepository activityRepository, AttendanceRepository attendanceRepository, StudentRepository studentRepository) {
         this.classRepository = classRepository;
         this.clubRepository = clubRepository;
         this.activityRepository = activityRepository;
         this.attendanceRepository = attendanceRepository;
+        this.studentRepository = studentRepository;
     }
 
     public List<ClubAndClassInformationForm> getNavigationInformation(int floor) {
@@ -204,5 +200,14 @@ public class AttendanceService {
         Activity activity = activityRepository.findById(LocalDate.now())
                 .orElseThrow(ActivityNotFoundException::new);
         return activity.getSchedule();
+    }
+
+    public String getStudentNumberAndName(String studentNumber) {
+        try {
+            Student student = studentRepository.findById(studentNumber).get();
+            return student.getNum() + " " + student.getName();
+        } catch(Exception e) {
+            return null;
+        }
     }
 }
