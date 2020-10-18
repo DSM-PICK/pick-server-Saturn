@@ -30,7 +30,6 @@ public class MainPageController {
     @ApiOperation(value = "공지사항", notes = "최근 2주간의 공지사항 반환")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK!!"),
-            @ApiResponse(code = 404, message = "notice not found"),
             @ApiResponse(code = 500, message = "500???")
     })
     @ApiImplicitParams({

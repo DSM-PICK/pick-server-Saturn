@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -36,7 +37,7 @@ public class NoticeCustomRepositoryImpl implements NoticeCustomRepository {
                 .map(n -> n.getContent())
                 .collect(Collectors.toList());
         if(result.size() <= 0)
-            throw new NoSuchElementException("일치하는 요소가 존재하지 않음");
+            return new ArrayList<>();
         return result;
     }
 }
