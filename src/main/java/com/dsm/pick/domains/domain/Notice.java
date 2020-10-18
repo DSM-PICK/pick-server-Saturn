@@ -17,7 +17,7 @@ public class Notice {
 
     @ManyToOne
     @JoinColumn(name = "admin_id", referencedColumnName = "id")
-    private String admin;
+    private Admin admin;
 
     @Column(name = "category")
     private String category;
@@ -26,7 +26,7 @@ public class Notice {
     private LocalDateTime date;
 
     public Notice() {}
-    public Notice(int id, String content, String admin, String category, LocalDateTime date) {
+    public Notice(int id, String content, Admin admin, String category, LocalDateTime date) {
         this.id = id;
         this.content = content;
         this.admin = admin;
@@ -50,11 +50,11 @@ public class Notice {
         this.content = content;
     }
 
-    public String getAdmin() {
+    public Admin getAdmin() {
         return admin;
     }
 
-    public void setAdmin(String admin) {
+    public void setAdmin(Admin admin) {
         this.admin = admin;
     }
 
