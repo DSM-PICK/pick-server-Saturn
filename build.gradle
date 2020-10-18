@@ -73,7 +73,9 @@ jacocoTestCoverageVerification {
 					'com.dsm.pick.PickApplication',
 
 					'com.dsm.pick.controller.AttendanceController',
-					'com.dsm.pick.domains.service.AttendanceService'
+					'com.dsm.pick.domains.service.AttendanceService',
+					'com.dsm.pick.controller.MainPageController',
+					'com.dsm.pick.domains.service.NoticeService'
 			]
 		}
 	}
