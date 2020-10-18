@@ -23,17 +23,12 @@ public class NoticeCustomRepositoryImpl implements NoticeCustomRepository {
     public List<String> findByDate(LocalDateTime date, String category) {
         List<String> result = entityManager.createQuery("SELECT n FROM Notice n " +
                 "WHERE n.date <= :date " +
-//                "AND n.date >= DATE_SUB(:date, INTERVAL 1 MONTH) " +
+                "AND n.date >= DATE_SUB( :date , INTERVAL 14 DAY ) " +
                 "AND n.category = :category", Notice.class)
                 .setParameter("date", date)
                 .setParameter("category", category)
                 .getResultStream()
-                .sorted((c1, c2) -> {
-                    boolean isAfter = c1.getDate().isAfter(c2.getDate());
-                    if (isAfter)
-                        return 1;
-                    return 0;
-                })
+                .sorted((c1, c2) -> c1.getDate().compareTo(c2.getDate()))
                 .map(n -> n.getContent())
                 .collect(Collectors.toList());
         if(result.size() <= 0)
