@@ -129,7 +129,7 @@ public class AttendanceController {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "header", name = "Authorization", dataType = "string", required = true, value = "Access Token")
     })
-    @PostMapping("/student-state")
+    @PatchMapping("/student-state")
     public void changeAttendanceState(
             @RequestBody AttendanceStateRequestForm attendanceStateRequestForm,
             HttpServletRequest request) {
