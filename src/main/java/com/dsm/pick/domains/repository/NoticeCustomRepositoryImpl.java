@@ -23,7 +23,7 @@ public class NoticeCustomRepositoryImpl implements NoticeCustomRepository {
     public List<String> findByDate(LocalDateTime date, String category) {
         List<String> result = entityManager.createQuery("SELECT n FROM Notice n " +
                 "WHERE n.date <= :date " +
-                "AND n.date >= DATE_SUB(:date, INTERVAL 14 DAY) " +
+                "AND n.date >= DATE_SUB(:date, INTERVAL 1 MONTH) " +
                 "AND n.category = :category", Notice.class)
                 .setParameter("date", date)
                 .setParameter("category", category)
