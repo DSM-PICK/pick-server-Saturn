@@ -13,7 +13,7 @@ public class SpringConfiguration {
     @Value("${DATABASE_DRIVER:com.mysql.cj.jdbc.Driver}")
     private String driverClassName = "";
 
-    @Value("${DATABASE_URL:jdbc:mysql://localhost:3306/testdb_saturn?useUnicode=true&characterEncoding=utf8&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC}")
+    @Value("${DATABASE_URL:jdbc:mysql://localhost:3306/pick?useUnicode=true&characterEncoding=utf8&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC}")
     private String url = "";
 
     @Value("${DATABASE_USERNAME:root}")

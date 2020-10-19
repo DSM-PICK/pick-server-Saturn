@@ -20,12 +20,38 @@ public class NoticeCustomRepositoryImpl implements NoticeCustomRepository {
     EntityManager entityManager;
 
     @Override
-    public List<String> findByDate(LocalDateTime date, String category) {
+    public List<String> findByDate(LocalDateTime endDate, String category) {
+
+        int year = endDate.getYear();
+        int month = endDate.getMonthValue();
+        int dayOfMonth = endDate.getDayOfMonth();
+
+        int[] dayOfMonths = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+        if((year % 400 == 0) || (year % 4 == 0 && year % 100 != 0)) {
+            dayOfMonths[1] = 29;
+        }
+
+        if(dayOfMonth - 14 >= 1) {
+            dayOfMonth -= 14;
+        } else {
+            dayOfMonth = dayOfMonths[month - 1] - (14 - dayOfMonth);
+        }
+
+        LocalDateTime startDate = LocalDateTime.of(
+                year,
+                month,
+                dayOfMonth,
+                endDate.getHour(),
+                endDate.getMinute(),
+                endDate.getSecond()
+        );
+
         List<String> result = entityManager.createQuery("SELECT n FROM Notice n " +
-                "WHERE n.date <= :date " +
-                "AND n.date >= DATE_SUB( :date , INTERVAL 14 DAY ) " +
+                "WHERE n.date <= :endDate " +
+                "AND n.date >= :startDate " +
                 "AND n.category = :category", Notice.class)
-                .setParameter("date", date)
+                .setParameter("endDate", endDate)
+                .setParameter("startDate", startDate)
                 .setParameter("category", category)
                 .getResultStream()
                 .sorted((c1, c2) -> c1.getDate().compareTo(c2.getDate()))

@@ -20,7 +20,7 @@ import java.util.Set;
 @EnableSwagger2
 public class SwaggerConfiguration {
 
-    @Value("${SERVER_HOST:localhost}")
+    @Value("${SERVER_HOST:localhost:8889}")
     private String host;
 
     @Bean
