@@ -39,8 +39,8 @@ public class AttendanceScheduler {
     }
 
 //    @Scheduled(cron = "0/1 * * * * *")              // TEST
-    @Scheduled(cron = "1 0 0 * * MON-FRI")          // REAL
-//    @Scheduled(cron = "1 40 20 * * *")        // TEST
+//    @Scheduled(cron = "1 0 0 * * MON-FRI")          // REAL
+    @Scheduled(cron = "1 47 8 * * *")        // TEST
     public void createTodayAttendance() {
         final LocalDate date = LocalDate.now();
         final Activity activity = activityRepository.findById(date)
@@ -137,8 +137,6 @@ public class AttendanceScheduler {
                                             attendance4.setState(p.getState());
                                         }
                                     }
-                                } else {
-                                    throw new InvalidTimeException("잘못된 시간이 저장되어 있음");
                                 }
                             });
 
