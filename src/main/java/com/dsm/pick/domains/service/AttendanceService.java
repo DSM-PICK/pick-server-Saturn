@@ -35,11 +35,10 @@ public class AttendanceService {
         this.studentRepository = studentRepository;
     }
 
-    public List<ClubAndClassInformationForm> getNavigationInformation(int floor) {
+    public List<ClubAndClassInformationForm> getNavigationInformation(String schedule, int floor) {
 
         List<ClubAndClassInformationForm> form = new ArrayList<>();
 
-        String schedule = getTodaySchedule();
         if(schedule.equals("club")) {
 
             if(!(1 <= floor && floor <= 4)) {

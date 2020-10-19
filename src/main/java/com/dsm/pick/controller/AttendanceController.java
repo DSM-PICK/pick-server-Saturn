@@ -47,8 +47,9 @@ public class AttendanceController {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "header", name = "Authorization", dataType = "string", required = true, value = "Access Token")
     })
-    @GetMapping("/navigation/{floor}")
+    @GetMapping("/navigation/{schedule}/{floor}")
     public AttendanceNavigationResponseForm attendanceNavigation(
+            @ApiParam(value = "club, self-study", required = true) @PathVariable("schedule") String schedule,
             @ApiParam(value = "층[ 1(자습실), 2, 3, 4 ]", required = true) @PathVariable("floor") String floorStr,
             HttpServletRequest request) {
 
@@ -62,14 +63,13 @@ public class AttendanceController {
         }
 
         List<ClubAndClassInformationForm> clubAndClassInformationForms =
-                attendanceService.getNavigationInformation(floor);
+                attendanceService.getNavigationInformation(schedule, floor);
         String date =
                 serverTimeService.getMonthAndDate();
         String dayOfWeek =
                 serverTimeService.getDayOfWeek();
         String teacherName =
                 attendanceService.getTodayTeacherName(date, floor);
-        String schedule = attendanceService.getTodaySchedule();
 
         return new AttendanceNavigationResponseForm(date, dayOfWeek, teacherName, schedule, clubAndClassInformationForms);
     }
