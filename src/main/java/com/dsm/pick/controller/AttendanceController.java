@@ -86,8 +86,9 @@ public class AttendanceController {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "header", name = "Authorization", dataType = "string", required = true, value = "Access Token")
     })
-    @GetMapping("/student-state/{floor}/{priority}")
+    @GetMapping("/student-state/{schedule}/{floor}/{priority}")
     public AttendanceListResponseForm attendanceList(
+            @ApiParam(value = "club, self-study", required = true) @PathVariable("schedule") String schedule,
             @ApiParam(value = "층[ 1(자습실), 2, 3, 4 ]", required = true) @PathVariable("floor") String floorStr,
             @ApiParam(value = "위치[ 왼쪽에서부터 0 ]", required = true) @PathVariable("priority") String priorityStr,
             HttpServletRequest request) {
@@ -104,9 +105,8 @@ public class AttendanceController {
         }
 
         List<AttendanceListForm> attendanceList =
-                attendanceService.getAttendanceList(LocalDate.now(), floor, priority);
+                attendanceService.getAttendanceList(schedule, LocalDate.now(), floor, priority);
 
-        String schedule = attendanceService.getTodaySchedule();
         if(schedule.equals("club")) {
             Club club = attendanceService.getClubHeadAndName(floor, priority);
             String head = attendanceService.getStudentNumberAndName(club.getHead());

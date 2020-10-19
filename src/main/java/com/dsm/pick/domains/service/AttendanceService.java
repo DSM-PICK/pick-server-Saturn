@@ -136,13 +136,12 @@ public class AttendanceService {
         return classRepository.findByFloorAndPriority(floor, priority);
     }
 
-    public List<AttendanceListForm> getAttendanceList(LocalDate date, int floor, int priority) {
+    public List<AttendanceListForm> getAttendanceList(String schedule, LocalDate date, int floor, int priority) {
         List<AttendanceListForm> form = new ArrayList<>();
         final Comparator<Attendance> comparator =
                 Comparator.comparing(c -> c.getStudent().getNum());
 
         List<Attendance> attendanceList;
-        String schedule = getTodaySchedule();
         if(schedule.equals("club")) {
             attendanceList = attendanceRepository.findByDateAndFloorAndPriorityWithClub(date, floor, priority);
         } else if(schedule.equals("self-study")) {
