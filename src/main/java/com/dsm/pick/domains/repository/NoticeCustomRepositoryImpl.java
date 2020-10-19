@@ -54,7 +54,7 @@ public class NoticeCustomRepositoryImpl implements NoticeCustomRepository {
                 .setParameter("startDate", startDate)
                 .setParameter("category", category)
                 .getResultStream()
-                .sorted((c1, c2) -> c1.getDate().compareTo(c2.getDate()))
+                .sorted((c1, c2) -> c2.getDate().compareTo(c1.getDate()))
                 .map(n -> n.getContent())
                 .collect(Collectors.toList());
         if(result.size() <= 0)
