@@ -1,6 +1,8 @@
 package com.dsm.pick.domains.repository;
 
 import com.dsm.pick.domains.domain.Notice;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,11 +18,16 @@ import java.util.stream.Collectors;
 @Transactional
 public class NoticeCustomRepositoryImpl implements NoticeCustomRepository {
 
+    private static final Logger logger = LoggerFactory.getLogger(NoticeRepository.class);
+
     @Autowired
     EntityManager entityManager;
 
     @Override
     public List<String> findByDate(LocalDateTime endDate, String category) {
+
+        logger.info("category : " + category);
+        logger.info("endDate : " + endDate);
 
         int year = endDate.getYear();
         int month = endDate.getMonthValue();
@@ -45,6 +52,8 @@ public class NoticeCustomRepositoryImpl implements NoticeCustomRepository {
                 endDate.getMinute(),
                 endDate.getSecond()
         );
+
+        logger.info("startDate : " + startDate);
 
         List<String> result = entityManager.createQuery("SELECT n FROM Notice n " +
                 "WHERE n.date <= :endDate " +
