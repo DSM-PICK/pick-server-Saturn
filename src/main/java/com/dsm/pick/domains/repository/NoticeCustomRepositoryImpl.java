@@ -11,7 +11,6 @@ import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Repository
@@ -50,7 +49,8 @@ public class NoticeCustomRepositoryImpl implements NoticeCustomRepository {
                 dayOfMonth,
                 endDate.getHour(),
                 endDate.getMinute(),
-                endDate.getSecond()
+                endDate.getSecond(),
+                endDate.getNano()
         );
 
         logger.info("startDate : " + startDate);
