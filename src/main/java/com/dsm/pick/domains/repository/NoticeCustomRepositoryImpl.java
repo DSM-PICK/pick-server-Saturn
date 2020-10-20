@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -59,8 +60,8 @@ public class NoticeCustomRepositoryImpl implements NoticeCustomRepository {
                 "WHERE n.date <= :endDate " +
                 "AND n.date >= :startDate " +
                 "AND n.category = :category", Notice.class)
-                .setParameter("endDate", endDate)
-                .setParameter("startDate", startDate)
+                .setParameter("endDate", Timestamp.valueOf(endDate))
+                .setParameter("startDate", Timestamp.valueOf(startDate))
                 .setParameter("category", category)
                 .getResultStream()
                 .sorted((c1, c2) -> c2.getDate().compareTo(c1.getDate()))

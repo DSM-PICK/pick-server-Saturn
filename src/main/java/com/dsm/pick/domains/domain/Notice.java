@@ -1,6 +1,7 @@
 package com.dsm.pick.domains.domain;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Entity
@@ -23,10 +24,10 @@ public class Notice {
     private String category;
 
     @Column(name = "created_at")
-    private LocalDateTime date;
+    private Timestamp date;
 
     public Notice() {}
-    public Notice(int id, String content, Admin admin, String category, LocalDateTime date) {
+    public Notice(int id, String content, Admin admin, String category, Timestamp date) {
         this.id = id;
         this.content = content;
         this.admin = admin;
@@ -66,11 +67,11 @@ public class Notice {
         this.category = category;
     }
 
-    public LocalDateTime getDate() {
+    public Timestamp getDate() {
         return date;
     }
 
-    public void setDate(LocalDateTime date) {
+    public void setDate(Timestamp date) {
         this.date = date;
     }
 }
