@@ -162,16 +162,15 @@ public class AttendanceScheduler {
     }
 
     private int todayStartPeriod(LocalDate date) {
-        return 8;
-//        int dayOfWeek = date.getDayOfWeek().getValue();
-//
-//        if(1 <= dayOfWeek && dayOfWeek <= 4) {
-//            return 8;
-//        } else if(dayOfWeek == 5) {
-//            return 7;
-//        } else {
-//            throw new WeekendException("오늘이 주말이라니!!!");
-//        }
+        int dayOfWeek = date.getDayOfWeek().getValue();
+
+        if(1 <= dayOfWeek && dayOfWeek <= 4) {
+            return 8;
+        } else if(dayOfWeek == 5) {
+            return 7;
+        } else {
+            throw new WeekendException("오늘이 주말이라니!!!");
+        }
     }
 
     private void attendanceTeacherSetting(Attendance attendance, int floor, Activity activity) {
