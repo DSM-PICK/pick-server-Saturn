@@ -1,6 +1,7 @@
 package com.dsm.pick.domains.domain;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "club")
@@ -19,6 +20,9 @@ public class Club {
 
     @Column(name = "club_head")
     private String head;
+
+    @OneToMany(mappedBy = "club")
+    private List<Student> students;
 
     public Club() {}
     public Club(String name, ClubLocation location, String teacher, String head) {
@@ -58,5 +62,13 @@ public class Club {
 
     public void setHead(String head) {
         this.head = head;
+    }
+
+    public List<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(List<Student> students) {
+        this.students = students;
     }
 }

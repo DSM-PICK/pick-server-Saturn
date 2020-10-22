@@ -52,6 +52,7 @@ public class AttendanceService {
 
             clubList.stream()
                     .sorted(comparator)
+                    .filter(c -> c.getStudents().size() >= 1)
                     .forEach(c -> {
                         ClubAndClassInformationForm element = new ClubAndClassInformationForm();
 
