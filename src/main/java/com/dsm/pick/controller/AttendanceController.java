@@ -65,7 +65,7 @@ public class AttendanceController {
         Activity activity = activityRepository.findById(LocalDate.now())
                 .orElseThrow(ActivityNotFoundException::new);
         String findSchedule = activity.getSchedule();
-        if(findSchedule.equals("club") || findSchedule.equals("self-study"))
+        if(!(findSchedule.equals("club") || findSchedule.equals("self-study")))
             throw new NotClubAndSelfStudyException("today schedule is not club or self-study");
 
         List<ClubAndClassInformationForm> clubAndClassInformationForms =
