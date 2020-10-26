@@ -62,6 +62,12 @@ public class AttendanceController {
             throw new NonExistFloorException("floor is not a number");
         }
 
+        Activity activity = activityRepository.findById(LocalDate.now())
+                .orElseThrow(ActivityNotFoundException::new);
+        String findSchedule = activity.getSchedule();
+        if(findSchedule.equals("club") || findSchedule.equals("self-study"))
+            throw new NotClubAndSelfStudyException("today schedule is not club or self-study");
+
         List<ClubAndClassInformationForm> clubAndClassInformationForms =
                 attendanceService.getNavigationInformation(schedule, floor);
         String date =
