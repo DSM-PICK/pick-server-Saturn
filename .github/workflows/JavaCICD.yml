@@ -69,6 +69,6 @@ jobs:
       - name: Upload to Registry
         uses: elgohr/Publish-Docker-Github-Action@master
         with:
-          name: saturn
+          name: 0816jinjin/saturn
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
