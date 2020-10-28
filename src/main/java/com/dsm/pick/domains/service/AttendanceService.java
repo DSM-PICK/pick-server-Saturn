@@ -213,11 +213,9 @@ public class AttendanceService {
     }
 
     public String getStudentNumberAndName(String studentNumber) {
-        try {
-            Student student = studentRepository.findById(studentNumber).get();
-            return student.getNum() + " " + student.getName();
-        } catch(Exception e) {
+        if(studentNumber == null)
             return null;
-        }
+        Student student = studentRepository.findById(studentNumber).get();
+        return student.getNum() + " " + student.getName();
     }
 }
