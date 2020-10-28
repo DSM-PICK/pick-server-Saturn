@@ -150,7 +150,6 @@ public class AttendanceService {
         List<Attendance> attendanceList;
         if(schedule.equals("club")) {
             attendanceList = attendanceRepository.findByDateAndFloorAndPriorityWithClub(date, floor, priority);
-            System.out.println("dsfasdf : " + attendanceList);
         } else if(schedule.equals("self-study")) {
             attendanceList = attendanceRepository.findByDateAndFloorAndPriorityWithClass(date, floor, priority);
         } else {
@@ -162,6 +161,12 @@ public class AttendanceService {
 
         AttendanceListForm attendanceListForm = null;
         for(Attendance a : attendanceList) {
+            System.out.println("id : " + a.getId());
+            System.out.println("period : " + a.getPeriod());
+            System.out.println("state : " + a.getState());
+            System.out.println("schedule : " + a.getActivity().getSchedule());
+            System.out.println("student : " + a.getStudent());
+
             if(attendanceListForm == null) {
                 attendanceListForm = new AttendanceListForm();
             } else if(!(attendanceListForm.getGradeClassNumber().equals(a.getStudent().getNum()))) {

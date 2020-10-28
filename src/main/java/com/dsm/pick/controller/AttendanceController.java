@@ -116,6 +116,8 @@ public class AttendanceController {
         if(schedule.equals("club")) {
             Club club = attendanceService.getClubHeadAndName(floor, priority);
             String head = attendanceService.getStudentNumberAndName(club.getHead());
+            System.out.println("head : " + head);
+            System.out.println("club.getName() : " + club.getName());
             return new AttendanceListResponseForm(club.getName(), head, attendanceList);
         } else if(schedule.equals("self-study")) {
             SchoolClass schoolClass = attendanceService.getClassName(floor, priority);
