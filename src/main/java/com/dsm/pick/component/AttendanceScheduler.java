@@ -18,8 +18,6 @@ import java.util.List;
 @Component
 public class AttendanceScheduler {
 
-    private final static Logger logger = LoggerFactory.getLogger(AttendanceScheduler.class);
-
     private final static int FIRST_PERIOD = 1;
     private final static int LAST_PERIOD = 10;
 
@@ -39,8 +37,8 @@ public class AttendanceScheduler {
     }
 
 //    @Scheduled(cron = "0/1 * * * * *")              // TEST
-    @Scheduled(cron = "1 0 0 * * MON-FRI")          // REAL
-//    @Scheduled(cron = "1 30 10 * * *")        // TEST//
+//    @Scheduled(cron = "1 0 0 * * MON-FRI")          // REAL
+    @Scheduled(cron = "1 0 23 * * *")        // TEST//
     public void createTodayAttendance() {
         final LocalDate date = LocalDate.now();
         final Activity activity = activityRepository.findById(date)
