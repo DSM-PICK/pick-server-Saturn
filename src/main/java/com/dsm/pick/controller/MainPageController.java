@@ -5,6 +5,8 @@ import com.dsm.pick.domains.service.NoticeService;
 import com.dsm.pick.utils.exception.TokenInvalidException;
 import com.dsm.pick.utils.form.NoticeResponseForm;
 import io.swagger.annotations.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +19,8 @@ import java.util.List;
 @RequestMapping("/main")
 @Api(value = "Main Page Controller")
 public class MainPageController {
+
+    private final static Logger log = LoggerFactory.getLogger(MainPageController.class);
 
     private JwtService jwtService;
     private NoticeService noticeService;
@@ -37,6 +41,8 @@ public class MainPageController {
     })
     @GetMapping("/notice")
     public NoticeResponseForm getNotice(HttpServletRequest request) {
+
+        log.info("request /notice GET");
 
         tokenValidation(request.getHeader("Authorization"));
 

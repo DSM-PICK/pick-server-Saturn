@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 @Api(value = "Auth Controller")
 public class AuthController {
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final static Logger log = LoggerFactory.getLogger(AuthController.class);
 
     private final AuthService authService;
     private final JwtService jwtService;
@@ -40,6 +40,9 @@ public class AuthController {
     })
     @PostMapping("/login")
     public LoginResponseForm login(@RequestBody TeacherRequestForm teacherRequestForm) {
+
+        log.info("request /login POST");
+
         Teacher teacher = new Teacher();
         teacher.setId(teacherRequestForm.getId());
         teacher.setPw(teacherRequestForm.getPw());
@@ -74,6 +77,9 @@ public class AuthController {
     })
     @PostMapping("/token")
     public void isUsableToken(HttpServletRequest request) {
+
+        log.info("request /token POST");
+
         String token = request.getHeader("Authorization");
 
         boolean isValid = jwtService.isValid(token);
@@ -99,6 +105,9 @@ public class AuthController {
     })
     @GetMapping("/access-token")
     public AccessTokenReissuanceResponseForm accessTokenReissuance(HttpServletRequest request) {
+
+        log.info("request /access-token GET");
+
         String refreshToken = request.getHeader("Authorization");
 
         boolean isValid = jwtService.isValid(refreshToken);

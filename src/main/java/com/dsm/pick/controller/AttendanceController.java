@@ -10,6 +10,8 @@ import com.dsm.pick.domains.service.ServerTimeService;
 import com.dsm.pick.utils.exception.*;
 import com.dsm.pick.utils.form.*;
 import io.swagger.annotations.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +24,8 @@ import java.util.Optional;
 @RequestMapping("/attendance")
 @Api(value = "Attendance Controller")
 public class AttendanceController {
+
+    private final static Logger log = LoggerFactory.getLogger(AttendanceController.class);
 
     private final AttendanceService attendanceService;
     private final ActivityRepository activityRepository;
@@ -52,6 +56,8 @@ public class AttendanceController {
             @ApiParam(value = "club, self-study", required = true) @PathVariable("schedule") String schedule,
             @ApiParam(value = "층[ 1(자습실), 2, 3, 4 ]", required = true) @PathVariable("floor") String floorStr,
             HttpServletRequest request) {
+
+        log.info(String.format("request /navigation/{%s}/{%s} GET", schedule, floorStr));
 
         tokenValidation(request.getHeader("Authorization"));
 
@@ -99,6 +105,8 @@ public class AttendanceController {
             @ApiParam(value = "위치[ 왼쪽에서부터 0 ]", required = true) @PathVariable("priority") String priorityStr,
             HttpServletRequest request) {
 
+        log.info(String.format("request /student-state/{%s}/{%s}/{%s} GET", schedule, floorStr, priorityStr));
+
         tokenValidation(request.getHeader("Authorization"));
 
         int floor = 0;
@@ -116,8 +124,6 @@ public class AttendanceController {
         if(schedule.equals("club")) {
             Club club = attendanceService.getClubHeadAndName(floor, priority);
             String head = attendanceService.getStudentNumberAndName(club.getHead());
-            System.out.println("head : " + head);
-            System.out.println("club.getName() : " + club.getName());
             return new AttendanceListResponseForm(club.getName(), head, attendanceList);
         } else if(schedule.equals("self-study")) {
             SchoolClass schoolClass = attendanceService.getClassName(floor, priority);
@@ -141,6 +147,8 @@ public class AttendanceController {
     public void changeAttendanceState(
             @RequestBody AttendanceStateRequestForm attendanceStateRequestForm,
             HttpServletRequest request) {
+
+        log.info("request /student-state PATCH");
 
         tokenValidation(request.getHeader("Authorization"));
 
