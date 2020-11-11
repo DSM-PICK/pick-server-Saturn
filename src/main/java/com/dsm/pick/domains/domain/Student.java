@@ -21,12 +21,20 @@ public class Student {
     @JoinColumn(name = "class_name", referencedColumnName = "name")
     private SchoolClass schoolClass;
 
+    @Column(name = "isMondaySelfStudy")
+    private boolean isMondaySelfStudy;
+
+    @Column(name = "isTuesdaySelfStudy")
+    private boolean isTuesdaySelfStudy;
+
     public Student() {}
-    public Student(String num, String name, Club club, SchoolClass schoolClass) {
+    public Student(String num, String name, Club club, SchoolClass schoolClass, boolean isMondaySelfStudy, boolean isTuesdaySelfStudy) {
         this.num = num;
         this.name = name;
         this.club = club;
         this.schoolClass = schoolClass;
+        this.isMondaySelfStudy = isMondaySelfStudy;
+        this.isTuesdaySelfStudy = isTuesdaySelfStudy;
     }
 
     public String getNum() {
@@ -59,5 +67,21 @@ public class Student {
 
     public void setSchoolClass(SchoolClass schoolClass) {
         this.schoolClass = schoolClass;
+    }
+
+    public boolean isMondaySelfStudy() {
+        return isMondaySelfStudy;
+    }
+
+    public void setMondaySelfStudy(boolean mondaySelfStudy) {
+        isMondaySelfStudy = mondaySelfStudy;
+    }
+
+    public boolean isTuesdaySelfStudy() {
+        return isTuesdaySelfStudy;
+    }
+
+    public void setTuesdaySelfStudy(boolean tuesdaySelfStudy) {
+        isTuesdaySelfStudy = tuesdaySelfStudy;
     }
 }

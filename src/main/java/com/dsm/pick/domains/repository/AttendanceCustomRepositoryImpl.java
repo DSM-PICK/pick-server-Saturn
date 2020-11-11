@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -34,16 +35,26 @@ public class AttendanceCustomRepositoryImpl implements AttendanceCustomRepositor
 
     @Override
     public List<Attendance> findByDateAndFloorAndPriorityWithClass(LocalDate date, int floor, int priority) {
-        List<Attendance> result = entityManager.createQuery("SELECT a FROM Attendance a " +
-                "WHERE a.student.schoolClass.floor = :floor " +
-                "AND a.student.schoolClass.priority = :priority " +
-                "AND a.activity.date = :date", Attendance.class)
-                .setParameter("floor", floor)
-                .setParameter("priority", priority)
-                .setParameter("date", date)
-                .getResultList();
-        if(result.size() <= 0)
-            throw new NoSuchElementException("일치하는 요소가 존재하지 않음");
+        List<Attendance> result = new ArrayList<>();
+        if(floor == 1) {
+            result = entityManager.createQuery("SELECT a FROM Attendance a " +
+                    "WHERE (a.student.isMondaySelfStudy = 1 " +
+                    "OR a.student.isTuesdaySelfStudy = 1) " +
+                    "AND 0 = :priority " +
+                    "AND a.activity.date = :date", Attendance.class)
+                    .setParameter("priority", priority)
+                    .setParameter("date", date)
+                    .getResultList();
+        } else {
+            result = entityManager.createQuery("SELECT a FROM Attendance a " +
+                    "WHERE a.student.schoolClass.floor = :floor " +
+                    "AND a.student.schoolClass.priority = :priority " +
+                    "AND a.activity.date = :date", Attendance.class)
+                    .setParameter("floor", floor)
+                    .setParameter("priority", priority)
+                    .setParameter("date", date)
+                    .getResultList();
+        }
         return result;
     }
 

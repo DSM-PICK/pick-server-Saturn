@@ -138,11 +138,6 @@ public class AttendanceService {
     }
 
     public List<AttendanceListForm> getAttendanceList(String schedule, LocalDate date, int floor, int priority) {
-        System.out.println("schedule : " + schedule);
-        System.out.println("date : " + date);
-        System.out.println("floor : " + floor);
-        System.out.println("priority : " + priority);
-
         List<AttendanceListForm> form = new ArrayList<>();
         final Comparator<Attendance> comparator =
                 Comparator.comparing(c -> c.getStudent().getNum());
@@ -161,12 +156,6 @@ public class AttendanceService {
 
         AttendanceListForm attendanceListForm = null;
         for(Attendance a : attendanceList) {
-            System.out.println("id : " + a.getId());
-            System.out.println("period : " + a.getPeriod());
-            System.out.println("state : " + a.getState());
-            System.out.println("schedule : " + a.getActivity().getSchedule());
-            System.out.println("student : " + a.getStudent());
-
             if(attendanceListForm == null) {
                 attendanceListForm = new AttendanceListForm();
             } else if(!(attendanceListForm.getGradeClassNumber().equals(a.getStudent().getNum()))) {
