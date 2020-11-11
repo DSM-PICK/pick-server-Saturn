@@ -6,8 +6,6 @@ import com.dsm.pick.domains.domain.PreAbsence;
 import com.dsm.pick.domains.domain.Student;
 import com.dsm.pick.domains.repository.*;
 import com.dsm.pick.utils.exception.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -38,7 +36,7 @@ public class AttendanceScheduler {
 
 //    @Scheduled(cron = "0/1 * * * * *")              // TEST
 //    @Scheduled(cron = "1 0 0 * * MON-FRI")          // REAL
-    @Scheduled(cron = "1 0 23 * * *")        // TEST//
+    @Scheduled(cron = "1 25 8 * * *")        // TEST//
     public void createTodayAttendance() {
         final LocalDate date = LocalDate.now();
         final Activity activity = activityRepository.findById(date)
