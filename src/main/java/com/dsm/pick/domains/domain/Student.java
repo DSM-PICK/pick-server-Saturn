@@ -22,13 +22,13 @@ public class Student {
     private SchoolClass schoolClass;
 
     @Column(name = "isMondaySelfStudy")
-    private boolean isMondaySelfStudy;
+    private int isMondaySelfStudy;
 
     @Column(name = "isTuesdaySelfStudy")
-    private boolean isTuesdaySelfStudy;
+    private int isTuesdaySelfStudy;
 
     public Student() {}
-    public Student(String num, String name, Club club, SchoolClass schoolClass, boolean isMondaySelfStudy, boolean isTuesdaySelfStudy) {
+    public Student(String num, String name, Club club, SchoolClass schoolClass, int isMondaySelfStudy, int isTuesdaySelfStudy) {
         this.num = num;
         this.name = name;
         this.club = club;
@@ -69,19 +69,19 @@ public class Student {
         this.schoolClass = schoolClass;
     }
 
-    public boolean isMondaySelfStudy() {
+    public int getIsMondaySelfStudy() {
         return isMondaySelfStudy;
     }
 
-    public void setMondaySelfStudy(boolean mondaySelfStudy) {
-        isMondaySelfStudy = mondaySelfStudy;
+    public void setIsMondaySelfStudy(int isMondaySelfStudy) {
+        this.isMondaySelfStudy = isMondaySelfStudy;
     }
 
-    public boolean isTuesdaySelfStudy() {
+    public int getIsTuesdaySelfStudy() {
         return isTuesdaySelfStudy;
     }
 
-    public void setTuesdaySelfStudy(boolean tuesdaySelfStudy) {
-        isTuesdaySelfStudy = tuesdaySelfStudy;
+    public void setIsTuesdaySelfStudy(int isTuesdaySelfStudy) {
+        this.isTuesdaySelfStudy = isTuesdaySelfStudy;
     }
 }
