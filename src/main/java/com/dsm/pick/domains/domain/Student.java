@@ -21,10 +21,10 @@ public class Student {
     @JoinColumn(name = "class_name", referencedColumnName = "name")
     private SchoolClass schoolClass;
 
-    @Column(name = "isMondaySelfStudy")
+    @Column(name = "is_monday_self_study")
     private int isMondaySelfStudy;
 
-    @Column(name = "isTuesdaySelfStudy")
+    @Column(name = "is_tuesday_self_study")
     private int isTuesdaySelfStudy;
 
     public Student() {}
