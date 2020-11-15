@@ -36,7 +36,7 @@ public class AttendanceScheduler {
 
 //    @Scheduled(cron = "0/1 * * * * *")              // TEST
 //    @Scheduled(cron = "1 0 0 * * MON-FRI")          // REAL
-    @Scheduled(cron = "1 40 20 * * *")        // TEST//
+    @Scheduled(cron = "1 43 20 * * *")        // TEST//
     public void createTodayAttendance() {
         System.out.println("scheduling");
         final LocalDate date = LocalDate.now();
@@ -167,7 +167,8 @@ public class AttendanceScheduler {
         } else if(dayOfWeek == 5) {
             return 7;
         } else {
-            throw new WeekendException("오늘이 주말이라니!!!");
+//            throw new WeekendException("오늘이 주말이라니!!!");
+            return 7;
         }
     }
 
