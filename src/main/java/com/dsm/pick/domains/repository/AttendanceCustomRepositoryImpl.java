@@ -36,6 +36,7 @@ public class AttendanceCustomRepositoryImpl implements AttendanceCustomRepositor
     @Override
     public List<Attendance> findByDateAndFloorAndPriorityWithClass(LocalDate date, int floor, int priority) {
         List<Attendance> result = new ArrayList<>();
+
         if(floor == 1) {
             result = entityManager.createQuery("SELECT a FROM Attendance a " +
                     "WHERE (a.student.isMondaySelfStudy = 1 " +

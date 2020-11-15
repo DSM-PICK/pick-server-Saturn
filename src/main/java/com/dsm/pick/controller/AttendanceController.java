@@ -54,7 +54,7 @@ public class AttendanceController {
     @GetMapping("/navigation/{schedule}/{floor}")
     public AttendanceNavigationResponseForm attendanceNavigation(
             @ApiParam(value = "club, self-study", required = true) @PathVariable("schedule") String schedule,
-            @ApiParam(value = "층[ 1(자습실), 2, 3, 4 ]", required = true) @PathVariable("floor") String floorStr,
+            @ApiParam(value = "층[ 1(자습실, 창조실), 2, 3, 4 ]", required = true) @PathVariable("floor") String floorStr,
             HttpServletRequest request) {
 
         log.info(String.format("request /navigation/{%s}/{%s} GET", schedule, floorStr));
@@ -71,8 +71,8 @@ public class AttendanceController {
         Activity activity = activityRepository.findById(LocalDate.now())
                 .orElseThrow(ActivityNotFoundException::new);
         String findSchedule = activity.getSchedule();
-        if(!(findSchedule.equals("club") || findSchedule.equals("self-study")))
-            throw new NotClubAndSelfStudyException("today schedule is not club or self-study");
+        if(!(findSchedule.equals("club") || findSchedule.equals("self-study") || findSchedule.equals("after-school")))
+            throw new NotClubAndSelfStudyException("today schedule is not club or self-study or after-school");
 
         List<ClubAndClassInformationForm> clubAndClassInformationForms =
                 attendanceService.getNavigationInformation(schedule, floor);

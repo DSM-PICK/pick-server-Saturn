@@ -71,8 +71,8 @@ public class AttendanceService {
 
         } else if(schedule.equals("self-study")) {
 
-            if(!(2 <= floor && floor <= 4)) {
-                throw new NonExistFloorException("2, 3, 4층이 아닙니다.");
+            if(!(1 <= floor && floor <= 4)) {
+                throw new NonExistFloorException("1, 2, 3, 4층이 아닙니다.");
             }
 
             List<SchoolClass> classList = classRepository.findByFloor(floor);

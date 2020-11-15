@@ -36,7 +36,7 @@ public class AttendanceScheduler {
 
 //    @Scheduled(cron = "0/1 * * * * *")              // TEST
 //    @Scheduled(cron = "1 0 0 * * MON-FRI")          // REAL
-    @Scheduled(cron = "1 50 19 * * *")        // TEST//
+    @Scheduled(cron = "1 28 20 * * *")        // TEST//
     public void createTodayAttendance() {
         System.out.println("scheduling");
         final LocalDate date = LocalDate.now();
@@ -74,7 +74,7 @@ public class AttendanceScheduler {
                     int floor = 0;
                     if(schedule.equals("club")) {
                         floor = s.getClub().getLocation().getFloor();
-                    } else if(schedule.equals("self-study")) {
+                    } else if(schedule.equals("self-study") || schedule.equals("after-school")) {
                         floor = s.getSchoolClass().getFloor();
                     } else {
                         throw new NotClubAndSelfStudyException("schedule 이 club 또는 self-study 가 아닙니다.");
