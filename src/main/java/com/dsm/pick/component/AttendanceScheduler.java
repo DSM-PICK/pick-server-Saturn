@@ -174,7 +174,7 @@ public class AttendanceScheduler {
 
     private void attendanceTeacherSetting(Attendance attendance, int floor, Activity activity) {
 
-        if(floor == 1) {
+        if(floor == 1 || attendance.getActivity().getSchedule().equals("after-school")) {
             attendance.setTeacher(null);
         } else if(floor == 2) {
             attendance.setTeacher(
