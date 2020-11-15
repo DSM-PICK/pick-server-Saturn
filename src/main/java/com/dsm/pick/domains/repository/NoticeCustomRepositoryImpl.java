@@ -18,16 +18,11 @@ import java.util.stream.Collectors;
 @Transactional
 public class NoticeCustomRepositoryImpl implements NoticeCustomRepository {
 
-    private static final Logger logger = LoggerFactory.getLogger(NoticeRepository.class);
-
     @Autowired
     EntityManager entityManager;
 
     @Override
     public List<String> findByDate(LocalDateTime endDate, String category) {
-
-        logger.info("category : " + category);
-        logger.info("endDate : " + endDate);
 
         int year = endDate.getYear();
         int month = endDate.getMonthValue();
@@ -53,8 +48,6 @@ public class NoticeCustomRepositoryImpl implements NoticeCustomRepository {
                 endDate.getSecond(),
                 endDate.getNano()
         );
-
-        logger.info("startDate : " + startDate);
 
         List<String> result = entityManager.createQuery("SELECT n FROM Notice n " +
                 "WHERE n.date <= :endDate " +
