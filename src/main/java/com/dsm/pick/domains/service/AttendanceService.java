@@ -111,7 +111,7 @@ public class AttendanceService {
 
         Optional<Activity> activity = activityRepository.findById(id);
         String teacherName;
-        if(floor == 1) {
+        if(floor == 1 || activity.get().getSchedule().equals("after-school")) {
             teacherName = null;
         } else if(floor == 2) {
             teacherName = activity.map(a -> a.getSecondFloorTeacher().getName())
