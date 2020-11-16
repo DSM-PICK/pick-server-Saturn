@@ -1,6 +1,8 @@
 package com.dsm.pick.domains.repository;
 
 import com.dsm.pick.domains.domain.Attendance;
+import com.dsm.pick.domains.service.ServerTimeService;
+import io.swagger.annotations.Authorization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +19,9 @@ public class AttendanceCustomRepositoryImpl implements AttendanceCustomRepositor
 
     @Autowired
     EntityManager entityManager;
+
+    @Autowired
+    ServerTimeService serverTimeService;
 
     @Override
     public List<Attendance> findByDateAndFloorAndPriorityWithClub(LocalDate date, int floor, int priority) {
@@ -38,14 +43,23 @@ public class AttendanceCustomRepositoryImpl implements AttendanceCustomRepositor
         List<Attendance> result = new ArrayList<>();
 
         if(floor == 1) {
-            result = entityManager.createQuery("SELECT a FROM Attendance a " +
-                    "WHERE (a.student.isMondaySelfStudy = 1 " +
-                    "OR a.student.isTuesdaySelfStudy = 1) " +
-                    "AND 0 = :priority " +
-                    "AND a.activity.date = :date", Attendance.class)
-                    .setParameter("priority", priority)
-                    .setParameter("date", date)
-                    .getResultList();
+            if(serverTimeService.getDayOfWeek().equals("월")) {
+                result = entityManager.createQuery("SELECT a FROM Attendance a " +
+                        "WHERE a.student.isMondaySelfStudy = 1 " +
+                        "AND 0 = :priority " +
+                        "AND a.activity.date = :date", Attendance.class)
+                        .setParameter("priority", priority)
+                        .setParameter("date", date)
+                        .getResultList();
+            } else if(serverTimeService.getDayOfWeek().equals("화")) {
+                result = entityManager.createQuery("SELECT a FROM Attendance a " +
+                        "WHERE a.student.isTuesdaySelfStudy = 1 " +
+                        "AND 0 = :priority " +
+                        "AND a.activity.date = :date", Attendance.class)
+                        .setParameter("priority", priority)
+                        .setParameter("date", date)
+                        .getResultList();
+            }
         } else {
             result = entityManager.createQuery("SELECT a FROM Attendance a " +
                     "WHERE a.student.schoolClass.floor = :floor " +
