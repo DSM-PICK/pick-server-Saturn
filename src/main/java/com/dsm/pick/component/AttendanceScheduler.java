@@ -35,10 +35,9 @@ public class AttendanceScheduler {
     }
 
 //    @Scheduled(cron = "0/1 * * * * *")              // TEST
-//    @Scheduled(cron = "1 0 0 * * MON-FRI")          // REAL
-    @Scheduled(cron = "1 15 14 * * *")        // TEST//
+    @Scheduled(cron = "1 0 0 * * MON-FRI")          // REAL
+//    @Scheduled(cron = "1 15 14 * * *")        // TEST//
     public void createTodayAttendance() {
-        System.out.println("scheduling");
         final LocalDate date = LocalDate.now();
         final Activity activity = activityRepository.findById(date)
                 .orElseThrow(ActivityNotFoundException::new);
@@ -49,7 +48,6 @@ public class AttendanceScheduler {
 
         students.stream()
                 .forEach(s -> {
-                    System.out.println("Student.Number : " + s.getNum());
                     Attendance attendance1 = new Attendance();
                     Attendance attendance2 = new Attendance();
                     Attendance attendance3 = new Attendance();
@@ -167,8 +165,7 @@ public class AttendanceScheduler {
         } else if(dayOfWeek == 5) {
             return 7;
         } else {
-//            throw new WeekendException("오늘이 주말이라니!!!");
-            return 7;
+            throw new WeekendException("오늘이 주말이라니!!!");
         }
     }
 
