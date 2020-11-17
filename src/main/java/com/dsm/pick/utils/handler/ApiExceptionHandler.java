@@ -83,4 +83,10 @@ public class ApiExceptionHandler {
         ApiErrorResponseForm response = new ApiErrorResponseForm("not a club and self-study exception", "schedule 이 club 또는 self-study 가 아닙니다.");
         return new ResponseEntity<>(response, HttpStatus.UNPROCESSABLE_ENTITY);
     }
+
+    @ExceptionHandler(RuleViolationInformationException.class)
+    public ResponseEntity<ApiErrorResponseForm> ruleViolationInformationExceptionHandler(RuleViolationInformationException ex) {
+        ApiErrorResponseForm response = new ApiErrorResponseForm("rule violation information exception", "유저의 정보가 규칙을 위반합니다.");
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
 }

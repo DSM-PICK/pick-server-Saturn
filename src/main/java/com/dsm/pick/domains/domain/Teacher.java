@@ -19,11 +19,20 @@ public class Teacher {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "office")
+    private String office;
+
     public Teacher() {}
     public Teacher(String id, String pw, String name) {
         this.id = id;
         this.pw = pw;
         this.name = name;
+    }
+    public Teacher(String id, String pw, String name, String office) {
+        this.id = id;
+        this.pw = pw;
+        this.name = name;
+        this.office = office;
     }
 
     public String getId() {
@@ -48,6 +57,14 @@ public class Teacher {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getOffice() {
+        return office;
+    }
+
+    public void setOffice(String office) {
+        this.office = office;
     }
 
     public void existIdOrPassword() {

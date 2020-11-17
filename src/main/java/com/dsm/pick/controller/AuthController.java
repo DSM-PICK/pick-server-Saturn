@@ -122,23 +122,65 @@ public class AuthController {
         }
     }
 
-//    @ApiOperation(value = "로그아웃", notes = "JWT 토큰 제거")
-//    @ApiResponses({
-//            @ApiResponse(code = 200, message = "NO Return Success"),
-//            @ApiResponse(code = 404, message = "NOT User"),
-//            @ApiResponse(code = 500, message = "500인데 이거 안 뜰듯")
-//    })
-//    @ApiImplicitParams({
-//            @ApiImplicitParam(paramType = "header", name = "token", dataType = "string", required = true, value = "Access Token")
-//    })
-//    @DeleteMapping("/access-refresh-token")
-//    public void logout(HttpServletRequest request) {
-//        authService.logout(request.getHeader("token"));
-//    }
+    @ApiOperation(value = "비밀번호 변경", notes = "비밀번호 변경")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK!!"),
+            @ApiResponse(code = 400, message = "Non Exist ID or Password"),
+            @ApiResponse(code = 403, message = "Token Invalid"),
+            @ApiResponse(code = 404, message = "ID, PASSWORD NOT FOUND"),
+            @ApiResponse(code = 500, message = "500???")
+    })
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "Authorization", dataType = "string", required = true, value = "Refresh Token")
+    })
+    @PutMapping("/password")
+    public void changePassword(HttpServletRequest request, @RequestBody PasswordUpdateRequestForm body) {
 
-//    @ApiOperation(value = "테스트라고 했다 이거 보고 뭐라 하지 마라", notes = "마마 이거 왜 여노?")
-//    @PostMapping("/join")
-//    public void join(Teacher teacher) {
-//        authService.join(teacher);
-//    }
+        log.info("request /password PUT");
+
+        String accessToken = request.getHeader("Authorization");
+        boolean isValid = jwtService.isValid(accessToken);
+        if(isValid) {
+            Teacher teacher = new Teacher();
+            teacher.setId(body.getId());
+            teacher.setPw(body.getPassword());
+            teacher.existIdOrPassword();
+
+            String encodedPassword = authService.encodingPassword(teacher.getPw());
+            teacher.setPw(encodedPassword);
+
+            if(authService.checkIdAndPassword(teacher)) {
+                authService.samePassword(body.getNewPassword(), body.getConfirmNewPassword());
+                authService.updatePassword(body.getId(), body.getNewPassword());
+            }
+        } else {
+            throw new TokenInvalidException("토큰이 잘못 되었습니다.");
+        }
+    }
+
+    @ApiOperation(value = "회원가입", notes = "회원가입")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK!!"),
+            @ApiResponse(code = 400, message = "유저의 정보가 규칙을 어김"),
+            @ApiResponse(code = 403, message = "Token Invalid"),
+            @ApiResponse(code = 404, message = "ID or Password Mismatch"),
+            @ApiResponse(code = 500, message = "500???")
+    })
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "Authorization", dataType = "string", required = true, value = "Refresh Token")
+    })
+    @PostMapping("/join")
+    public void join(HttpServletRequest request, @RequestBody JoinRequestForm form) {
+
+        log.info("request /join POST");
+
+        String accessToken = request.getHeader("Authorization");
+        boolean isValid = jwtService.isValid(accessToken);
+        if(!isValid)
+            throw new TokenInvalidException("토큰이 잘못 되었습니다.");
+
+        authService.samePassword(form.getPassword(), form.getConfirmPassword());
+        Teacher teacher = new Teacher(form.getId(), form.getPassword(), form.getName(), form.getOffice());
+        authService.join(teacher);
+    }
 }

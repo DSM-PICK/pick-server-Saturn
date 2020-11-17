@@ -4,12 +4,14 @@ import com.dsm.pick.domains.domain.Teacher;
 import com.dsm.pick.domains.repository.TeacherRepository;
 import com.dsm.pick.utils.exception.IdOrPasswordMismatchException;
 import com.dsm.pick.utils.exception.NonExistEncodingOrCryptographicAlgorithmException;
+import com.dsm.pick.utils.exception.RuleViolationInformationException;
 import com.dsm.pick.utils.exception.TeacherNameNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;
+import java.util.Optional;
 
 @Service
 public class AuthService {
@@ -42,39 +44,11 @@ public class AuthService {
                 .getName();
     }
 
-//    public String getAccessToken(String id) {
-//        return jwtService.createAccessToken(id);
-//    }
-//
-//    public String getRefreshToken(String id) {
-//        return jwtService.createRefreshToken(id);
-//    }
-
-//    public LocalDateTime getAccessTokenExpiration(String accessToken) {
-//        Date expiration = jwtService.getExpiration(accessToken);
-//        return LocalDateTime.ofInstant(expiration.toInstant(), ZoneId.of("Asia/Seoul"));
-//    }
-
-//    public Teacher getSameRefreshTokenTeacher(String refreshToken) {
-//        if(jwtService.isUsableToken(refreshToken)) {
-//            Teacher findTeacher = teacherRepository.findByRefreshToken(refreshToken)
-//                    .orElseThrow(() -> new RefreshTokenMismatchException());
-//
-//            String findRefreshToken = findTeacher.getRefreshToken();
-//            if(refreshToken.equals(findRefreshToken))
-//                return findTeacher;
-//            else
-//                throw new RefreshTokenMismatchException();
-//        } else {
-//            throw new TokenExpirationException();
-//        }
-//    }
-
     public boolean checkIdAndPassword(Teacher teacher) {
         String userId = teacher.getId();
 
         Teacher findTeacher = teacherRepository.findById(userId)
-                .orElseThrow(() -> new IdOrPasswordMismatchException());
+                .orElseThrow(IdOrPasswordMismatchException::new);
 
         String userPw = teacher.getPw();
         String findUserPw = findTeacher.getPw();
@@ -85,34 +59,36 @@ public class AuthService {
         return true;
     }
 
-//    public LoginResponseForm formatLoginResponseForm(String accessToken, String refreshToken) {
-//        return new LoginResponseForm(accessToken, refreshToken);
-//    }
-//
-//    public AccessTokenReissuanceResponseForm formatAccessTokenReissuanceResponseForm(String accessToken, LocalDateTime accessTokenExpiration) {
-//        return new AccessTokenReissuanceResponseForm(accessToken, accessTokenExpiration);
-//    }
+    public void samePassword(String password, String confirmPassword) {
+        if(!password.equals(confirmPassword))
+            throw new IdOrPasswordMismatchException();
+    }
 
-//    public void logout(String accessToken) {
-//        if(jwtService.isUsableToken(accessToken)) {
-//            String teacherId = jwtService.getTeacherId(accessToken);
-//
-//            Teacher findTeacher = teacherRepository.findById(teacherId)
-//                    .orElseThrow(() -> new TokenExpirationException());
-//
-////            String refreshToken = findTeacher.getRefreshToken();
-//
-////            jwtService.killToken(refreshToken);
-////            jwtService.killToken(accessToken);
-//
-//            findTeacher.setRefreshToken(null);
-//        } else {
-//            throw new TokenExpirationException();
-//        }
-//    }
+    public void updatePassword(String id, String newPassword) {
+        Teacher teacher = teacherRepository.findById(id)
+                .orElseThrow(IdOrPasswordMismatchException::new);
+        teacher.setPw(encodingPassword(newPassword));
+    }
 
     public void join(Teacher teacher) {
-        teacher.setPw(encodingPassword(teacher.getPw()));
+        String userId = teacher.getId();
+        String password = teacher.getPw();
+        String name = teacher.getName();
+        String office = teacher.getOffice();
+
+        patternCheck(userId, 4, 16, "^[a-zA-Z]*$");
+        patternCheck(password, 4, 16, "^[a-zA-Z0-9|*|!|@|^]*$");
+        patternCheck(name, 1, 12, "^[a-zA-Z]*$");
+        patternCheck(office, 1, 12, "^[a-zA-Z0-9]*$");
+
+        teacher.setPw(encodingPassword(password));
         teacherRepository.save(teacher);
+    }
+
+    private void patternCheck(String target, int minimumLength, int maximumLength, String pattern) {
+        boolean isNormal = target.length() >= minimumLength && target.length() <= maximumLength && target.matches(pattern);
+        if(!isNormal) {
+            throw new RuleViolationInformationException();
+        }
     }
 }
