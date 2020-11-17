@@ -131,7 +131,7 @@ public class AuthController {
             @ApiResponse(code = 500, message = "500???")
     })
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "header", name = "Authorization", dataType = "string", required = true, value = "Refresh Token")
+            @ApiImplicitParam(paramType = "header", name = "Authorization", dataType = "string", required = true, value = "Access Token")
     })
     @PutMapping("/password")
     public void changePassword(HttpServletRequest request, @RequestBody PasswordUpdateRequestForm body) {
@@ -167,7 +167,7 @@ public class AuthController {
             @ApiResponse(code = 500, message = "500???")
     })
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "header", name = "Authorization", dataType = "string", required = true, value = "Refresh Token")
+            @ApiImplicitParam(paramType = "header", name = "Authorization", dataType = "string", required = true, value = "Access Token")
     })
     @PostMapping("/join")
     public void join(HttpServletRequest request, @RequestBody JoinRequestForm form) {
