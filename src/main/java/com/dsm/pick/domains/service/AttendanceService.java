@@ -138,6 +138,7 @@ public class AttendanceService {
     }
 
     public List<AttendanceListForm> getAttendanceList(String schedule, LocalDate date, int floor, int priority) {
+        System.out.println("sdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdf");
         List<AttendanceListForm> form = new ArrayList<>();
         final Comparator<Attendance> comparator =
                 Comparator.comparing(c -> c.getStudent().getNum());
@@ -152,7 +153,10 @@ public class AttendanceService {
         }
 
         attendanceList.stream()
-                .sorted(comparator);
+                .sorted(comparator)
+                .forEach(a -> {
+                    System.out.println(a.getStudent().getName() + " " + a.getState());
+                });
 
         AttendanceListForm attendanceListForm = null;
         for(Attendance a : attendanceList) {
