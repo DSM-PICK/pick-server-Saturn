@@ -33,8 +33,10 @@ public class AttendanceCustomRepositoryImpl implements AttendanceCustomRepositor
                 .setParameter("priority", priority)
                 .setParameter("date", date)
                 .getResultList();
-        if(result.size() <= 0)
-            throw new NoSuchElementException("일치하는 요소가 존재하지 않음");
+
+        result.stream()
+                .forEach(a -> System.out.println(a.getStudent().getName() + " " + a.getStudent().getClub().getName()));
+
         return result;
     }
 
