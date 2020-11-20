@@ -33,10 +33,6 @@ public class AttendanceCustomRepositoryImpl implements AttendanceCustomRepositor
                 .setParameter("priority", priority)
                 .setParameter("date", date)
                 .getResultList();
-
-        result.stream()
-                .forEach(a -> System.out.println(a.getStudent().getName() + " " + a.getStudent().getClub().getName()));
-
         return result;
     }
 
