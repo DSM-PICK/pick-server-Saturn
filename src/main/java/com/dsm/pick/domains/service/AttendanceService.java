@@ -179,10 +179,6 @@ public class AttendanceService {
         }
         if(attendanceListForm != null)
             form.add(attendanceListForm);
-
-        form.stream()
-                .forEach(a -> System.out.println(a.getGradeClassNumber() + " " + a.getName() + " " + a.getState().getSeven() + a.getState().getEight() + a.getState().getNine() + a.getState().getTen()));
-
         return form;
     }
 

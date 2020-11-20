@@ -124,7 +124,13 @@ public class AttendanceController {
         if(schedule.equals("club")) {
             Club club = attendanceService.getClubHeadAndName(floor, priority);
             String head = attendanceService.getStudentNumberAndName(club.getHead());
-            return new AttendanceListResponseForm(club.getName(), head, attendanceList);
+            AttendanceListResponseForm form = new AttendanceListResponseForm(club.getName(), head, attendanceList);
+            form.getAttendances()
+                    .stream()
+                    .forEach(a -> {
+                        System.out.println(a.getGradeClassNumber() + " " + a.getName() + " " + a.getState().getSeven() + a.getState().getEight() + a.getState().getNine() + a.getState().getTen());
+                    });
+            return form;
         } else if(schedule.equals("self-study")) {
             SchoolClass schoolClass = attendanceService.getClassName(floor, priority);
             return new AttendanceListResponseForm(schoolClass.getName(), null, attendanceList);
