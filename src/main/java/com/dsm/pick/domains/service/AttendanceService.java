@@ -138,6 +138,7 @@ public class AttendanceService {
     }
 
     public List<AttendanceListForm> getAttendanceList(String schedule, LocalDate date, int floor, int priority) {
+        System.out.println("여긴 들어왔냐1");
         List<AttendanceListForm> form = new ArrayList<>();
         final Comparator<Attendance> comparator =
                 Comparator.comparing(c -> c.getStudent().getNum());
@@ -179,6 +180,7 @@ public class AttendanceService {
         }
         if(attendanceListForm != null)
             form.add(attendanceListForm);
+        System.out.println("여긴 들어왔냐1");
         return form;
     }
 
