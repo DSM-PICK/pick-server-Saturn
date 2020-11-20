@@ -2,15 +2,16 @@ package com.dsm.pick.controller;
 
 import com.dsm.pick.domains.service.JwtService;
 import com.dsm.pick.domains.service.NoticeService;
+import com.dsm.pick.domains.service.StatisticsService;
 import com.dsm.pick.utils.exception.TokenInvalidException;
 import com.dsm.pick.utils.form.NoticeResponseForm;
+import com.dsm.pick.utils.form.StatisticsClubForm;
+import com.dsm.pick.utils.form.StatisticsResponseForm;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -24,11 +25,13 @@ public class MainPageController {
 
     private JwtService jwtService;
     private NoticeService noticeService;
+    private StatisticsService statisticsService;
 
     @Autowired
-    public MainPageController(JwtService jwtService, NoticeService noticeService) {
+    public MainPageController(JwtService jwtService, NoticeService noticeService, StatisticsService statisticsService) {
         this.jwtService = jwtService;
         this.noticeService = noticeService;
+        this.statisticsService = statisticsService;
     }
 
     @ApiOperation(value = "공지사항", notes = "최근 2주간의 공지사항 반환")
@@ -42,7 +45,7 @@ public class MainPageController {
     @GetMapping("/notice")
     public NoticeResponseForm getNotice(HttpServletRequest request) {
 
-        log.info("request /notice GET");
+        log.info("request /main/notice GET");
 
         tokenValidation(request.getHeader("Authorization"));
 
@@ -50,6 +53,35 @@ public class MainPageController {
         List<String> memberNotice = noticeService.getMemberNotice();
 
         return new NoticeResponseForm(clubNotice, memberNotice);
+    }
+
+    @ApiOperation(value = "통계", notes = "오늘의 통계를 반환함")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK!!"),
+            @ApiResponse(code = 500, message = "500???")
+    })
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "Authorization", dataType = "string", required = true, value = "Access Token")
+    })
+    @GetMapping("/statistics/{floor}")
+    public StatisticsResponseForm getTodayStatistics(HttpServletRequest request,
+                                                     @PathVariable("floor") String floorStr) {
+
+        log.info("request /main/statistics");
+
+        tokenValidation(request.getHeader("Authorization"));
+
+        int floor = 0;
+        try {
+            floor = Integer.parseInt(floorStr);
+        } catch(Exception e) {
+            throw new NumberFormatException("floor가 정수 타입이 아닙니다.");
+        }
+
+        String floorText = statisticsService.convertToText(floor);
+        List<StatisticsClubForm> statisticsClubForms = statisticsService.getTodayStatistics(floor);
+
+        return new StatisticsResponseForm(floorText, statisticsClubForms);
     }
 
     private void tokenValidation(String token) {
