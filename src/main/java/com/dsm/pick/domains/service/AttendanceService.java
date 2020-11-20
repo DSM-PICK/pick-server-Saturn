@@ -130,7 +130,11 @@ public class AttendanceService {
     }
 
     public Club getClubHeadAndName(int floor, int priority) {
-        return clubRepository.findByFloorAndPriority(floor, priority);
+        System.out.println("floor : " + floor);
+        System.out.println("priority : " + priority);
+        Club club = clubRepository.findByFloorAndPriority(floor, priority);
+        System.out.println(club.getName() + club.getTeacher());
+        return club;
     }
 
     public SchoolClass getClassName(int floor, int priority) {
@@ -138,7 +142,6 @@ public class AttendanceService {
     }
 
     public List<AttendanceListForm> getAttendanceList(String schedule, LocalDate date, int floor, int priority) {
-        System.out.println("여긴 들어왔냐1");
         List<AttendanceListForm> form = new ArrayList<>();
         final Comparator<Attendance> comparator =
                 Comparator.comparing(c -> c.getStudent().getNum());
@@ -180,7 +183,6 @@ public class AttendanceService {
         }
         if(attendanceListForm != null)
             form.add(attendanceListForm);
-        System.out.println("여긴 들어왔냐1");
         return form;
     }
 
@@ -197,12 +199,5 @@ public class AttendanceService {
         Activity activity = activityRepository.findById(LocalDate.now())
                 .orElseThrow(ActivityNotFoundException::new);
         return activity.getSchedule();
-    }
-
-    public String getStudentNumberAndName(String studentNumber) {
-        if(studentNumber == null)
-            return null;
-        Student student = studentRepository.findById(studentNumber).get();
-        return student.getNum() + " " + student.getName();
     }
 }

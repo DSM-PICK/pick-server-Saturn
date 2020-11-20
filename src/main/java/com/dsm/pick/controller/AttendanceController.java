@@ -121,12 +121,9 @@ public class AttendanceController {
         List<AttendanceListForm> attendanceList =
                 attendanceService.getAttendanceList(schedule, LocalDate.now(), floor, priority);
 
-        System.out.println("여긴 들어왔냐2");
         if(schedule.equals("club")) {
             Club club = attendanceService.getClubHeadAndName(floor, priority);
-            String head = attendanceService.getStudentNumberAndName(club.getHead());
-            AttendanceListResponseForm form = new AttendanceListResponseForm(club.getName(), head, attendanceList);
-            System.out.println("여긴 들어왔냐3");
+            AttendanceListResponseForm form = new AttendanceListResponseForm(club.getName(), club.getHead(), attendanceList);
             form.getAttendances()
                     .stream()
                     .forEach(a -> {
