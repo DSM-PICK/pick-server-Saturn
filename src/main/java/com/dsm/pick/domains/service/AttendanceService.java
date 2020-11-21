@@ -130,11 +130,7 @@ public class AttendanceService {
     }
 
     public Club getClubHeadAndName(int floor, int priority) {
-        System.out.println("floor : " + floor);
-        System.out.println("priority : " + priority);
-        Club club = clubRepository.findByFloorAndPriority(floor, priority);
-        System.out.println(club.getName() + club.getTeacher());
-        return club;
+        return clubRepository.findByFloorAndPriority(floor, priority);
     }
 
     public SchoolClass getClassName(int floor, int priority) {
@@ -193,11 +189,5 @@ public class AttendanceService {
                 period
         );
         attendance.setState(state);
-    }
-
-    public String getTodaySchedule() {
-        Activity activity = activityRepository.findById(LocalDate.now())
-                .orElseThrow(ActivityNotFoundException::new);
-        return activity.getSchedule();
     }
 }
