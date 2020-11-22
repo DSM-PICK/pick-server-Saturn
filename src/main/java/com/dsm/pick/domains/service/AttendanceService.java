@@ -69,7 +69,7 @@ public class AttendanceService {
                         form.add(element);
                     });
 
-        } else if(schedule.equals("self-study")) {
+        } else if(schedule.equals("self-study") || schedule.equals("after-school")) {
 
             if(!(1 <= floor && floor <= 4)) {
                 throw new NonExistFloorException("1, 2, 3, 4층이 아닙니다.");
@@ -145,7 +145,7 @@ public class AttendanceService {
         List<Attendance> attendanceList;
         if(schedule.equals("club")) {
             attendanceList = attendanceRepository.findByDateAndFloorAndPriorityWithClub(date, floor, priority);
-        } else if(schedule.equals("self-study")) {
+        } else if(schedule.equals("self-study") || schedule.equals("after-school")) {
             attendanceList = attendanceRepository.findByDateAndFloorAndPriorityWithClass(date, floor, priority);
         } else {
             throw new NotClubAndSelfStudyException("schedule is not club or self-study");
