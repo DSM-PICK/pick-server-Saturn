@@ -80,6 +80,7 @@ public class AttendanceService {
 
             classList.stream()
                     .sorted(Comparator.comparing(SchoolClass::getPriority))
+                    .filter(c -> c.getStudents().size() >= 1)
                     .forEach(c -> {
                         ClubAndClassInformationForm element = new ClubAndClassInformationForm();
 

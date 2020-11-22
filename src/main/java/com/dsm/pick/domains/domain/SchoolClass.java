@@ -1,9 +1,7 @@
 package com.dsm.pick.domains.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "class")
@@ -19,11 +17,15 @@ public class SchoolClass {
     @Column(name = "priority")
     private int priority;
 
+    @OneToMany(mappedBy = "schoolClass")
+    private List<Student> students;
+
     public SchoolClass() {}
-    public SchoolClass(String name, int floor, int priority) {
+    public SchoolClass(String name, int floor, int priority, List<Student> students) {
         this.name = name;
         this.floor = floor;
         this.priority = priority;
+        this.students = students;
     }
 
     public String getName() {
@@ -48,5 +50,13 @@ public class SchoolClass {
 
     public void setPriority(int priority) {
         this.priority = priority;
+    }
+
+    public List<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(List<Student> students) {
+        this.students = students;
     }
 }
