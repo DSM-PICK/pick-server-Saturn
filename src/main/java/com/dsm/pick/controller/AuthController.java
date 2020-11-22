@@ -41,7 +41,7 @@ public class AuthController {
     @PostMapping("/login")
     public LoginResponseForm login(@RequestBody TeacherRequestForm teacherRequestForm) {
 
-        log.info("request /login POST");
+        log.info("request /auth/login POST");
 
         Teacher teacher = new Teacher();
         teacher.setId(teacherRequestForm.getId());
@@ -78,7 +78,7 @@ public class AuthController {
     @PostMapping("/token")
     public void isUsableToken(HttpServletRequest request) {
 
-        log.info("request /token POST");
+        log.info("request /auth/token POST");
 
         String token = request.getHeader("Authorization");
 
@@ -106,7 +106,7 @@ public class AuthController {
     @GetMapping("/access-token")
     public AccessTokenReissuanceResponseForm accessTokenReissuance(HttpServletRequest request) {
 
-        log.info("request /access-token GET");
+        log.info("request /auth/access-token GET");
 
         String refreshToken = request.getHeader("Authorization");
 
@@ -136,7 +136,7 @@ public class AuthController {
     @PutMapping("/password")
     public void changePassword(HttpServletRequest request, @RequestBody PasswordUpdateRequestForm body) {
 
-        log.info("request /password PUT");
+        log.info("request /auth/password PUT");
 
         String accessToken = request.getHeader("Authorization");
         boolean isValid = jwtService.isValid(accessToken);
@@ -172,7 +172,7 @@ public class AuthController {
     @PostMapping("/join")
     public void join(HttpServletRequest request, @RequestBody JoinRequestForm form) {
 
-        log.info("request /join POST");
+        log.info("request /auth/join POST");
 
         String accessToken = request.getHeader("Authorization");
         boolean isValid = jwtService.isValid(accessToken);

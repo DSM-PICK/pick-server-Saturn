@@ -142,7 +142,7 @@ public class AttendanceService {
         final Comparator<Attendance> comparator =
                 Comparator.comparing(c -> c.getStudent().getNum());
 
-        List<Attendance> attendanceList;
+        List<Attendance> attendanceList = new ArrayList<>();
         if(schedule.equals("club")) {
             attendanceList = attendanceRepository.findByDateAndFloorAndPriorityWithClub(date, floor, priority);
         } else if(schedule.equals("self-study") || schedule.equals("after-school")) {
@@ -152,6 +152,9 @@ public class AttendanceService {
         }
 
         AttendanceListForm attendanceListForm = null;
+        if(attendanceList == null) {
+            return form;
+        }
         for(Attendance a : attendanceList) {
             if(attendanceListForm == null) {
                 attendanceListForm = new AttendanceListForm();
@@ -162,7 +165,6 @@ public class AttendanceService {
 
             attendanceListForm.setGradeClassNumber(a.getStudent().getNum());
             attendanceListForm.setName(a.getStudent().getName());
-
 
             if(attendanceListForm.getState() == null)
                 attendanceListForm.setState(new AttendanceStateForm());

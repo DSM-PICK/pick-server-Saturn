@@ -9,7 +9,7 @@ public class ClubAndClassInformationForm {
     private String name;
     @ApiModelProperty(example = "done", required = true)
     private String done;
-    @ApiModelProperty(example = "3", required = true)
+    @ApiModelProperty(example = "9", required = true)
     private String priority;
 
     public ClubAndClassInformationForm() {}

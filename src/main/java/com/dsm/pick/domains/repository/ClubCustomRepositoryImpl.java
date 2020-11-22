@@ -22,7 +22,7 @@ public class ClubCustomRepositoryImpl implements ClubCustomRepository {
 //                .setParameter("floor", floor)
 //                .getResultList();
         return entityManager.createQuery("SELECT c FROM Club c " +
-                "WHERE c.location.floor = :floor")
+                "WHERE c.location.floor = :floor", Club.class)
                 .setParameter("floor", floor)
                 .getResultList();
     }

@@ -57,7 +57,7 @@ public class AttendanceController {
             @ApiParam(value = "층[ 1(자습실, 창조실), 2, 3, 4 ]", required = true) @PathVariable("floor") String floorStr,
             HttpServletRequest request) {
 
-        log.info(String.format("request /navigation/{%s}/{%s} GET", schedule, floorStr));
+        log.info(String.format("request /attendance/navigation/%s/%s GET", schedule, floorStr));
 
         tokenValidation(request.getHeader("Authorization"));
 
@@ -105,7 +105,7 @@ public class AttendanceController {
             @ApiParam(value = "위치[ 왼쪽에서부터 0 ]", required = true) @PathVariable("priority") String priorityStr,
             HttpServletRequest request) {
 
-        log.info(String.format("request /student-state/{%s}/{%s}/{%s} GET", schedule, floorStr, priorityStr));
+        log.info(String.format("request /attendance/student-state/%s/%s/%s GET", schedule, floorStr, priorityStr));
 
         tokenValidation(request.getHeader("Authorization"));
 
@@ -148,7 +148,7 @@ public class AttendanceController {
             @RequestBody AttendanceStateRequestForm attendanceStateRequestForm,
             HttpServletRequest request) {
 
-        log.info("request /student-state PATCH");
+        log.info("request attendance/student-state PATCH");
 
         tokenValidation(request.getHeader("Authorization"));
 
