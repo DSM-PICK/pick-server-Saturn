@@ -16,7 +16,6 @@ jobs:
       DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
       TOKEN_SECURE_KEY: ${{ secrets.TOKEN_SECURE_KEY }}
       SERVER_HOST: ${{ secrets.SERVER_HOST }}
-      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
     steps:
       - uses: actions/checkout@v2
@@ -47,6 +46,9 @@ jobs:
         run: ./gradlew clean build -x test
   CD:
     runs-on: ubuntu-latest
+    env:
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+  
     needs: CI
 
     steps:
