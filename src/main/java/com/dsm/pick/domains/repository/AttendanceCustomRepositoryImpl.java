@@ -38,7 +38,7 @@ public class AttendanceCustomRepositoryImpl implements AttendanceCustomRepositor
 
     @Override
     public List<Attendance> findByDateAndFloorAndPriorityWithClass(LocalDate date, int floor, int priority) {
-        List<Attendance> result = new ArrayList<>();
+        List<Attendance> result = null;
 
         if(floor == 1) {
             if(serverTimeService.getDayOfWeek().equals("월")) {
