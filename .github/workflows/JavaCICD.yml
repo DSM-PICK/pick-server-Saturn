@@ -46,6 +46,9 @@ jobs:
         run: ./gradlew clean build -x test
   CD:
     runs-on: ubuntu-latest
+    env:
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+  
     needs: CI
 
     steps:
@@ -72,3 +75,9 @@ jobs:
           name: 0816jinjin/saturn
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - uses: act10ns/slack@v1
+        with:
+          status: ${{ job.status }}
+          steps: ${{ toJson(steps) }}
+        if: always()
