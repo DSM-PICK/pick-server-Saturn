@@ -16,6 +16,7 @@ jobs:
       DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
       TOKEN_SECURE_KEY: ${{ secrets.TOKEN_SECURE_KEY }}
       SERVER_HOST: ${{ secrets.SERVER_HOST }}
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
     steps:
       - uses: actions/checkout@v2
@@ -72,3 +73,9 @@ jobs:
           name: 0816jinjin/saturn
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - uses: act10ns/slack@v1
+        with:
+          status: ${{ job.status }}
+          steps: ${{ toJson(steps) }}
+        if: always()
