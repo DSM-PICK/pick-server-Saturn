@@ -170,14 +170,9 @@ public class AuthController {
             @ApiImplicitParam(paramType = "header", name = "Authorization", dataType = "string", required = true, value = "Access Token")
     })
     @PostMapping("/join")
-    public void join(HttpServletRequest request, @RequestBody JoinRequestForm form) {
+    public void join(@RequestBody JoinRequestForm form) {
 
         log.info("request /auth/join POST");
-
-        String accessToken = request.getHeader("Authorization");
-        boolean isValid = jwtService.isValid(accessToken);
-        if(!isValid)
-            throw new TokenInvalidException("토큰이 잘못 되었습니다.");
 
         authService.samePassword(form.getPassword(), form.getConfirmPassword());
         Teacher teacher = new Teacher(form.getId(), form.getPassword(), form.getName(), form.getOffice());
