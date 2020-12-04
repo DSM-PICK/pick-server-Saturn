@@ -16,16 +16,12 @@ public class JoinRequestForm {
     @ApiParam(value = "이진혁", required = true)
     private String name;
 
-    @ApiParam(value = "산학협력부", required = true)
-    private String office;
-
     public JoinRequestForm() {}
-    public JoinRequestForm(String id, String password, String confirmPassword, String name, String office) {
+    public JoinRequestForm(String id, String password, String confirmPassword, String name) {
         this.id = id;
         this.password = password;
         this.confirmPassword = confirmPassword;
         this.name = name;
-        this.office = office;
     }
 
     public String getId() {
@@ -58,13 +54,5 @@ public class JoinRequestForm {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getOffice() {
-        return office;
-    }
-
-    public void setOffice(String office) {
-        this.office = office;
     }
 }

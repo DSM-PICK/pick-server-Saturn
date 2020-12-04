@@ -3,6 +3,7 @@ package com.dsm.pick.controller;
 import com.dsm.pick.domains.domain.Teacher;
 import com.dsm.pick.domains.service.AuthService;
 import com.dsm.pick.domains.service.JwtService;
+import com.dsm.pick.utils.exception.InconsistentAuthenticationNumberException;
 import com.dsm.pick.utils.exception.TokenExpirationException;
 import com.dsm.pick.utils.exception.TokenInvalidException;
 import com.dsm.pick.utils.form.*;
@@ -10,6 +11,7 @@ import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,6 +22,9 @@ import javax.servlet.http.HttpServletRequest;
 public class AuthController {
 
     private final static Logger log = LoggerFactory.getLogger(AuthController.class);
+
+    @Value("${JOIN_AUTHENTICATION_NUMBER:korean-good}")
+    private String authenticationNumber;
 
     private final AuthService authService;
     private final JwtService jwtService;
@@ -158,6 +163,22 @@ public class AuthController {
         }
     }
 
+    @ApiOperation(value = "인증번호 확인", notes = "인증번호 확인")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK!!"),
+            @ApiResponse(code = 400, message = "인증 번호가 일치하지 않음"),
+            @ApiResponse(code = 500, message = "500???")
+    })
+    @PostMapping("/authentication-number")
+    public void authenticationNumberCheck(AuthenticationNumberRequestForm form) {
+
+        log.info("request /auth/authentication-number POST");
+
+        String authenticationNumber = form.getAuthenticationNumber();
+        if(!this.authenticationNumber.equals(authenticationNumber))
+            throw new InconsistentAuthenticationNumberException();
+    }
+
     @ApiOperation(value = "회원가입", notes = "회원가입")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK!!"),
@@ -175,7 +196,7 @@ public class AuthController {
         log.info("request /auth/join POST");
 
         authService.samePassword(form.getPassword(), form.getConfirmPassword());
-        Teacher teacher = new Teacher(form.getId(), form.getPassword(), form.getName(), form.getOffice());
+        Teacher teacher = new Teacher(form.getId(), form.getPassword(), form.getName(), "임시 교무실");
         authService.join(teacher);
     }
 }

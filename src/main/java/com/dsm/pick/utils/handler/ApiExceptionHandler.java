@@ -89,4 +89,10 @@ public class ApiExceptionHandler {
         ApiErrorResponseForm response = new ApiErrorResponseForm("rule violation information exception", "유저의 정보가 규칙을 위반합니다.");
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(InconsistentAuthenticationNumberException.class)
+    public ResponseEntity<ApiErrorResponseForm> inconsistentAuthenticationNumberExceptionHandler(InconsistentAuthenticationNumberException ex) {
+        ApiErrorResponseForm response = new ApiErrorResponseForm("Inconsistent Authentication Number Exception", "인증 번호가 일치하지 않습니다.");
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
 }
