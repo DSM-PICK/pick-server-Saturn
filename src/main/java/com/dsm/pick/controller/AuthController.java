@@ -170,11 +170,11 @@ public class AuthController {
             @ApiResponse(code = 500, message = "500???")
     })
     @PostMapping("/authentication-number")
-    public void authenticationNumberCheck(AuthenticationNumberRequestForm form) {
+    public void authenticationNumberCheck(@RequestBody AuthenticationNumberRequestForm form) {
 
         log.info("request /auth/authentication-number POST");
 
-        String authenticationNumber = form.getAuthenticationNumber();
+        String authenticationNumber = form.getAuthenticationNumber(); 
         if(!this.authenticationNumber.equals(authenticationNumber))
             throw new InconsistentAuthenticationNumberException();
     }
