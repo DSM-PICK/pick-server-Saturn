@@ -2,10 +2,7 @@ package com.dsm.pick.domains.service;
 
 import com.dsm.pick.domains.domain.Teacher;
 import com.dsm.pick.domains.repository.TeacherRepository;
-import com.dsm.pick.utils.exception.IdOrPasswordMismatchException;
-import com.dsm.pick.utils.exception.NonExistEncodingOrCryptographicAlgorithmException;
-import com.dsm.pick.utils.exception.RuleViolationInformationException;
-import com.dsm.pick.utils.exception.TeacherNameNotFoundException;
+import com.dsm.pick.utils.exception.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -71,22 +68,30 @@ public class AuthService {
     }
 
     public void join(Teacher teacher) {
-        String userId = teacher.getId();
+        String teacherId = teacher.getId();
         String password = teacher.getPw();
         String name = teacher.getName();
         String office = teacher.getOffice();
-        System.out.println("userid : " + userId);
-        System.out.println("password : " + password);
-        System.out.println("name : " + name);
-        System.out.println("office : " + office);
 
-        patternCheck(userId, 4, 16, "^[a-zA-Z|-]*$");
+        if(alreadyExistID(teacherId))
+            throw new AlreadyExistIdException();
+
+        patternCheck(teacherId, 4, 16, "^[a-zA-Z|-]*$");
         patternCheck(password, 4, 16, "^[a-zA-Z0-9|*|!|@|^]*$");
         patternCheck(name, 1, 12, "^[a-zA-Zㄱ-ㅎ가-힣\\s]*$");
         patternCheck(office, 1, 12, "^[a-zA-Z0-9ㄱ-ㅎ가-힣\\s]*$");
 
         teacher.setPw(encodingPassword(password));
         teacherRepository.save(teacher);
+    }
+
+    public boolean alreadyExistID(String teacherId) {
+        try {
+            teacherRepository.findById(teacherId).get();
+            return true;
+        } catch(Exception e) {
+            return false;
+        }
     }
 
     private void patternCheck(String target, int minimumLength, int maximumLength, String pattern) {

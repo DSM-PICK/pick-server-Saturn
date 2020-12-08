@@ -95,4 +95,10 @@ public class ApiExceptionHandler {
         ApiErrorResponseForm response = new ApiErrorResponseForm("Inconsistent Authentication Number Exception", "인증 번호가 일치하지 않습니다.");
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(AlreadyExistIdException.class)
+    public ResponseEntity<ApiErrorResponseForm> alreadyExistIdExceptionHandler(AlreadyExistIdException ex) {
+        ApiErrorResponseForm response = new ApiErrorResponseForm("Already ExistId Exception", "이미 존재하는 아이디입니다.");
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
 }

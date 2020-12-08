@@ -182,7 +182,7 @@ public class AuthController {
     @ApiOperation(value = "회원가입", notes = "회원가입")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK!!"),
-            @ApiResponse(code = 400, message = "유저의 정보가 규칙을 어김"),
+            @ApiResponse(code = 400, message = "유저의 정보가 규칙을 어김, 또는 이미 존재하는 아이디"),
             @ApiResponse(code = 403, message = "Token Invalid"),
             @ApiResponse(code = 404, message = "ID or Password Mismatch"),
             @ApiResponse(code = 500, message = "500???")
@@ -191,6 +191,7 @@ public class AuthController {
     public void join(@RequestBody JoinRequestForm form) {
 
         log.info("request /auth/join POST");
+
 
         authService.samePassword(form.getPassword(), form.getConfirmPassword());
         Teacher teacher = new Teacher(form.getId(), form.getPassword(), form.getName(), "임시 교무실");
