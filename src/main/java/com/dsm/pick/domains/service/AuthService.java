@@ -80,10 +80,10 @@ public class AuthService {
         System.out.println("name : " + name);
         System.out.println("office : " + office);
 
-        patternCheck(userId, 4, 16, "^[a-zA-Z]*$");
+        patternCheck(userId, 4, 16, "^[a-zA-Z|-]*$");
         patternCheck(password, 4, 16, "^[a-zA-Z0-9|*|!|@|^]*$");
-        patternCheck(name, 1, 12, "^[a-zA-Z]*$");
-        patternCheck(office, 1, 12, "^[a-zA-Z0-9]*$");
+        patternCheck(name, 1, 12, "^[a-zA-Zㄱ-ㅎ가-힣]*$");
+        patternCheck(office, 1, 12, "^[a-zA-Z0-9ㄱ-ㅎ가-힣]*$");
 
         teacher.setPw(encodingPassword(password));
         teacherRepository.save(teacher);
