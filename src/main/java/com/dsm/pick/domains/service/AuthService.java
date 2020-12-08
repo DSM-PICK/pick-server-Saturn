@@ -75,6 +75,10 @@ public class AuthService {
         String password = teacher.getPw();
         String name = teacher.getName();
         String office = teacher.getOffice();
+        System.out.println("userid : " + userId);
+        System.out.println("password : " + password);
+        System.out.println("name : " + name);
+        System.out.println("office : " + office);
 
         patternCheck(userId, 4, 16, "^[a-zA-Z]*$");
         patternCheck(password, 4, 16, "^[a-zA-Z0-9|*|!|@|^]*$");
@@ -88,6 +92,8 @@ public class AuthService {
     private void patternCheck(String target, int minimumLength, int maximumLength, String pattern) {
         boolean isNormal = target.length() >= minimumLength && target.length() <= maximumLength && target.matches(pattern);
         if(!isNormal) {
+            System.out.println("target : " + target);
+            System.out.println("length : " + target.length());
             throw new RuleViolationInformationException();
         }
     }
