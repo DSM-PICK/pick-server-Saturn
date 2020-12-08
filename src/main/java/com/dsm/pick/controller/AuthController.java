@@ -174,7 +174,7 @@ public class AuthController {
 
         log.info("request /auth/authentication-number POST");
 
-        String authenticationNumber = form.getAuthenticationNumber(); 
+        String authenticationNumber = form.getAuthenticationNumber();
         if(!this.authenticationNumber.equals(authenticationNumber))
             throw new InconsistentAuthenticationNumberException();
     }
@@ -186,9 +186,6 @@ public class AuthController {
             @ApiResponse(code = 403, message = "Token Invalid"),
             @ApiResponse(code = 404, message = "ID or Password Mismatch"),
             @ApiResponse(code = 500, message = "500???")
-    })
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "header", name = "Authorization", dataType = "string", required = true, value = "Access Token")
     })
     @PostMapping("/join")
     public void join(@RequestBody JoinRequestForm form) {
