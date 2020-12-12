@@ -150,6 +150,7 @@ public class AuthController {
             String teacherId = jwtService.getTeacherId(accessToken);
             if(authService.checkId(teacherId)) {
                 authService.samePassword(body.getNewPassword(), body.getConfirmNewPassword());
+                authService.validatePassword(body.getNewPassword());
                 authService.updatePassword(teacherId, body.getNewPassword());
             }
         } else {

@@ -17,6 +17,11 @@ public class AuthService {
     private static final String ALGORITHM = "SHA-512";
     private static final String ENCODING = "UTF-8";
 
+    private static final String ID_PATTERN = "^[a-zA-Z0-9|-]*$";
+    private static final String PASSWORD_PATTERN = "^[a-zA-Z0-9|*|!|@|^]*$";
+    private static final String NAME_PATTERN = "^[a-zA-Zㄱ-ㅎ가-힣\\s]*$";
+    private static final String OFFICE_PATTERN = "^[a-zA-Z0-9ㄱ-ㅎ가-힣\\s]*$";
+
     private static final Logger log = LoggerFactory.getLogger(AuthService.class);
 
     private TeacherRepository teacherRepository;
@@ -86,6 +91,10 @@ public class AuthService {
         teacherRepository.save(teacher);
     }
 
+    public void validatePassword(String password) {
+        patternCheck(password, 4, 16, PASSWORD_PATTERN);
+    }
+
     public void join(Teacher teacher) {
         String teacherId = teacher.getId();
         String password = teacher.getPw();
@@ -95,10 +104,10 @@ public class AuthService {
         if(alreadyExistID(teacherId))
             throw new AlreadyExistIdException();
 
-        patternCheck(teacherId, 4, 16, "^[a-zA-Z0-9|-]*$");
-        patternCheck(password, 4, 16, "^[a-zA-Z0-9|*|!|@|^]*$");
-        patternCheck(name, 1, 12, "^[a-zA-Zㄱ-ㅎ가-힣\\s]*$");
-        patternCheck(office, 1, 12, "^[a-zA-Z0-9ㄱ-ㅎ가-힣\\s]*$");
+        patternCheck(teacherId, 4, 16, ID_PATTERN);
+        patternCheck(password, 4, 16, PASSWORD_PATTERN);
+        patternCheck(name, 1, 12, NAME_PATTERN);
+        patternCheck(office, 1, 12, OFFICE_PATTERN);
 
         teacher.setPw(encodingPassword(password));
         teacherRepository.save(teacher);
