@@ -165,8 +165,8 @@ public class AttendanceScheduler {
         } else if(dayOfWeek == 5) {
             return 7;
         } else {
-            throw new WeekendException("오늘이 주말이라니!!!");
-//            return 7;         // test
+//            throw new WeekendException("오늘이 주말이라니!!!");
+            return 7;         // test
         }
     }
 

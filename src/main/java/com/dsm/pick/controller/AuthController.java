@@ -186,7 +186,6 @@ public class AuthController {
 
         log.info("request /auth/join POST");
 
-
         authService.samePassword(form.getPassword(), form.getConfirmPassword());
         Teacher teacher = new Teacher(form.getId(), form.getPassword(), form.getName(), "임시 교무실");
         authService.join(teacher);
