@@ -144,19 +144,13 @@ public class AuthController {
         log.info("request /auth/password PUT");
 
         String accessToken = request.getHeader("Authorization");
+        String teacherId = jwtService.getTeacherId(accessToken);
+
         boolean isValid = jwtService.isValid(accessToken);
         if(isValid) {
-            Teacher teacher = new Teacher();
-            teacher.setId(body.getId());
-            teacher.setPw(body.getPassword());
-            teacher.existIdOrPassword();
-
-            String encodedPassword = authService.encodingPassword(teacher.getPw());
-            teacher.setPw(encodedPassword);
-
-            if(authService.checkIdAndPassword(teacher)) {
+            if(authService.checkId(teacherId)) {
                 authService.samePassword(body.getNewPassword(), body.getConfirmNewPassword());
-                authService.updatePassword(body.getId(), body.getNewPassword());
+                authService.updatePassword(teacherId, body.getNewPassword());
             }
         } else {
             throw new TokenInvalidException("토큰이 잘못 되었습니다.");

@@ -3,6 +3,8 @@ package com.dsm.pick.domains.service;
 import com.dsm.pick.domains.domain.Teacher;
 import com.dsm.pick.domains.repository.TeacherRepository;
 import com.dsm.pick.utils.exception.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,8 @@ import java.util.Optional;
 public class AuthService {
     private static final String ALGORITHM = "SHA-512";
     private static final String ENCODING = "UTF-8";
+
+    private static final Logger log = LoggerFactory.getLogger(AuthService.class);
 
     private TeacherRepository teacherRepository;
 
@@ -39,6 +43,20 @@ public class AuthService {
         return teacherRepository.findById(teacherId)
                 .orElseThrow(TeacherNameNotFoundException::new)
                 .getName();
+    }
+
+    public boolean checkId(String id) {
+        if(id == null)
+            throw new IdOrPasswordMismatchException();
+        try {
+            Teacher teacher = teacherRepository.findById(id)
+                    .orElseThrow(TeacherNotFoundException::new);
+            return true;
+        } catch(Exception e) {
+            log.error("error " + e.getMessage() + "[500]");
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public boolean checkIdAndPassword(Teacher teacher) {
