@@ -95,7 +95,7 @@ public class AuthService {
         if(alreadyExistID(teacherId))
             throw new AlreadyExistIdException();
 
-        patternCheck(teacherId, 4, 16, "^[a-zA-Z|-]*$");
+        patternCheck(teacherId, 4, 16, "^[a-zA-Z0-9|-]*$");
         patternCheck(password, 4, 16, "^[a-zA-Z0-9|*|!|@|^]*$");
         patternCheck(name, 1, 12, "^[a-zA-Zㄱ-ㅎ가-힣\\s]*$");
         patternCheck(office, 1, 12, "^[a-zA-Z0-9ㄱ-ㅎ가-힣\\s]*$");
