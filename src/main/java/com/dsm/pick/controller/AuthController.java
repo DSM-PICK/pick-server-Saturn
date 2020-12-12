@@ -144,10 +144,10 @@ public class AuthController {
         log.info("request /auth/password PUT");
 
         String accessToken = request.getHeader("Authorization");
-        String teacherId = jwtService.getTeacherId(accessToken);
 
         boolean isValid = jwtService.isValid(accessToken);
         if(isValid) {
+            String teacherId = jwtService.getTeacherId(accessToken);
             if(authService.checkId(teacherId)) {
                 authService.samePassword(body.getNewPassword(), body.getConfirmNewPassword());
                 authService.updatePassword(teacherId, body.getNewPassword());

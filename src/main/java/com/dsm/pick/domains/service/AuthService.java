@@ -83,6 +83,7 @@ public class AuthService {
         Teacher teacher = teacherRepository.findById(id)
                 .orElseThrow(IdOrPasswordMismatchException::new);
         teacher.setPw(encodingPassword(newPassword));
+        teacherRepository.save(teacher);
     }
 
     public void join(Teacher teacher) {
