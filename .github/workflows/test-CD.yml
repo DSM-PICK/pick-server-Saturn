@@ -1,0 +1,83 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [test]
+  pull_request:
+    branches: [test]
+
+jobs:
+  CI:
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_DRIVER: ${{ secrets.DATABASE_DRIVER }}
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
+      DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+      TOKEN_SECURE_KEY: ${{ secrets.TOKEN_SECURE_KEY }}
+      SERVER_HOST: ${{ secrets.SERVER_HOST }}
+
+    steps:
+      - uses: actions/checkout@v2
+
+#      - name: Upload coverage to Codecov
+#        uses: codecov/codecov-action@v1
+#        with:
+#          token: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: use JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      - name: gradlew Full Authorization
+        run: chmod 777 gradlew
+
+      - name: Test::test
+        run: ./gradlew test
+
+#      - name: Test::jacocoTestReport
+#        run: ./gradlew jacocoTestReport
+#
+#      - name: Test::jacocoTestCoverageVerification
+#        run: ./gradlew jacocoTestCoverageVerification
+
+      - name: Clean and Build
+        run: ./gradlew clean build -x test
+  CD:
+    runs-on: ubuntu-latest
+    env:
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+  
+    needs: CI
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: use JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      - name: gradlew Full Authorization
+        run: chmod 777 gradlew
+
+      - name: Clean and Build
+        run: ./gradlew clean build -x test
+
+      - name: Create Docker Image
+        run: docker build --tag 0816jinjin/saturn:test .
+#        run: docker build --tag pick-saturn .
+
+      - name: Upload to Registry
+        uses: elgohr/Publish-Docker-Github-Action@master
+        with:
+          name: 0816jinjin/saturn:test
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - uses: act10ns/slack@v1
+        with:
+          status: ${{ job.status }}
+          steps: ${{ toJson(steps) }}
+        if: always()
