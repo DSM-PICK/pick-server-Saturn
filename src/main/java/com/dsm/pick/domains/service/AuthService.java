@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;
-import java.util.Optional;
 
 @Service
 public class AuthService {
