@@ -55,35 +55,6 @@ public class MainPageController {
         return new NoticeResponseForm(clubNotice, memberNotice);
     }
 
-    @ApiOperation(value = "통계", notes = "오늘의 통계를 반환함")
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "OK!!"),
-            @ApiResponse(code = 500, message = "500???")
-    })
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "header", name = "Authorization", dataType = "string", required = true, value = "Access Token")
-    })
-    @GetMapping("/statistics/{floor}")
-    public StatisticsResponseForm getTodayStatistics(HttpServletRequest request,
-                                                     @PathVariable("floor") String floorStr) {
-
-        log.info("request /main/statistics");
-
-        tokenValidation(request.getHeader("Authorization"));
-
-        int floor = 0;
-        try {
-            floor = Integer.parseInt(floorStr);
-        } catch(Exception e) {
-            throw new NumberFormatException("floor가 정수 타입이 아닙니다.");
-        }
-
-        String floorText = statisticsService.convertToText(floor);
-        List<StatisticsClubForm> statisticsClubForms = statisticsService.getTodayStatistics(floor);
-
-        return new StatisticsResponseForm(floorText, statisticsClubForms);
-    }
-
     private void tokenValidation(String token) {
         boolean isValid = jwtService.isValid(token);
         boolean isNotTimeOut = jwtService.isNotTimeOut(token);
