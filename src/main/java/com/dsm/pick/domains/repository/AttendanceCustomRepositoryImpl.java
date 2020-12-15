@@ -41,7 +41,7 @@ public class AttendanceCustomRepositoryImpl implements AttendanceCustomRepositor
         List<Attendance> result = null;
 
         if(floor == 1) {
-            if(serverTimeService.getDayOfWeek().equals("월")) {
+            if(serverTimeService.getDayOfWeek(date).equals("월")) {
                 result = entityManager.createQuery("SELECT a FROM Attendance a " +
                         "WHERE a.student.isMondaySelfStudy = 1 " +
                         "AND 0 = :priority " +
@@ -49,7 +49,7 @@ public class AttendanceCustomRepositoryImpl implements AttendanceCustomRepositor
                         .setParameter("priority", priority)
                         .setParameter("date", date)
                         .getResultList();
-            } else if(serverTimeService.getDayOfWeek().equals("화")) {
+            } else if(serverTimeService.getDayOfWeek(date).equals("화")) {
                 result = entityManager.createQuery("SELECT a FROM Attendance a " +
                         "WHERE a.student.isTuesdaySelfStudy = 1 " +
                         "AND 0 = :priority " +

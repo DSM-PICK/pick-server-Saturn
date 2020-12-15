@@ -8,6 +8,7 @@ import com.dsm.pick.utils.exception.NotClubAndSelfStudyException;
 import com.dsm.pick.utils.form.AttendanceListForm;
 import com.dsm.pick.utils.form.AttendanceStateForm;
 import com.dsm.pick.utils.form.ClubAndClassInformationForm;
+import com.dsm.pick.utils.form.StatisticsClubAndClassInformationForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -101,6 +103,14 @@ public class AttendanceService {
         }
 
         return form;
+    }
+
+    public List<StatisticsClubAndClassInformationForm> getStatisticsNavigationInformation(
+            String schedule, int floor) {
+        return this.getNavigationInformation(schedule, floor)
+                .stream()
+                .map(i -> new StatisticsClubAndClassInformationForm(i.getLocation(), i.getName(), i.getPriority()))
+                .collect(Collectors.toList());
     }
 
     public String getTodayTeacherName(String date, int floor) {

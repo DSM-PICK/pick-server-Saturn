@@ -9,9 +9,7 @@ import java.time.ZoneId;
 @Service
 public class ServerTimeService {
 
-    public String getMonthAndDate() {
-
-        LocalDate date = LocalDate.now();
+    public String getMonthAndDate(LocalDate date) {
         int intMonth = date.getMonth().getValue();
         int intDayOfMonth = date.getDayOfMonth();
 
@@ -33,9 +31,8 @@ public class ServerTimeService {
         return month + dayOfMonth;
     }
 
-    public String getDayOfWeek() {
+    public String getDayOfWeek(LocalDate date) {
         String dayOfWeeks[] = {"월", "화", "수", "목", "금", "토", "일"};
-        LocalDateTime date = LocalDateTime.now();
 
         int intDayOfWeek = date.getDayOfWeek().getValue();
         return dayOfWeeks[intDayOfWeek - 1];

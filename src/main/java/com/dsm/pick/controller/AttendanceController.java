@@ -10,6 +10,7 @@ import com.dsm.pick.domains.service.ServerTimeService;
 import com.dsm.pick.utils.exception.*;
 import com.dsm.pick.utils.form.*;
 import io.swagger.annotations.*;
+import org.apache.tomcat.jni.Local;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,9 +78,9 @@ public class AttendanceController {
         List<ClubAndClassInformationForm> clubAndClassInformationForms =
                 attendanceService.getNavigationInformation(schedule, floor);
         String date =
-                serverTimeService.getMonthAndDate();
+                serverTimeService.getMonthAndDate(LocalDate.now());
         String dayOfWeek =
-                serverTimeService.getDayOfWeek();
+                serverTimeService.getDayOfWeek(LocalDate.now());
         String teacherName =
                 attendanceService.getTodayTeacherName(date, floor);
 
