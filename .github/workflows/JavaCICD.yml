@@ -33,6 +33,9 @@ jobs:
       - name: gradlew Full Authorization
         run: chmod 777 gradlew
 
+      - name: Clean QueryDSL Query Entity
+        run: ./gradle cleanQuerydslSourcesDir
+
       - name: Test::test
         run: ./gradlew test
 
@@ -41,9 +44,6 @@ jobs:
 #
 #      - name: Test::jacocoTestCoverageVerification
 #        run: ./gradlew jacocoTestCoverageVerification
-
-      - name: Clean QueryDSL Query Entity
-        run: ./gradle cleanQuerydslSourcesDir
 
       - name: Compile QueryDSL Query Entity
         run: ./gradle compileQuerydsl
