@@ -1,6 +1,5 @@
 package com.dsm.pick.controller;
 
-import com.dsm.pick.domains.domain.Activity;
 import com.dsm.pick.domains.repository.ActivityRepository;
 import com.dsm.pick.domains.service.AttendanceService;
 import com.dsm.pick.domains.service.JwtService;
@@ -9,15 +8,12 @@ import com.dsm.pick.utils.exception.ActivityNotFoundException;
 import com.dsm.pick.utils.exception.NonExistFloorException;
 import com.dsm.pick.utils.exception.NotClubAndSelfStudyException;
 import com.dsm.pick.utils.exception.TokenInvalidException;
-import com.dsm.pick.utils.form.AttendanceNavigationResponseForm;
-import com.dsm.pick.utils.form.ClubAndClassInformationForm;
 import com.dsm.pick.utils.form.StatisticsClubAndClassInformationForm;
 import com.dsm.pick.utils.form.StatisticsNavigationResponseForm;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfigurationPackage;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/statistics")
