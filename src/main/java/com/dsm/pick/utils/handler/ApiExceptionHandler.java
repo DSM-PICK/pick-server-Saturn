@@ -14,7 +14,7 @@ import java.util.NoSuchElementException;
 @ControllerAdvice
 public class ApiExceptionHandler {
 
-    private static Logger log = LoggerFactory.getLogger(ApiExceptionHandler.class);
+    private static final Logger log = LoggerFactory.getLogger(ApiExceptionHandler.class);
 
     @ExceptionHandler(IdOrPasswordMismatchException.class)
     public ResponseEntity<ApiErrorResponseForm> idOrPasswordMismatchExceptionHandler(IdOrPasswordMismatchException ex) {
@@ -71,12 +71,6 @@ public class ApiExceptionHandler {
         log.warn("error " + ex.getMessage() + "[BAD REQUEST]");
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
-
-//    @ExceptionHandler(NonExistActivityException.class)
-//    public ResponseEntity<ApiErrorResponseForm> nonExistActivityExceptionHandler(NonExistActivityException ex) {
-//        ApiErrorResponseForm response = new ApiErrorResponseForm("Non Exist Activity Exception", "Activity 가 club 또는 self-study 가 아님");
-//        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-//    }
 
     @ExceptionHandler(NonExistFloorException.class)
     public ResponseEntity<ApiErrorResponseForm> nonExistFloorExceptionHandler(NonExistFloorException ex) {

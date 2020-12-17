@@ -6,8 +6,10 @@ public class AttendanceListForm {
 
     @ApiModelProperty(example = "2417", required = true)
     private String gradeClassNumber;
+
     @ApiModelProperty(example = "이진혁", required = true)
     private String name;
+
     private AttendanceStateForm state;
 
     public AttendanceListForm() {}

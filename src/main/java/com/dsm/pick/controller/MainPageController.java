@@ -2,11 +2,8 @@ package com.dsm.pick.controller;
 
 import com.dsm.pick.domains.service.JwtService;
 import com.dsm.pick.domains.service.NoticeService;
-import com.dsm.pick.domains.service.StatisticsService;
 import com.dsm.pick.utils.exception.TokenInvalidException;
 import com.dsm.pick.utils.form.NoticeResponseForm;
-import com.dsm.pick.utils.form.StatisticsClubForm;
-import com.dsm.pick.utils.form.StatisticsResponseForm;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,15 +20,13 @@ public class MainPageController {
 
     private final static Logger log = LoggerFactory.getLogger(MainPageController.class);
 
-    private JwtService jwtService;
-    private NoticeService noticeService;
-    private StatisticsService statisticsService;
+    private final JwtService jwtService;
+    private final NoticeService noticeService;
 
     @Autowired
-    public MainPageController(JwtService jwtService, NoticeService noticeService, StatisticsService statisticsService) {
+    public MainPageController(JwtService jwtService, NoticeService noticeService) {
         this.jwtService = jwtService;
         this.noticeService = noticeService;
-        this.statisticsService = statisticsService;
     }
 
     @ApiOperation(value = "공지사항", notes = "최근 2주간의 공지사항 반환")
@@ -61,10 +56,10 @@ public class MainPageController {
 
         try {
             if(!(isValid && isNotTimeOut)) {
-                throw new TokenInvalidException("토큰이 잘못되었거나 만료되었습니다.");
+                throw new TokenInvalidException();
             }
         } catch(Exception e) {
-            throw new TokenInvalidException("토큰을 검증하는 과정에서 예외가 발생하였습니다.");
+            throw new TokenInvalidException();
         }
     }
 }

@@ -1,11 +1,10 @@
 package com.dsm.pick.utils.form;
 
-import com.dsm.pick.controller.AuthController;
 import io.swagger.annotations.ApiParam;
 
 public class AuthenticationNumberRequestForm {
 
-    @ApiParam(value = "anjfwjrdjdigkfwlahfmrpTek", required = true)
+    @ApiParam(value = "authentication-number", required = true)
     private String authenticationNumber;
 
     public AuthenticationNumberRequestForm() {}

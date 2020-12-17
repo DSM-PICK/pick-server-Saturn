@@ -6,6 +6,7 @@ public class TeacherRequestForm {
 
     @ApiParam(value = "사용자 아이디", required = true)
     private String id;
+
     @ApiParam(value = "사용자 비밀번호", required = true)
     private String pw;
 

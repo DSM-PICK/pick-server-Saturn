@@ -5,12 +5,16 @@ import io.swagger.annotations.ApiModelProperty;
 import java.util.List;
 
 public class StatisticsNavigationResponseForm {
+
     @ApiModelProperty(example = "0816", required = true)
     private String date;
+
     @ApiModelProperty(example = "일", required = true)
     private String dayOfWeek;
+
     @ApiModelProperty(example = "club", required = true)
     private String schedule;
+
     private List<StatisticsClubAndClassInformationForm> locations;
 
     public StatisticsNavigationResponseForm() {}

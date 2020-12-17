@@ -3,16 +3,13 @@ package com.dsm.pick.configuration;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.bind.annotation.RequestMapping;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spring.web.paths.RelativePathProvider;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-import javax.servlet.ServletContext;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -20,8 +17,7 @@ import java.util.Set;
 @EnableSwagger2
 public class SwaggerConfiguration {
 
-    @Value("${SERVER_HOST:localhost:8889}")
-    private String host;
+    private final String host;
 
     @Bean
     public Docket api() {
@@ -60,5 +56,9 @@ public class SwaggerConfiguration {
         Set<String> produces = new HashSet<>();
         produces.add("application/json");
         return produces;
+    }
+
+    public SwaggerConfiguration(@Value("${SERVER_HOST:localhost:8889}") String host) {
+        this.host = host;
     }
 }

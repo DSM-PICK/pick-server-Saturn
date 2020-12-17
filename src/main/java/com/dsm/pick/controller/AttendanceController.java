@@ -1,6 +1,5 @@
 package com.dsm.pick.controller;
 
-import com.dsm.pick.domains.domain.Activity;
 import com.dsm.pick.domains.domain.Club;
 import com.dsm.pick.domains.domain.SchoolClass;
 import com.dsm.pick.domains.repository.ActivityRepository;
@@ -10,7 +9,6 @@ import com.dsm.pick.domains.service.ServerTimeService;
 import com.dsm.pick.utils.exception.*;
 import com.dsm.pick.utils.form.*;
 import io.swagger.annotations.*;
-import org.apache.tomcat.jni.Local;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/attendance")
@@ -74,11 +71,11 @@ public class AttendanceController {
 
         tokenValidation(request.getHeader("Authorization"));
 
-        int floor = 0;
+        int floor;
         try {
             floor = Integer.parseInt(floorStr);
         } catch(NumberFormatException e) {
-            throw new NonExistFloorException("floor is not a number");
+            throw new NonExistFloorException();
         }
 
         String findSchedule = activityRepository.findById(LocalDate.now())
@@ -88,8 +85,7 @@ public class AttendanceController {
         if(!(findSchedule.equals("club")
                 || findSchedule.equals("self-study")
                 || findSchedule.equals("after-school")))
-            throw new NotClubAndSelfStudyException(
-                    "today schedule is not club or self-study or after-school");
+            throw new NotClubAndSelfStudyException();
 
         List<ClubAndClassInformationForm> clubAndClassInformationForms =
                 attendanceService.getNavigationInformation(schedule, floor);
@@ -142,13 +138,13 @@ public class AttendanceController {
 
         tokenValidation(request.getHeader("Authorization"));
 
-        int floor = 0;
-        int priority = 0;
+        int floor;
+        int priority;
         try {
             floor = Integer.parseInt(floorStr);
             priority = Integer.parseInt(priorityStr);
         } catch(NumberFormatException e) {
-            throw new NonExistFloorOrPriorityException("floor 또는 priority 가 숫자가 아님");
+            throw new NonExistFloorOrPriorityException();
         }
 
         List<AttendanceListForm> attendanceList =
@@ -156,13 +152,12 @@ public class AttendanceController {
 
         if(schedule.equals("club")) {
             Club club = attendanceService.getClubHeadAndName(floor, priority);
-            AttendanceListResponseForm form = new AttendanceListResponseForm(club.getName(), club.getHead(), attendanceList);
-            return form;
+            return new AttendanceListResponseForm(club.getName(), club.getHead(), attendanceList);
         } else if(schedule.equals("self-study")) {
             SchoolClass schoolClass = attendanceService.getClassName(floor, priority);
             return new AttendanceListResponseForm(schoolClass.getName(), null, attendanceList);
         } else {
-            throw new NotClubAndSelfStudyException("schedule 이 club 또는 self-study 가 아닙니다.");
+            throw new NotClubAndSelfStudyException();
         }
     }
 
@@ -208,10 +203,10 @@ public class AttendanceController {
 
         try {
             if(!(isValid && isNotTimeOut)) {
-                throw new TokenInvalidException("토큰이 잘못되었거나 만료되었습니다.");
+                throw new TokenInvalidException();
             }
         } catch(Exception e) {
-            throw new TokenInvalidException("토큰을 검증하는 과정에서 예외가 발생하였습니다.");
+            throw new TokenInvalidException();
         }
     }
 }

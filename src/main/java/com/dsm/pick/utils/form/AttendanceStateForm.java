@@ -4,12 +4,15 @@ import io.swagger.annotations.ApiModelProperty;
 
 public class AttendanceStateForm {
 
-    @ApiModelProperty(example = "출석", required = false)
+    @ApiModelProperty(example = "출석")
     private String seven;
+
     @ApiModelProperty(example = "출석", required = true)
     private String eight;
+
     @ApiModelProperty(example = "출석", required = true)
     private String nine;
+
     @ApiModelProperty(example = "출석", required = true)
     private String ten;
 

@@ -6,6 +6,7 @@ public class StatisticsStudentForm {
 
     @ApiModelProperty(example = "2417 이진혁", required = true)
     private String text;
+
     @ApiModelProperty(example = "무단", required = true)
     private String state;
 

@@ -46,8 +46,7 @@ public class AttendanceScheduler {
 
         final int todayStartPeriod = todayStartPeriod(date);
 
-        students.stream()
-                .forEach(s -> {
+        students.forEach(s -> {
                     Attendance attendance1 = new Attendance();
                     Attendance attendance2 = new Attendance();
                     Attendance attendance3 = new Attendance();
@@ -69,13 +68,13 @@ public class AttendanceScheduler {
                     attendance4.setPeriod(10);
 
                     String schedule = activity.getSchedule();
-                    int floor = 0;
+                    int floor;
                     if(schedule.equals("club")) {
                         floor = s.getClub().getLocation().getFloor();
                     } else if(schedule.equals("self-study") || schedule.equals("after-school")) {
                         floor = s.getSchoolClass().getFloor();
                     } else {
-                        throw new NotClubAndSelfStudyException("schedule 이 club 또는 self-study 가 아닙니다.");
+                        throw new NotClubAndSelfStudyException();
                     }
                     attendanceTeacherSetting(attendance1, floor, activity);
                     attendanceTeacherSetting(attendance2, floor, activity);
@@ -165,8 +164,7 @@ public class AttendanceScheduler {
         } else if(dayOfWeek == 5) {
             return 7;
         } else {
-//            throw new WeekendException("오늘이 주말이라니!!!");
-            return 7;         // test
+            throw new WeekendException();
         }
     }
 
@@ -177,20 +175,20 @@ public class AttendanceScheduler {
         } else if(floor == 2) {
             attendance.setTeacher(
                     teacherRepository.findById(activity.getSecondFloorTeacher().getId())
-                            .orElseThrow(() -> new TeacherNotFoundException("2층 선생님이 존재하지 않음"))
+                            .orElseThrow(TeacherNotFoundException::new)
             );
         } else if(floor == 3) {
             attendance.setTeacher(
                     teacherRepository.findById(activity.getThirdFloorTeacher().getId())
-                            .orElseThrow(() -> new TeacherNotFoundException("3층 선생님이 존재하지 않음"))
+                            .orElseThrow(TeacherNotFoundException::new)
             );
         } else if(floor == 4) {
             attendance.setTeacher(
                     teacherRepository.findById(activity.getForthFloorTeacher().getId())
-                            .orElseThrow(() -> new TeacherNotFoundException("4층 선생님이 존재하지 않음"))
+                            .orElseThrow(TeacherNotFoundException::new)
             );
         } else {
-            throw new NonExistFloorException("floor 가 1, 2, 3, 4 가 아님");
+            throw new NonExistFloorException();
         }
     }
 }

@@ -15,17 +15,14 @@ public class Activity {
     private String schedule;
 
     @ManyToOne
-//    @JoinColumn(name = "id", referencedColumnName = "second_floor_teacher_id")
     @JoinColumn(name = "second_floor_teacher_id", referencedColumnName = "id")
     private Teacher secondFloorTeacher;
 
     @ManyToOne
-//    @JoinColumn(name = "id", referencedColumnName = "third_floor_teacher_id")
     @JoinColumn(name = "third_floor_teacher_id", referencedColumnName = "id")
     private Teacher thirdFloorTeacher;
 
     @ManyToOne
-//    @JoinColumn(name = "id", referencedColumnName = "forth_floor_teacher_id")
     @JoinColumn(name = "forth_floor_teacher_id", referencedColumnName = "id")
     private Teacher forthFloorTeacher;
 

@@ -1,7 +1,6 @@
 package com.dsm.pick.utils.form;
 
 import io.swagger.annotations.ApiModelProperty;
-import org.apache.catalina.LifecycleState;
 
 import java.util.List;
 
@@ -9,8 +8,10 @@ public class StatisticsClubForm {
 
     @ApiModelProperty(example = "7", required = true)
     private String priority;
+
     @ApiModelProperty(example = "UP", required = true)
     private String clubName;
+
     private List<StatisticsStudentForm> clubMembers;
 
     public StatisticsClubForm() {}

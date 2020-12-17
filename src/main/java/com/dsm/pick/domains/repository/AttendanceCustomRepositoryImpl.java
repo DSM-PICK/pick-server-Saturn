@@ -2,14 +2,12 @@ package com.dsm.pick.domains.repository;
 
 import com.dsm.pick.domains.domain.Attendance;
 import com.dsm.pick.domains.service.ServerTimeService;
-import io.swagger.annotations.Authorization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -25,7 +23,7 @@ public class AttendanceCustomRepositoryImpl implements AttendanceCustomRepositor
 
     @Override
     public List<Attendance> findByDateAndFloorAndPriorityWithClub(LocalDate date, int floor, int priority) {
-        List<Attendance> result = entityManager.createQuery("SELECT a FROM Attendance a " +
+        return entityManager.createQuery("SELECT a FROM Attendance a " +
                 "WHERE a.student.club.location.floor = :floor " +
                 "AND a.student.club.location.priority = :priority " +
                 "AND a.activity.date = :date", Attendance.class)
@@ -33,7 +31,6 @@ public class AttendanceCustomRepositoryImpl implements AttendanceCustomRepositor
                 .setParameter("priority", priority)
                 .setParameter("date", date)
                 .getResultList();
-        return result;
     }
 
     @Override

@@ -23,17 +23,15 @@ public class AttendanceService {
     private final ClubRepository clubRepository;
     private final ActivityRepository activityRepository;
     private final AttendanceRepository attendanceRepository;
-    private final StudentRepository studentRepository;
 
     private final ServerTimeService serverTimeService;
 
     @Autowired
-    public AttendanceService(ClassRepository classRepository, ClubRepository clubRepository, ActivityRepository activityRepository, AttendanceRepository attendanceRepository, StudentRepository studentRepository, ServerTimeService serverTimeService) {
+    public AttendanceService(ClassRepository classRepository, ClubRepository clubRepository, ActivityRepository activityRepository, AttendanceRepository attendanceRepository, ServerTimeService serverTimeService) {
         this.classRepository = classRepository;
         this.clubRepository = clubRepository;
         this.activityRepository = activityRepository;
         this.attendanceRepository = attendanceRepository;
-        this.studentRepository = studentRepository;
         this.serverTimeService = serverTimeService;
     }
 
@@ -41,8 +39,7 @@ public class AttendanceService {
         if(!(schedule.equals("club")
                 || schedule.equals("self-study")
                 || schedule.equals("after-school")))
-            throw new NotClubAndSelfStudyException(
-                    "today schedule is not club or self-study or after-school");
+            throw new NotClubAndSelfStudyException();
 
         List<StatisticsClubAndClassInformationForm> statisticsClubAndClassInformationForms =
                 getStatisticsNavigationInformation(schedule, floor);
@@ -59,8 +56,7 @@ public class AttendanceService {
         if(!(schedule.equals("club")
                 || schedule.equals("self-study")
                 || schedule.equals("after-school")))
-            throw new NotClubAndSelfStudyException(
-                    "today schedule is not club or self-study or after-school");
+            throw new NotClubAndSelfStudyException();
 
         List<AttendanceListForm> attendanceList =
                 getAttendanceList(schedule, date, floor, priority);
@@ -72,7 +68,7 @@ public class AttendanceService {
             SchoolClass schoolClass = getClassName(floor, priority);
             return new StatisticsListResponseForm(schoolClass.getName(), null, "홍정교", attendanceList);
         } else {
-            throw new NotClubAndSelfStudyException("schedule 이 club 또는 self-study 가 아닙니다.");
+            throw new NotClubAndSelfStudyException();
         }
     }
 
@@ -83,7 +79,7 @@ public class AttendanceService {
         if(schedule.equals("club")) {
 
             if(!(1 <= floor && floor <= 4)) {
-                throw new NonExistFloorException("1, 2, 3, 4층이 아닙니다.");
+                throw new NonExistFloorException();
             }
 
             List<Club> clubList = clubRepository.findByFloor(floor);
@@ -113,7 +109,7 @@ public class AttendanceService {
         } else if(schedule.equals("self-study") || schedule.equals("after-school")) {
 
             if(!(1 <= floor && floor <= 4)) {
-                throw new NonExistFloorException("1, 2, 3, 4층이 아닙니다.");
+                throw new NonExistFloorException();
             }
 
             List<SchoolClass> classList = classRepository.findByFloor(floor);
@@ -138,7 +134,7 @@ public class AttendanceService {
                         form.add(element);
                     });
         } else {
-            throw new NotClubAndSelfStudyException("schedule 이 club 또는 self-study 가 아닙니다.");
+            throw new NotClubAndSelfStudyException();
         }
 
         return form;
@@ -154,8 +150,8 @@ public class AttendanceService {
 
     public String getTodayTeacherName(String date, int floor) {
         int todayYear = LocalDate.now().getYear();
-        int todayMonth = Integer.valueOf(date.substring(0, 2)).intValue();
-        int todayDayOfMonth = Integer.valueOf(date.substring(2, 4)).intValue();
+        int todayMonth = Integer.parseInt(date.substring(0, 2));
+        int todayDayOfMonth = Integer.parseInt(date.substring(2, 4));
 
         LocalDate id = LocalDate.of(todayYear, todayMonth, todayDayOfMonth);
 
@@ -173,7 +169,7 @@ public class AttendanceService {
             teacherName = activity.map(a -> a.getForthFloorTeacher().getName())
                     .orElseThrow(ActivityNotFoundException::new);
         } else {
-            throw new NonExistFloorException("floor 가 2, 3, 4가 아님");
+            throw new NonExistFloorException();
         }
 
         return teacherName;
@@ -189,16 +185,14 @@ public class AttendanceService {
 
     public List<AttendanceListForm> getAttendanceList(String schedule, LocalDate date, int floor, int priority) {
         List<AttendanceListForm> form = new ArrayList<>();
-        final Comparator<Attendance> comparator =
-                Comparator.comparing(c -> c.getStudent().getNum());
 
-        List<Attendance> attendanceList = new ArrayList<>();
+        List<Attendance> attendanceList;
         if(schedule.equals("club")) {
             attendanceList = attendanceRepository.findByDateAndFloorAndPriorityWithClub(date, floor, priority);
         } else if(schedule.equals("self-study") || schedule.equals("after-school")) {
             attendanceList = attendanceRepository.findByDateAndFloorAndPriorityWithClass(date, floor, priority);
         } else {
-            throw new NotClubAndSelfStudyException("schedule is not club or self-study");
+            throw new NotClubAndSelfStudyException();
         }
 
         AttendanceListForm attendanceListForm = null;

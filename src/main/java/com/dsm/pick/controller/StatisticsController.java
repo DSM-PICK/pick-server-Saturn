@@ -1,14 +1,11 @@
 package com.dsm.pick.controller;
 
-import com.dsm.pick.domains.domain.Club;
-import com.dsm.pick.domains.domain.SchoolClass;
 import com.dsm.pick.domains.repository.ActivityRepository;
 import com.dsm.pick.domains.service.AttendanceService;
 import com.dsm.pick.domains.service.JwtService;
-import com.dsm.pick.domains.service.ServerTimeService;
 import com.dsm.pick.utils.exception.ActivityNotFoundException;
 import com.dsm.pick.utils.exception.NonExistFloorException;
-import com.dsm.pick.utils.exception.NotClubAndSelfStudyException;
+import com.dsm.pick.utils.exception.NonExistFloorOrPriorityException;
 import com.dsm.pick.utils.exception.TokenInvalidException;
 import com.dsm.pick.utils.form.*;
 import io.swagger.annotations.*;
@@ -24,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
-import java.util.List;
 
 @Validated
 @RestController
@@ -36,14 +32,12 @@ public class StatisticsController {
 
     private final AttendanceService attendanceService;
     private final ActivityRepository activityRepository;
-    private final ServerTimeService serverTimeService;
     private final JwtService jwtService;
 
     @Autowired
-    public StatisticsController(AttendanceService attendanceService, ActivityRepository activityRepository, ServerTimeService serverTimeService, JwtService jwtService) {
+    public StatisticsController(AttendanceService attendanceService, ActivityRepository activityRepository, JwtService jwtService) {
         this.attendanceService = attendanceService;
         this.activityRepository = activityRepository;
-        this.serverTimeService = serverTimeService;
         this.jwtService = jwtService;
     }
 
@@ -88,7 +82,7 @@ public class StatisticsController {
         try {
             floor = Integer.parseInt(floorStr);
         } catch(NumberFormatException e) {
-            throw new NonExistFloorException("floor is not a number");
+            throw new NonExistFloorException();
         }
 
         String schedule = activityRepository.findById(date)
@@ -145,7 +139,7 @@ public class StatisticsController {
             floor = Integer.parseInt(floorStr);
             priority = Integer.parseInt(priorityStr);
         } catch(NumberFormatException e) {
-            throw new NonExistFloorException("floor or priority is not a number");
+            throw new NonExistFloorOrPriorityException();
         }
 
         String schedule = activityRepository.findById(date)
@@ -196,7 +190,7 @@ public class StatisticsController {
         try {
             floor = Integer.parseInt(floorStr);
         } catch(NumberFormatException e) {
-            throw new NonExistFloorException("floor is not a number");
+            throw new NonExistFloorException();
         }
 
         final String schedule = "self-study";
@@ -250,7 +244,7 @@ public class StatisticsController {
             floor = Integer.parseInt(floorStr);
             priority = Integer.parseInt(priorityStr);
         } catch(NumberFormatException e) {
-            throw new NonExistFloorException("floor or priority is not a number");
+            throw new NonExistFloorOrPriorityException();
         }
 
         final String schedule = "self-study";
@@ -263,10 +257,10 @@ public class StatisticsController {
 
         try {
             if(!(isValid && isNotTimeOut)) {
-                throw new TokenInvalidException("토큰이 잘못되었거나 만료되었습니다.");
+                throw new TokenInvalidException();
             }
         } catch(Exception e) {
-            throw new TokenInvalidException("토큰을 검증하는 과정에서 예외가 발생하였습니다.");
+            throw new TokenInvalidException();
         }
     }
 }

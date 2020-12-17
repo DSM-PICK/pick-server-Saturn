@@ -8,8 +8,10 @@ public class AttendanceListResponseForm {
 
     @ApiModelProperty(example = "UP", required = true)
     private String name;
+
     @ApiModelProperty(example = "손정우", required = true)
     private String head;
+
     private List<AttendanceListForm> attendances;
 
     public AttendanceListResponseForm() {}

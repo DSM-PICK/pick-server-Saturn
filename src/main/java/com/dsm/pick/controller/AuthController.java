@@ -89,12 +89,12 @@ public class AuthController {
 
         boolean isValid = jwtService.isValid(token);
         if(!isValid) {
-            throw new TokenInvalidException("토큰이 잘못 되었습니다.");
+            throw new TokenInvalidException();
         }
 
         boolean isNotTimeOut = jwtService.isNotTimeOut(token);
         if(!isNotTimeOut) {
-            throw new TokenExpirationException("토큰이 만료 되었습니다.");
+            throw new TokenExpirationException();
         }
     }
 
@@ -109,7 +109,7 @@ public class AuthController {
             @ApiImplicitParam(paramType = "header", name = "Authorization", dataType = "string", required = true, value = "Refresh Token")
     })
     @GetMapping("/access-token")
-    public AccessTokenReissuanceResponseForm accessTokenReissuance(HttpServletRequest request) {
+    public AccessTokenRecreateResponseForm accessTokenRecreate(HttpServletRequest request) {
 
         log.info("request /auth/access-token GET");
 
@@ -121,9 +121,9 @@ public class AuthController {
         if(isValid) {
             String teacherId = jwtService.getTeacherId(refreshToken);
             String accessToken = jwtService.createAccessToken(teacherId);
-            return new AccessTokenReissuanceResponseForm(accessToken);
+            return new AccessTokenRecreateResponseForm(accessToken);
         } else {
-            throw new TokenInvalidException("토큰이 잘못 되었습니다.");
+            throw new TokenInvalidException();
         }
     }
 
@@ -154,7 +154,7 @@ public class AuthController {
                 authService.updatePassword(teacherId, body.getNewPassword());
             }
         } else {
-            throw new TokenInvalidException("토큰이 잘못 되었습니다.");
+            throw new TokenInvalidException();
         }
     }
 

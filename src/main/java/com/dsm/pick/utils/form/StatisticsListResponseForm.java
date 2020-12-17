@@ -5,12 +5,16 @@ import io.swagger.annotations.ApiModelProperty;
 import java.util.List;
 
 public class StatisticsListResponseForm {
+
     @ApiModelProperty(example = "UP", required = true)
     private String name;
+
     @ApiModelProperty(example = "손정우", required = true)
     private String head;
+
     @ApiModelProperty(example = "김정은", required = true)
     private String managerTeacher;
+
     private List<AttendanceListForm> attendances;
 
     public StatisticsListResponseForm() {}

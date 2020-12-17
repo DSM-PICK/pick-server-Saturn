@@ -23,7 +23,7 @@ public class AuthService {
 
     private static final Logger log = LoggerFactory.getLogger(AuthService.class);
 
-    private TeacherRepository teacherRepository;
+    private final TeacherRepository teacherRepository;
 
     @Autowired
     public AuthService(TeacherRepository teacherRepository) {
@@ -31,14 +31,14 @@ public class AuthService {
     }
 
     public String encodingPassword(String original) {
-        String resultHex = null;
+        String resultHex;
         try {
             MessageDigest digest = MessageDigest.getInstance(ALGORITHM);
             digest.reset();
             digest.update(original.getBytes(ENCODING));
             resultHex = String.format("%0128x", new BigInteger(1, digest.digest()));
         } catch(Exception e) {
-            throw new NonExistEncodingOrCryptographicAlgorithmException("현재 인코딩 방식 또는 암호화 알고리즘이 잘못되었습니다.");
+            throw new NonExistEncodingOrCryptographicAlgorithmException();
         }
         return resultHex;
     }
@@ -53,7 +53,7 @@ public class AuthService {
         if(id == null)
             throw new IdOrPasswordMismatchException();
         try {
-            Teacher teacher = teacherRepository.findById(id)
+            teacherRepository.findById(id)
                     .orElseThrow(TeacherNotFoundException::new);
             return true;
         } catch(Exception e) {

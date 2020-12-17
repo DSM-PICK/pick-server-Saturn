@@ -11,10 +11,10 @@ import java.util.TimeZone;
 @EnableScheduling
 public class PickApplication {
 
-	@PostConstruct
-	public void setTimeZone() {
-		TimeZone.setDefault(TimeZone.getTimeZone("Asia/Seoul"));
-	}
+//	@PostConstruct
+//	public void setTimeZone() {
+//		TimeZone.setDefault(TimeZone.getTimeZone("Asia/Seoul"));
+//	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(PickApplication.class, args);

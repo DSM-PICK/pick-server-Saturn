@@ -8,6 +8,7 @@ public class StatisticsResponseForm {
     
     @ApiModelProperty(example = "3층", required = true)
     private String floorText;
+
     private List<StatisticsClubForm> clubArr;
 
     public StatisticsResponseForm() {}

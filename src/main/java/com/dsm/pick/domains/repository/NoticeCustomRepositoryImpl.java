@@ -1,8 +1,6 @@
 package com.dsm.pick.domains.repository;
 
 import com.dsm.pick.domains.domain.Notice;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -58,7 +56,7 @@ public class NoticeCustomRepositoryImpl implements NoticeCustomRepository {
                 .setParameter("category", category)
                 .getResultStream()
                 .sorted((c1, c2) -> c2.getDate().compareTo(c1.getDate()))
-                .map(n -> n.getContent())
+                .map(Notice::getContent)
                 .collect(Collectors.toList());
         if(result.size() <= 0)
             return new ArrayList<>();

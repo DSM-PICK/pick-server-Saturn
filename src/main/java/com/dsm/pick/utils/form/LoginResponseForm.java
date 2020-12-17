@@ -6,8 +6,10 @@ public class LoginResponseForm {
 
     @ApiModelProperty(example = "H1H1H1H1H1H.H1H1H1H1H.HH1HH1H1HH1H", required = true)
     private String accessToken;
+
     @ApiModelProperty(example = "H1H1H1H1H1H.H1H1H1H1H.HH1HH1H1HH1H", required = true)
     private String refreshToken;
+
     @ApiModelProperty(example = "김정은", required = true)
     private String teacherName;
 

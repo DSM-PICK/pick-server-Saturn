@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiParam;
 
 public class JoinRequestForm {
     
-    @ApiParam(value = "idididid", required = true)
+    @ApiParam(value = "strawberry", required = true)
     private String id;
 
     @ApiParam(value = "password1!", required = true)

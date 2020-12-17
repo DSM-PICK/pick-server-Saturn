@@ -1,7 +1,6 @@
 package com.dsm.pick.domains.domain;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 
 @Entity
 @Table(name = "attendance")

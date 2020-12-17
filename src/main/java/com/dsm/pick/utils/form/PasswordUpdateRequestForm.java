@@ -4,10 +4,10 @@ import io.swagger.annotations.ApiParam;
 
 public class PasswordUpdateRequestForm {
 
-    @ApiParam(value = "newpassword1!", required = true)
+    @ApiParam(value = "password1!", required = true)
     private String newPassword;
 
-    @ApiParam(value = "newpassword1!", required = true)
+    @ApiParam(value = "password1!", required = true)
     private String confirmNewPassword;
 
     public PasswordUpdateRequestForm() {}

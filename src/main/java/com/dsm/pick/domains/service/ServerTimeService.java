@@ -3,8 +3,6 @@ package com.dsm.pick.domains.service;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 
 @Service
 public class ServerTimeService {
@@ -17,13 +15,13 @@ public class ServerTimeService {
         String dayOfMonth;
 
         if(intMonth < 10) {
-            month = "0" + String.valueOf(intMonth);
+            month = "0" + intMonth;
         } else {
             month = String.valueOf(intMonth);
         }
 
         if(intDayOfMonth < 10) {
-            dayOfMonth = "0" + String.valueOf(intDayOfMonth);
+            dayOfMonth = "0" + intDayOfMonth;
         } else {
             dayOfMonth = String.valueOf(intDayOfMonth);
         }
@@ -32,7 +30,7 @@ public class ServerTimeService {
     }
 
     public String getDayOfWeek(LocalDate date) {
-        String dayOfWeeks[] = {"월", "화", "수", "목", "금", "토", "일"};
+        String[] dayOfWeeks = {"월", "화", "수", "목", "금", "토", "일"};
 
         int intDayOfWeek = date.getDayOfWeek().getValue();
         return dayOfWeeks[intDayOfWeek - 1];
