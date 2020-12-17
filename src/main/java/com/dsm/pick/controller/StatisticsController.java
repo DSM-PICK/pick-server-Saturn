@@ -14,6 +14,7 @@ import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -55,6 +56,7 @@ public class StatisticsController {
     public StatisticsNavigationResponseForm getDailyStatistics(
             HttpServletRequest request,
             @ApiParam(value = "2003-08-16", required = true)
+            @DateTimeFormat(pattern = "yyyy-MM-dd")
             @PathVariable("date") LocalDate date,
             @ApiParam(value = "3", required = true)
             @PathVariable("floor") String floorStr) {
