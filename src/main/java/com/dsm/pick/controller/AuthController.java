@@ -138,10 +138,10 @@ public class AuthController {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "header", name = "Authorization", dataType = "string", required = true, value = "Access Token")
     })
-    @PutMapping("/password")
+    @PatchMapping("/password")
     public void changePassword(HttpServletRequest request, @RequestBody PasswordUpdateRequestForm body) {
 
-        log.info("request /auth/password PUT");
+        log.info("request /auth/password PATCH");
 
         String accessToken = request.getHeader("Authorization");
 
