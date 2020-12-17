@@ -5,10 +5,7 @@ import com.dsm.pick.domains.repository.*;
 import com.dsm.pick.utils.exception.ActivityNotFoundException;
 import com.dsm.pick.utils.exception.NonExistFloorException;
 import com.dsm.pick.utils.exception.NotClubAndSelfStudyException;
-import com.dsm.pick.utils.form.AttendanceListForm;
-import com.dsm.pick.utils.form.AttendanceStateForm;
-import com.dsm.pick.utils.form.ClubAndClassInformationForm;
-import com.dsm.pick.utils.form.StatisticsClubAndClassInformationForm;
+import com.dsm.pick.utils.form.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,13 +25,34 @@ public class AttendanceService {
     private final AttendanceRepository attendanceRepository;
     private final StudentRepository studentRepository;
 
+    private final ServerTimeService serverTimeService;
+
     @Autowired
-    public AttendanceService(ClassRepository classRepository, ClubRepository clubRepository, ActivityRepository activityRepository, AttendanceRepository attendanceRepository, StudentRepository studentRepository) {
+    public AttendanceService(ClassRepository classRepository, ClubRepository clubRepository, ActivityRepository activityRepository, AttendanceRepository attendanceRepository, StudentRepository studentRepository, ServerTimeService serverTimeService) {
         this.classRepository = classRepository;
         this.clubRepository = clubRepository;
         this.activityRepository = activityRepository;
         this.attendanceRepository = attendanceRepository;
         this.studentRepository = studentRepository;
+        this.serverTimeService = serverTimeService;
+    }
+
+    public StatisticsNavigationResponseForm getStatisticsNavigation(LocalDate date, String schedule, int floor) {
+        if(!(schedule.equals("club")
+                || schedule.equals("self-study")
+                || schedule.equals("after-school")))
+            throw new NotClubAndSelfStudyException(
+                    "today schedule is not club or self-study or after-school");
+
+        List<StatisticsClubAndClassInformationForm> statisticsClubAndClassInformationForms =
+                getStatisticsNavigationInformation(schedule, floor);
+        String monthAndDate =
+                serverTimeService.getMonthAndDate(date);
+        String dayOfWeek =
+                serverTimeService.getDayOfWeek(date);
+
+        return new StatisticsNavigationResponseForm(
+                monthAndDate, dayOfWeek, schedule, statisticsClubAndClassInformationForms);
     }
 
     public List<ClubAndClassInformationForm> getNavigationInformation(String schedule, int floor) {
