@@ -53,6 +53,12 @@ public class StatisticsController {
     @ApiResponses({
             @ApiResponse(code = 200,
                     message = "OK!!"),
+            @ApiResponse(code = 400,
+                    message = "floor is not in (1, 2, 3, 4)"),
+            @ApiResponse(code = 403,
+                    message = "token invalid"),
+            @ApiResponse(code = 422,
+                    message = "today schedule is not club or self-study"),
             @ApiResponse(code = 500,
                     message = "500???")
     })
@@ -112,8 +118,18 @@ public class StatisticsController {
             value = "일정 통계 정보",
             notes = "날짜에 해당하는 일정 통계 정보 반환")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "OK!!"),
-            @ApiResponse(code = 500, message = "500???")
+            @ApiResponse(code = 200,
+                    message = "OK!!"),
+            @ApiResponse(code = 400,
+                    message = "floor is not in (1, 2, 3, 4) or priority is not a number"),
+            @ApiResponse(code = 403,
+                    message = "token invalid"),
+            @ApiResponse(code = 404,
+                    message = "activity not found or club not found or attendance not found"),
+            @ApiResponse(code = 422,
+                    message = "today schedule is not club or self-study"),
+            @ApiResponse(code = 500,
+                    message = "500???")
     })
     @ApiImplicitParams({
             @ApiImplicitParam(
@@ -180,6 +196,12 @@ public class StatisticsController {
     @ApiResponses({
             @ApiResponse(code = 200,
                     message = "OK!!"),
+            @ApiResponse(code = 400,
+                    message = "floor is not in (1, 2, 3, 4)"),
+            @ApiResponse(code = 403,
+                    message = "token invalid"),
+            @ApiResponse(code = 422,
+                    message = "today schedule is not self-study"),
             @ApiResponse(code = 500,
                     message = "500???")
     })
@@ -230,8 +252,18 @@ public class StatisticsController {
             value = "일정 통계 정보",
             notes = "날짜에 해당하는 일정 통계 정보 반환")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "OK!!"),
-            @ApiResponse(code = 500, message = "500???")
+            @ApiResponse(code = 200,
+                    message = "OK!!"),
+            @ApiResponse(code = 400,
+                    message = "floor is not in (1, 2, 3, 4) or priority is not a number"),
+            @ApiResponse(code = 403,
+                    message = "token invalid"),
+            @ApiResponse(code = 404,
+                    message = "club not found or attendance not found"),
+            @ApiResponse(code = 422,
+                    message = "today schedule is not club or self-study"),
+            @ApiResponse(code = 500,
+                    message = "500???")
     })
     @ApiImplicitParams({
             @ApiImplicitParam(
