@@ -43,19 +43,31 @@ public class AttendanceController {
 
     @ApiOperation(value = "출석 페이지 네비게이션 정보", notes = "방과후 교실 정보 및 선생님 정보 반환")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "OK!!"),
-            @ApiResponse(code = 400, message = "floor is not in (1, 2, 3, 4)"),
-            @ApiResponse(code = 403, message = "token invalid"),
-            @ApiResponse(code = 422, message = "today schedule is not club or self-study"),
-            @ApiResponse(code = 500, message = "500???")
+            @ApiResponse(code = 200,
+                    message = "OK!!"),
+            @ApiResponse(code = 400,
+                    message = "floor is not in (1, 2, 3, 4)"),
+            @ApiResponse(code = 403,
+                    message = "token invalid"),
+            @ApiResponse(code = 422,
+                    message = "today schedule is not club or self-study"),
+            @ApiResponse(code = 500,
+                    message = "500???")
     })
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "header", name = "Authorization", dataType = "string", required = true, value = "Access Token")
+            @ApiImplicitParam(
+                    paramType = "header",
+                    name = "Authorization",
+                    dataType = "string",
+                    required = true,
+                    value = "Access Token")
     })
     @GetMapping("/navigation/{schedule}/{floor}")
     public AttendanceNavigationResponseForm attendanceNavigation(
-            @ApiParam(value = "club, self-study", required = true) @PathVariable("schedule") String schedule,
-            @ApiParam(value = "층[ 1(자습실, 창조실), 2, 3, 4 ]", required = true) @PathVariable("floor") String floorStr,
+            @ApiParam(value = "club, self-study", required = true)
+            @PathVariable("schedule") String schedule,
+            @ApiParam(value = "층[ 1(자습실, 창조실), 2, 3, 4 ]", required = true)
+            @PathVariable("floor") String floorStr,
             HttpServletRequest request) {
 
         log.info(String.format("request /attendance/navigation/%s/%s GET", schedule, floorStr));
@@ -69,11 +81,15 @@ public class AttendanceController {
             throw new NonExistFloorException("floor is not a number");
         }
 
-        Activity activity = activityRepository.findById(LocalDate.now())
-                .orElseThrow(ActivityNotFoundException::new);
-        String findSchedule = activity.getSchedule();
-        if(!(findSchedule.equals("club") || findSchedule.equals("self-study") || findSchedule.equals("after-school")))
-            throw new NotClubAndSelfStudyException("today schedule is not club or self-study or after-school");
+        String findSchedule = activityRepository.findById(LocalDate.now())
+                .orElseThrow(ActivityNotFoundException::new)
+                .getSchedule();
+
+        if(!(findSchedule.equals("club")
+                || findSchedule.equals("self-study")
+                || findSchedule.equals("after-school")))
+            throw new NotClubAndSelfStudyException(
+                    "today schedule is not club or self-study or after-school");
 
         List<ClubAndClassInformationForm> clubAndClassInformationForms =
                 attendanceService.getNavigationInformation(schedule, floor);
@@ -84,29 +100,45 @@ public class AttendanceController {
         String teacherName =
                 attendanceService.getTodayTeacherName(date, floor);
 
-        return new AttendanceNavigationResponseForm(date, dayOfWeek, teacherName, schedule, clubAndClassInformationForms);
+        return new AttendanceNavigationResponseForm(
+                date, dayOfWeek, teacherName, schedule, clubAndClassInformationForms);
     }
 
     @ApiOperation(value = "출석 현황 요청", notes = "출석 현황 반환")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "OK!!"),
-            @ApiResponse(code = 400, message = "floor is not in (1, 2, 3, 4) or priority is not a number"),
-            @ApiResponse(code = 403, message = "token invalid"),
-            @ApiResponse(code = 404, message = "activity not found or club not found or attendance not found"),
-            @ApiResponse(code = 422, message = "today schedule is not club or self-study"),
-            @ApiResponse(code = 500, message = "500???")
+            @ApiResponse(code = 200,
+                    message = "OK!!"),
+            @ApiResponse(code = 400,
+                    message = "floor is not in (1, 2, 3, 4) or priority is not a number"),
+            @ApiResponse(code = 403,
+                    message = "token invalid"),
+            @ApiResponse(code = 404,
+                    message = "activity not found or club not found or attendance not found"),
+            @ApiResponse(code = 422,
+                    message = "today schedule is not club or self-study"),
+            @ApiResponse(code = 500,
+                    message = "500???")
     })
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "header", name = "Authorization", dataType = "string", required = true, value = "Access Token")
+            @ApiImplicitParam(
+                    paramType = "header",
+                    name = "Authorization",
+                    dataType = "string",
+                    required = true,
+                    value = "Access Token")
     })
     @GetMapping("/student-state/{schedule}/{floor}/{priority}")
     public AttendanceListResponseForm attendanceList(
-            @ApiParam(value = "club, self-study", required = true) @PathVariable("schedule") String schedule,
-            @ApiParam(value = "층[ 1(자습실), 2, 3, 4 ]", required = true) @PathVariable("floor") String floorStr,
-            @ApiParam(value = "위치[ 왼쪽에서부터 0 ]", required = true) @PathVariable("priority") String priorityStr,
+            @ApiParam(value = "club, self-study", required = true)
+            @PathVariable("schedule") String schedule,
+            @ApiParam(value = "층[ 1(자습실), 2, 3, 4 ]", required = true)
+            @PathVariable("floor") String floorStr,
+            @ApiParam(value = "위치[ 왼쪽에서부터 0 ]", required = true)
+            @PathVariable("priority") String priorityStr,
             HttpServletRequest request) {
 
-        log.info(String.format("request /attendance/student-state/%s/%s/%s GET", schedule, floorStr, priorityStr));
+        log.info(String.format("request /attendance/student-state/%s/%s/%s GET",
+                schedule, floorStr, priorityStr));
 
         tokenValidation(request.getHeader("Authorization"));
 
@@ -136,13 +168,22 @@ public class AttendanceController {
 
     @ApiOperation(value = "출석", notes = "출석 상태 변환")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "OK!!"),
-            @ApiResponse(code = 400, message = "floor is not in (1, 2, 3, 4) or priority is not a number"),
-            @ApiResponse(code = 404, message = "attendance not found"),
-            @ApiResponse(code = 500, message = "500???")
+            @ApiResponse(code = 200,
+                    message = "OK!!"),
+            @ApiResponse(code = 400,
+                    message = "floor is not in (1, 2, 3, 4) or priority is not a number"),
+            @ApiResponse(code = 404,
+                    message = "attendance not found"),
+            @ApiResponse(code = 500,
+                    message = "500???")
     })
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "header", name = "Authorization", dataType = "string", required = true, value = "Access Token")
+            @ApiImplicitParam(
+                    paramType = "header",
+                    name = "Authorization",
+                    dataType = "string",
+                    required = true,
+                    value = "Access Token")
     })
     @PatchMapping("/student-state")
     public void changeAttendanceState(

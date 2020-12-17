@@ -1,5 +1,7 @@
 package com.dsm.pick.controller;
 
+import com.dsm.pick.domains.domain.Club;
+import com.dsm.pick.domains.domain.SchoolClass;
 import com.dsm.pick.domains.repository.ActivityRepository;
 import com.dsm.pick.domains.service.AttendanceService;
 import com.dsm.pick.domains.service.JwtService;
@@ -8,8 +10,7 @@ import com.dsm.pick.utils.exception.ActivityNotFoundException;
 import com.dsm.pick.utils.exception.NonExistFloorException;
 import com.dsm.pick.utils.exception.NotClubAndSelfStudyException;
 import com.dsm.pick.utils.exception.TokenInvalidException;
-import com.dsm.pick.utils.form.StatisticsClubAndClassInformationForm;
-import com.dsm.pick.utils.form.StatisticsNavigationResponseForm;
+import com.dsm.pick.utils.form.*;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,8 +23,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -48,7 +47,7 @@ public class StatisticsController {
         this.jwtService = jwtService;
     }
 
-    @ApiOperation(value = "일정 통계 페이지 네비게이션 정보", notes = "날짜에 해당하는 통계 정보 반환")
+    @ApiOperation(value = "일정 통계 페이지 네비게이션 정보", notes = "날짜에 해당하는 통계 네비게이션 정보 반환")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK!!"),
             @ApiResponse(code = 500, message = "500???")
@@ -57,7 +56,7 @@ public class StatisticsController {
             @ApiImplicitParam(paramType = "header", name = "Authorization", dataType = "string", required = true, value = "Access Token")
     })
     @GetMapping("/daily/navigation/{date}/{floor}")
-    public StatisticsNavigationResponseForm getDailyStatistics(
+    public StatisticsNavigationResponseForm getDailyStatisticsNavigation(
             HttpServletRequest request,
             @ApiParam(value = "2003-08-16", required = true)
             @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -69,7 +68,7 @@ public class StatisticsController {
 
         tokenValidation(request.getHeader("Authorization"));
 
-        int floor = 0;
+        int floor;
         try {
             floor = Integer.parseInt(floorStr);
         } catch(NumberFormatException e) {
@@ -95,6 +94,62 @@ public class StatisticsController {
 
         return new StatisticsNavigationResponseForm(
                 monthAndDate, dayOfWeek, schedule, statisticsClubAndClassInformationForms);
+    }
+
+    @ApiOperation(value = "일정 통계 정보", notes = "날짜에 해당하는 통계 정보 반환")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK!!"),
+            @ApiResponse(code = 500, message = "500???")
+    })
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "Authorization", dataType = "string", required = true, value = "Access Token")
+    })
+    @GetMapping("/daily/student-state/{date}/{floor}/{priority}")
+    public StatisticsListResponseForm getDailyStatistics(
+            HttpServletRequest request,
+            @ApiParam(value = "2003-08-16", required = true)
+            @DateTimeFormat(pattern = "yyyy-MM-dd")
+            @PathVariable("date") LocalDate date,
+            @ApiParam(value = "3", required = true)
+            @PathVariable("floor") String floorStr,
+            @ApiParam(value = "4", required = true)
+            @PathVariable("priority") String priorityStr) {
+
+        log.info(String.format("request /daily/student-state/%s/%s/%s GET", date, floorStr, priorityStr));
+
+        tokenValidation(request.getHeader("Authorization"));
+
+        int floor;
+        int priority;
+        try {
+            floor = Integer.parseInt(floorStr);
+            priority = Integer.parseInt(priorityStr);
+        } catch(NumberFormatException e) {
+            throw new NonExistFloorException("floor or priority is not a number");
+        }
+
+        String schedule = activityRepository.findById(date)
+                .orElseThrow(ActivityNotFoundException::new)
+                .getSchedule();
+
+        if(!(schedule.equals("club")
+                || schedule.equals("self-study")
+                || schedule.equals("after-school")))
+            throw new NotClubAndSelfStudyException(
+                    "today schedule is not club or self-study or after-school");
+
+        List<AttendanceListForm> attendanceList =
+                attendanceService.getAttendanceList(schedule, LocalDate.now(), floor, priority);
+
+        if(schedule.equals("club")) {
+            Club club = attendanceService.getClubHeadAndName(floor, priority);
+            return new StatisticsListResponseForm(club.getName(), club.getHead(), club.getTeacher(), attendanceList);
+        } else if(schedule.equals("self-study")) {
+            SchoolClass schoolClass = attendanceService.getClassName(floor, priority);
+            return new StatisticsListResponseForm(schoolClass.getName(), null, "홍정교", attendanceList);
+        } else {
+            throw new NotClubAndSelfStudyException("schedule 이 club 또는 self-study 가 아닙니다.");
+        }
     }
 
     private void tokenValidation(String token) {
