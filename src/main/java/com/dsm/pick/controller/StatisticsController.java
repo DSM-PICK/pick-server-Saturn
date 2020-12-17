@@ -15,15 +15,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.time.LocalDate;
 import java.util.List;
 
+@Validated
 @RestController
 @RequestMapping("/statistics")
 @Api(value = "Statistics Controller")
@@ -59,6 +63,8 @@ public class StatisticsController {
             @DateTimeFormat(pattern = "yyyy-MM-dd")
             @PathVariable("date") LocalDate date,
             @ApiParam(value = "3", required = true)
+            @Min(value = 1)
+            @Max(value = 4)
             @PathVariable("floor") int floor) {
 
         log.info("request /statistics/daily/navigation/{floor}/ GET");
