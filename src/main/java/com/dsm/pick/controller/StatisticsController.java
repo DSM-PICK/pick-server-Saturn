@@ -134,7 +134,7 @@ public class StatisticsController {
             @ApiParam(value = "4", required = true)
             @PathVariable("priority") String priorityStr) {
 
-        log.info(String.format("request /daily/student-state/%s/%s/%s GET",
+        log.info(String.format("request /statistics/daily/student-state/%s/%s/%s GET",
                 date, floorStr, priorityStr));
 
         tokenValidation(request.getHeader("Authorization"));
@@ -239,7 +239,7 @@ public class StatisticsController {
             @ApiParam(value = "4", required = true)
             @PathVariable("priority") String priorityStr) {
 
-        log.info(String.format("request /group/student-state/%s/%s/%s GET",
+        log.info(String.format("request /statistics/group/student-state/%s/%s/%s GET",
                 date, floorStr, priorityStr));
 
         tokenValidation(request.getHeader("Authorization"));
