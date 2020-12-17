@@ -55,6 +55,27 @@ public class AttendanceService {
                 monthAndDate, dayOfWeek, schedule, statisticsClubAndClassInformationForms);
     }
 
+    public StatisticsListResponseForm getStatistics(LocalDate date, String schedule, int floor, int priority) {
+        if(!(schedule.equals("club")
+                || schedule.equals("self-study")
+                || schedule.equals("after-school")))
+            throw new NotClubAndSelfStudyException(
+                    "today schedule is not club or self-study or after-school");
+
+        List<AttendanceListForm> attendanceList =
+                getAttendanceList(schedule, date, floor, priority);
+
+        if(schedule.equals("club")) {
+            Club club = getClubHeadAndName(floor, priority);
+            return new StatisticsListResponseForm(club.getName(), club.getHead(), club.getTeacher(), attendanceList);
+        } else if(schedule.equals("self-study")) {
+            SchoolClass schoolClass = getClassName(floor, priority);
+            return new StatisticsListResponseForm(schoolClass.getName(), null, "홍정교", attendanceList);
+        } else {
+            throw new NotClubAndSelfStudyException("schedule 이 club 또는 self-study 가 아닙니다.");
+        }
+    }
+
     public List<ClubAndClassInformationForm> getNavigationInformation(String schedule, int floor) {
 
         List<ClubAndClassInformationForm> form = new ArrayList<>();

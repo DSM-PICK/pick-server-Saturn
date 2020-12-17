@@ -152,24 +152,26 @@ public class StatisticsController {
                 .orElseThrow(ActivityNotFoundException::new)
                 .getSchedule();
 
-        if(!(schedule.equals("club")
-                || schedule.equals("self-study")
-                || schedule.equals("after-school")))
-            throw new NotClubAndSelfStudyException(
-                    "today schedule is not club or self-study or after-school");
+        return attendanceService.getStatistics(date, schedule, floor, priority);
 
-        List<AttendanceListForm> attendanceList =
-                attendanceService.getAttendanceList(schedule, LocalDate.now(), floor, priority);
-
-        if(schedule.equals("club")) {
-            Club club = attendanceService.getClubHeadAndName(floor, priority);
-            return new StatisticsListResponseForm(club.getName(), club.getHead(), club.getTeacher(), attendanceList);
-        } else if(schedule.equals("self-study")) {
-            SchoolClass schoolClass = attendanceService.getClassName(floor, priority);
-            return new StatisticsListResponseForm(schoolClass.getName(), null, "홍정교", attendanceList);
-        } else {
-            throw new NotClubAndSelfStudyException("schedule 이 club 또는 self-study 가 아닙니다.");
-        }
+//        if(!(schedule.equals("club")
+//                || schedule.equals("self-study")
+//                || schedule.equals("after-school")))
+//            throw new NotClubAndSelfStudyException(
+//                    "today schedule is not club or self-study or after-school");
+//
+//        List<AttendanceListForm> attendanceList =
+//                attendanceService.getAttendanceList(schedule, date, floor, priority);
+//
+//        if(schedule.equals("club")) {
+//            Club club = attendanceService.getClubHeadAndName(floor, priority);
+//            return new StatisticsListResponseForm(club.getName(), club.getHead(), club.getTeacher(), attendanceList);
+//        } else if(schedule.equals("self-study")) {
+//            SchoolClass schoolClass = attendanceService.getClassName(floor, priority);
+//            return new StatisticsListResponseForm(schoolClass.getName(), null, "홍정교", attendanceList);
+//        } else {
+//            throw new NotClubAndSelfStudyException("schedule 이 club 또는 self-study 가 아닙니다.");
+//        }
     }
 
     @ApiOperation(
@@ -198,7 +200,7 @@ public class StatisticsController {
             @ApiParam(value = "3", required = true)
             @PathVariable("floor") String floorStr) {
 
-        log.info(String.format("request /statistics/daily/navigation/%s/%s GET",
+        log.info(String.format("request /statistics/group/navigation/%s/%s GET",
                 date, floorStr));
 
         tokenValidation(request.getHeader("Authorization"));
@@ -211,7 +213,6 @@ public class StatisticsController {
         }
 
         final String schedule = "self-study";
-
         return attendanceService.getStatisticsNavigation(date, schedule, floor);
 
 //        List<StatisticsClubAndClassInformationForm> statisticsClubAndClassInformationForms =
@@ -223,6 +224,69 @@ public class StatisticsController {
 //
 //        return new StatisticsNavigationResponseForm(
 //                monthAndDate, dayOfWeek, schedule, statisticsClubAndClassInformationForms);
+    }
+
+    @ApiOperation(
+            value = "일정 통계 정보",
+            notes = "날짜에 해당하는 일정 통계 정보 반환")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK!!"),
+            @ApiResponse(code = 500, message = "500???")
+    })
+    @ApiImplicitParams({
+            @ApiImplicitParam(
+                    paramType = "header",
+                    name = "Authorization",
+                    dataType = "string",
+                    required = true,
+                    value = "Access Token")
+    })
+    @GetMapping("/group/student-state/{date}/{floor}/{priority}")
+    public StatisticsListResponseForm getGroupStatistics(
+            HttpServletRequest request,
+            @ApiParam(value = "2003-08-16", required = true)
+            @DateTimeFormat(pattern = "yyyy-MM-dd")
+            @PathVariable("date") LocalDate date,
+            @ApiParam(value = "3", required = true)
+            @PathVariable("floor") String floorStr,
+            @ApiParam(value = "4", required = true)
+            @PathVariable("priority") String priorityStr) {
+
+        log.info(String.format("request /group/student-state/%s/%s/%s GET",
+                date, floorStr, priorityStr));
+
+        tokenValidation(request.getHeader("Authorization"));
+
+        int floor;
+        int priority;
+        try {
+            floor = Integer.parseInt(floorStr);
+            priority = Integer.parseInt(priorityStr);
+        } catch(NumberFormatException e) {
+            throw new NonExistFloorException("floor or priority is not a number");
+        }
+
+        final String schedule = "self-study";
+        return attendanceService.getStatistics(date, schedule, floor, priority);
+
+//        if(!(schedule.equals("club")
+//                || schedule.equals("self-study")
+//                || schedule.equals("after-school")))
+//            throw new NotClubAndSelfStudyException(
+//                    "today schedule is not club or self-study or after-school");
+//
+//        List<AttendanceListForm> attendanceList =
+//                attendanceService.getAttendanceList(schedule, date, floor, priority);
+//
+//        if(schedule.equals("club")) {
+//            Club club = attendanceService.getClubHeadAndName(floor, priority);
+//            return new StatisticsListResponseForm(club.getName(), club.getHead(), club.getTeacher(), attendanceList);
+//        } else if(schedule.equals("self-study")) {
+//            SchoolClass schoolClass = attendanceService.getClassName(floor, priority);
+//            return new StatisticsListResponseForm(schoolClass.getName(), null, "홍정교", attendanceList);
+//        } else {
+//            throw new NotClubAndSelfStudyException("schedule 이 club 또는 self-study 가 아닙니다.");
+//        }
     }
 
     private void tokenValidation(String token) {
