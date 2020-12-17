@@ -96,22 +96,6 @@ public class StatisticsController {
                 .getSchedule();
 
         return attendanceService.getStatisticsNavigation(date, schedule, floor);
-
-//        if(!(schedule.equals("club")
-//                || schedule.equals("self-study")
-//                || schedule.equals("after-school")))
-//            throw new NotClubAndSelfStudyException(
-//                    "today schedule is not club or self-study or after-school");
-//
-//        List<StatisticsClubAndClassInformationForm> statisticsClubAndClassInformationForms =
-//                attendanceService.getStatisticsNavigationInformation(schedule, floor);
-//        String monthAndDate =
-//                serverTimeService.getMonthAndDate(date);
-//        String dayOfWeek =
-//                serverTimeService.getDayOfWeek(date);
-//
-//        return new StatisticsNavigationResponseForm(
-//                monthAndDate, dayOfWeek, schedule, statisticsClubAndClassInformationForms);
     }
 
     @ApiOperation(
@@ -169,25 +153,6 @@ public class StatisticsController {
                 .getSchedule();
 
         return attendanceService.getStatistics(date, schedule, floor, priority);
-
-//        if(!(schedule.equals("club")
-//                || schedule.equals("self-study")
-//                || schedule.equals("after-school")))
-//            throw new NotClubAndSelfStudyException(
-//                    "today schedule is not club or self-study or after-school");
-//
-//        List<AttendanceListForm> attendanceList =
-//                attendanceService.getAttendanceList(schedule, date, floor, priority);
-//
-//        if(schedule.equals("club")) {
-//            Club club = attendanceService.getClubHeadAndName(floor, priority);
-//            return new StatisticsListResponseForm(club.getName(), club.getHead(), club.getTeacher(), attendanceList);
-//        } else if(schedule.equals("self-study")) {
-//            SchoolClass schoolClass = attendanceService.getClassName(floor, priority);
-//            return new StatisticsListResponseForm(schoolClass.getName(), null, "홍정교", attendanceList);
-//        } else {
-//            throw new NotClubAndSelfStudyException("schedule 이 club 또는 self-study 가 아닙니다.");
-//        }
     }
 
     @ApiOperation(
@@ -236,16 +201,6 @@ public class StatisticsController {
 
         final String schedule = "self-study";
         return attendanceService.getStatisticsNavigation(date, schedule, floor);
-
-//        List<StatisticsClubAndClassInformationForm> statisticsClubAndClassInformationForms =
-//                attendanceService.getStatisticsNavigationInformation(schedule, floor);
-//        String monthAndDate =
-//                serverTimeService.getMonthAndDate(date);
-//        String dayOfWeek =
-//                serverTimeService.getDayOfWeek(date);
-//
-//        return new StatisticsNavigationResponseForm(
-//                monthAndDate, dayOfWeek, schedule, statisticsClubAndClassInformationForms);
     }
 
     @ApiOperation(
@@ -300,25 +255,6 @@ public class StatisticsController {
 
         final String schedule = "self-study";
         return attendanceService.getStatistics(date, schedule, floor, priority);
-
-//        if(!(schedule.equals("club")
-//                || schedule.equals("self-study")
-//                || schedule.equals("after-school")))
-//            throw new NotClubAndSelfStudyException(
-//                    "today schedule is not club or self-study or after-school");
-//
-//        List<AttendanceListForm> attendanceList =
-//                attendanceService.getAttendanceList(schedule, date, floor, priority);
-//
-//        if(schedule.equals("club")) {
-//            Club club = attendanceService.getClubHeadAndName(floor, priority);
-//            return new StatisticsListResponseForm(club.getName(), club.getHead(), club.getTeacher(), attendanceList);
-//        } else if(schedule.equals("self-study")) {
-//            SchoolClass schoolClass = attendanceService.getClassName(floor, priority);
-//            return new StatisticsListResponseForm(schoolClass.getName(), null, "홍정교", attendanceList);
-//        } else {
-//            throw new NotClubAndSelfStudyException("schedule 이 club 또는 self-study 가 아닙니다.");
-//        }
     }
 
     private void tokenValidation(String token) {
