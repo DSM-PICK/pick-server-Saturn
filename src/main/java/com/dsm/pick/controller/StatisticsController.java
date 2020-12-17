@@ -65,7 +65,7 @@ public class StatisticsController {
             @ApiParam(value = "3", required = true)
             @Min(value = 1)
             @Max(value = 4)
-            @PathVariable("floor") int floor) {
+            @PathVariable("floor") Integer floor) {
 
         log.info("request /statistics/daily/navigation/{floor}/ GET");
 
