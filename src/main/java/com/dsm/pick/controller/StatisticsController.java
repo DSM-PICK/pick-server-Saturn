@@ -63,20 +63,18 @@ public class StatisticsController {
             @DateTimeFormat(pattern = "yyyy-MM-dd")
             @PathVariable("date") LocalDate date,
             @ApiParam(value = "3", required = true)
-            @Min(value = 1)
-            @Max(value = 4)
-            @PathVariable("floor") Integer floor) {
+            @PathVariable("floor") String floorStr) {
 
-        log.info("request /statistics/daily/navigation/{floor}/ GET");
+        log.info(String.format("request /statistics/daily/navigation/%s/%s GET", date, floorStr));
 
         tokenValidation(request.getHeader("Authorization"));
 
-//        int floor = 0;
-//        try {
-//            floor = Integer.parseInt(floorStr);
-//        } catch(NumberFormatException e) {
-//            throw new NonExistFloorException("floor is not a number");
-//        }
+        int floor = 0;
+        try {
+            floor = Integer.parseInt(floorStr);
+        } catch(NumberFormatException e) {
+            throw new NonExistFloorException("floor is not a number");
+        }
 
         String schedule = activityRepository.findById(date)
                 .orElseThrow(ActivityNotFoundException::new)
