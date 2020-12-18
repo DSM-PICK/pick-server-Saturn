@@ -185,7 +185,7 @@ public class AttendanceController {
             @RequestBody AttendanceStateRequestForm attendanceStateRequestForm,
             HttpServletRequest request) {
 
-        log.info("request attendance/student-state PATCH");
+        log.info("request /attendance/student-state PATCH");
 
         tokenValidation(request.getHeader("Authorization"));
 
@@ -195,6 +195,38 @@ public class AttendanceController {
                 attendanceStateRequestForm.getPeriod(),
                 attendanceStateRequestForm.getState()
         );
+    }
+
+    @ApiOperation(value = "메모", notes = "학생 출석 상태가 이동일 때 메모")
+    @ApiResponses({
+            @ApiResponse(code = 200,
+                    message = "OK!!"),
+            @ApiResponse(code = 500,
+                    message = "500???")
+    })
+    @ApiImplicitParams({
+            @ApiImplicitParam(
+                    paramType = "header",
+                    name = "Authorization",
+                    dataType = "string",
+                    required = true,
+                    value = "Access Token")
+    })
+    @PatchMapping("/memo/{student}/{period}")
+    public void changeMemo(
+            HttpServletRequest request, 
+            MemoRequestForm memo,
+            @ApiParam(value = "2417", required = true)
+            @PathVariable("student") String studentNumber,
+            @ApiParam(value = "8", required = true)
+            @PathVariable("period") String period) {
+
+        log.info(String.format("request /attendance/memo/%s/%s PATCH",
+                studentNumber, period));
+
+        tokenValidation(request.getHeader("Authorization"));
+
+
     }
 
     private void tokenValidation(String token) {
