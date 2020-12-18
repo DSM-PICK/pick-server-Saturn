@@ -215,14 +215,19 @@ public class AttendanceService {
                 attendanceListForm.setState(new AttendanceStateForm());
 
             int period = a.getPeriod();
-            if(period == 7)
+            if(period == 7) {
                 attendanceListForm.getState().setSeven(a.getState());
-            else if(period == 8)
+                attendanceListForm.getState().setSevenMemo(a.getMemo());
+            } else if(period == 8) {
                 attendanceListForm.getState().setEight(a.getState());
-            else if(period == 9)
+                attendanceListForm.getState().setEight(a.getMemo());
+            } else if(period == 9) {
                 attendanceListForm.getState().setNine(a.getState());
-            else if(period == 10)
+                attendanceListForm.getState().setNineMemo(a.getMemo());
+            } else if(period == 10) {
                 attendanceListForm.getState().setTen(a.getState());
+                attendanceListForm.getState().setTenMemo(a.getMemo());
+            }
         }
         if(attendanceListForm != null)
             form.add(attendanceListForm);
