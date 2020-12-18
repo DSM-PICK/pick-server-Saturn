@@ -220,7 +220,7 @@ public class AttendanceService {
                 attendanceListForm.getState().setSevenMemo(a.getMemo());
             } else if(period == 8) {
                 attendanceListForm.getState().setEight(a.getState());
-                attendanceListForm.getState().setEight(a.getMemo());
+                attendanceListForm.getState().setEightMemo(a.getMemo());
             } else if(period == 9) {
                 attendanceListForm.getState().setNine(a.getState());
                 attendanceListForm.getState().setNineMemo(a.getMemo());
