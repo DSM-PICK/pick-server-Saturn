@@ -235,12 +235,20 @@ public class AttendanceService {
     }
 
     public void updateAttendance(LocalDate date, String number, int period, String state) {
-        Attendance attendance = getAttendance(date, number, period);
+        Attendance attendance = attendanceRepository.findByDateAndNumberAndPeriod(
+                date,
+                number,
+                period
+        );
         attendance.setState(state);
     }
 
     public void updateMemo(LocalDate date, String number, int period, String memo) {
-        Attendance attendance = getAttendance(date, number, period);
+        Attendance attendance = attendanceRepository.findByDateAndNumberAndPeriod(
+                date,
+                number,
+                period
+        );
 
         final String state = "이동";
         if(attendance.getState().equals(state)) {
@@ -248,13 +256,5 @@ public class AttendanceService {
         } else {
             throw new AnInappropriateStateException();
         }
-    }
-
-    public Attendance getAttendance(LocalDate date, String number, int period) {
-        return attendanceRepository.findByDateAndNumberAndPeriod(
-                date,
-                number,
-                period
-        );
     }
 }
