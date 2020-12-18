@@ -113,4 +113,11 @@ public class ApiExceptionHandler {
         log.warn("error " + ex.getMessage() + "[BAD REQUEST]");
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(AnInappropriateStateException.class)
+    public ResponseEntity<ApiErrorResponseForm> anInappropriateStateExceptionHandler(AnInappropriateStateException ex) {
+        ApiErrorResponseForm response = new ApiErrorResponseForm("An Inappropriate State Exception", "요청으로 들어온 학생의 상태가 적절하지 않습니다.");
+        log.warn("error " + ex.getMessage() + "[BAD REQUEST]");
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
 }

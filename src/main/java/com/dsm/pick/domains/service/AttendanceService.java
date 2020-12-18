@@ -3,6 +3,7 @@ package com.dsm.pick.domains.service;
 import com.dsm.pick.domains.domain.*;
 import com.dsm.pick.domains.repository.*;
 import com.dsm.pick.utils.exception.ActivityNotFoundException;
+import com.dsm.pick.utils.exception.AnInappropriateStateException;
 import com.dsm.pick.utils.exception.NonExistFloorException;
 import com.dsm.pick.utils.exception.NotClubAndSelfStudyException;
 import com.dsm.pick.utils.form.*;
@@ -235,7 +236,13 @@ public class AttendanceService {
 
     public void updateMemo(LocalDate date, String number, int period, String memo) {
         Attendance attendance = getAttendance(date, number, period);
-        attendance.setMemo(memo);
+
+        final String state = "이동";
+        if(attendance.getState().equals(state)) {
+            attendance.setMemo(memo);
+        } else {
+            throw new AnInappropriateStateException();
+        }
     }
 
     public Attendance getAttendance(LocalDate date, String number, int period) {

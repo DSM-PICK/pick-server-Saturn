@@ -233,6 +233,7 @@ public class AttendanceController {
             throw new NonExistPeriodException();
         }
 
+
         attendanceService.updateMemo(LocalDate.now(), studentNumber, period, memo.getMemo());
     }
 
