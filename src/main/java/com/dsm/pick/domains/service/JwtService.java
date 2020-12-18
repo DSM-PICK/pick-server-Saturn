@@ -37,7 +37,7 @@ public class JwtService {
                 .setHeaderParam("typ", "JWT")
                 .setSubject("refresh token")
                 .claim("id", teacherId)
-                .setExpiration(new Date(System.currentTimeMillis() + (1000 * 60 * 60 * 24 * 7)))    // 2주
+                .setExpiration(new Date(System.currentTimeMillis() + (1000 * 60 * 60 * 4)))    // 4시간
                 .signWith(signatureAlgorithm, KEY)
                 .compact();
     }
