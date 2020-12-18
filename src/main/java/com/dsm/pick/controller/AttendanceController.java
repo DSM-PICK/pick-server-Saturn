@@ -219,14 +219,21 @@ public class AttendanceController {
             @ApiParam(value = "2417", required = true)
             @PathVariable("student") String studentNumber,
             @ApiParam(value = "8", required = true)
-            @PathVariable("period") String period) {
+            @PathVariable("period") String periodStr) {
 
         log.info(String.format("request /attendance/memo/%s/%s PATCH",
-                studentNumber, period));
+                studentNumber, periodStr));
 
         tokenValidation(request.getHeader("Authorization"));
 
+        int period;
+        try {
+            period = Integer.parseInt(periodStr);
+        } catch(NumberFormatException e) {
+            throw new NonExistPeriodException();
+        }
 
+        attendanceService.updateMemo(LocalDate.now(), studentNumber, period, memo.getMemo());
     }
 
     private void tokenValidation(String token) {

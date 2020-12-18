@@ -229,11 +229,20 @@ public class AttendanceService {
     }
 
     public void updateAttendance(LocalDate date, String number, int period, String state) {
-        Attendance attendance = attendanceRepository.findByDateAndNumberAndPeriod(
+        Attendance attendance = getAttendance(date, number, period);
+        attendance.setState(state);
+    }
+
+    public void updateMemo(LocalDate date, String number, int period, String memo) {
+        Attendance attendance = getAttendance(date, number, period);
+        attendance.setMemo(memo);
+    }
+
+    public Attendance getAttendance(LocalDate date, String number, int period) {
+        return attendanceRepository.findByDateAndNumberAndPeriod(
                 date,
                 number,
                 period
         );
-        attendance.setState(state);
     }
 }

@@ -29,14 +29,18 @@ public class Attendance {
     @Column(name = "state")
     private String state;
 
+    @Column(name = "memo")
+    private String memo;
+
     public Attendance() {}
-    public Attendance(int id, Activity activity, Student student, int period, Teacher teacher, String state) {
+    public Attendance(int id, Activity activity, Student student, int period, Teacher teacher, String state, String memo) {
         this.id = id;
         this.activity = activity;
         this.student = student;
         this.period = period;
         this.teacher = teacher;
         this.state = state;
+        this.memo = memo;
     }
 
     public int getId() {
@@ -85,5 +89,13 @@ public class Attendance {
 
     public void setState(String state) {
         this.state = state;
+    }
+
+    public String getMemo() {
+        return memo;
+    }
+
+    public void setMemo(String memo) {
+        this.memo = memo;
     }
 }

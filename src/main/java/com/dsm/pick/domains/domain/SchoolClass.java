@@ -17,14 +17,18 @@ public class SchoolClass {
     @Column(name = "priority")
     private int priority;
 
+    @Column(name = "manager")
+    private String manager;
+
     @OneToMany(mappedBy = "schoolClass")
     private List<Student> students;
 
     public SchoolClass() {}
-    public SchoolClass(String name, int floor, int priority, List<Student> students) {
+    public SchoolClass(String name, int floor, int priority, String manager, List<Student> students) {
         this.name = name;
         this.floor = floor;
         this.priority = priority;
+        this.manager = manager;
         this.students = students;
     }
 
@@ -58,5 +62,13 @@ public class SchoolClass {
 
     public void setStudents(List<Student> students) {
         this.students = students;
+    }
+
+    public String getManager() {
+        return manager;
+    }
+
+    public void setManager(String manager) {
+        this.manager = manager;
     }
 }
