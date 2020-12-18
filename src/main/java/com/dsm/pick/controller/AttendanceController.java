@@ -215,7 +215,7 @@ public class AttendanceController {
     @PatchMapping("/memo/{student}/{period}")
     public void changeMemo(
             HttpServletRequest request, 
-            MemoRequestForm memo,
+            @RequestBody MemoRequestForm memo,
             @ApiParam(value = "2417", required = true)
             @PathVariable("student") String studentNumber,
             @ApiParam(value = "8", required = true)
