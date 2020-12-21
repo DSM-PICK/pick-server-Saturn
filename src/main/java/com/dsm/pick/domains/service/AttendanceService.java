@@ -240,7 +240,7 @@ public class AttendanceService {
 
             if(eightState1.equals(lowPriorityString)) {
                 if(eightState2.equals(lowPriorityString)) {
-                    return eightState1.compareTo(eightState2);
+                    return c1.getGradeClassNumber().compareTo(c2.getGradeClassNumber());
                 } else {
                     return 1;
                 }
