@@ -231,7 +231,29 @@ public class AttendanceService {
         }
         if(attendanceListForm != null)
             form.add(attendanceListForm);
-        return form;
+
+        Comparator<AttendanceListForm> comparator = (c1, c2) -> {
+            final String lowPriorityString = "취업";
+
+            final String eightState1 = c1.getState().getEight();
+            final String eightState2 = c2.getState().getEight();
+
+            if(eightState1.equals(lowPriorityString)) {
+                if(eightState2.equals(lowPriorityString)) {
+                    return eightState1.compareTo(eightState2);
+                } else {
+                    return -1;
+                }
+            } else if(eightState2.equals(lowPriorityString)) {
+                return 1;
+            } else {
+                return eightState1.compareTo(eightState2);
+            }
+        };
+
+        return form.stream()
+                .sorted(comparator)
+                .collect(Collectors.toList());
     }
 
     public void updateAttendance(LocalDate date, String number, int period, String state) {
