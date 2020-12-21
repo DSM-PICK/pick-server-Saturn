@@ -242,10 +242,10 @@ public class AttendanceService {
                 if(eightState2.equals(lowPriorityString)) {
                     return eightState1.compareTo(eightState2);
                 } else {
-                    return -1;
+                    return 1;
                 }
             } else if(eightState2.equals(lowPriorityString)) {
-                return 1;
+                return -1;
             } else {
                 return eightState1.compareTo(eightState2);
             }
