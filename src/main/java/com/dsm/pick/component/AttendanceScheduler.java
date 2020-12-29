@@ -159,14 +159,13 @@ public class AttendanceScheduler {
     private int todayStartPeriod(LocalDate date) {
         int dayOfWeek = date.getDayOfWeek().getValue();
 
-        return 7;
-//        if(1 <= dayOfWeek && dayOfWeek <= 4) {
-//            return 8;
-//        } else if(dayOfWeek == 5) {
-//            return 7;
-//        } else {
-//            throw new WeekendException();
-//        }
+        if(1 <= dayOfWeek && dayOfWeek <= 4) {
+            return 8;
+        } else if(dayOfWeek == 5) {
+            return 7;
+        } else {
+            throw new WeekendException();
+        }
     }
 
     private void attendanceTeacherSetting(Attendance attendance, int floor, Activity activity) {
