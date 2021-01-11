@@ -11,12 +11,14 @@ public class AttendanceListForm {
     private String name;
 
     private AttendanceStateForm state;
+    private AttendanceMemoForm memo;
 
     public AttendanceListForm() {}
-    public AttendanceListForm(String gradeClassNumber, String name, AttendanceStateForm state) {
+    public AttendanceListForm(String gradeClassNumber, String name, AttendanceStateForm state, AttendanceMemoForm memo) {
         this.gradeClassNumber = gradeClassNumber;
         this.name = name;
         this.state = state;
+        this.memo = memo;
     }
 
     public String getGradeClassNumber() {
@@ -41,5 +43,13 @@ public class AttendanceListForm {
 
     public void setState(AttendanceStateForm state) {
         this.state = state;
+    }
+
+    public AttendanceMemoForm getMemo() {
+        return memo;
+    }
+
+    public void setMemo(AttendanceMemoForm memo) {
+        this.memo = memo;
     }
 }

@@ -217,16 +217,16 @@ public class AttendanceService {
             int period = a.getPeriod();
             if(period == 7) {
                 attendanceListForm.getState().setSeven(a.getState());
-                attendanceListForm.getState().setSevenMemo(a.getMemo());
+                attendanceListForm.getMemo().setSevenMemo(a.getMemo());
             } else if(period == 8) {
                 attendanceListForm.getState().setEight(a.getState());
-                attendanceListForm.getState().setEightMemo(a.getMemo());
+                attendanceListForm.getMemo().setEightMemo(a.getMemo());
             } else if(period == 9) {
                 attendanceListForm.getState().setNine(a.getState());
-                attendanceListForm.getState().setNineMemo(a.getMemo());
+                attendanceListForm.getMemo().setNineMemo(a.getMemo());
             } else if(period == 10) {
                 attendanceListForm.getState().setTen(a.getState());
-                attendanceListForm.getState().setTenMemo(a.getMemo());
+                attendanceListForm.getMemo().setTenMemo(a.getMemo());
             }
         }
         if(attendanceListForm != null)
