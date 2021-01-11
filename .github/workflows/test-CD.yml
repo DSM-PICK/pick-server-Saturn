@@ -44,7 +44,7 @@ jobs:
 #
 #      - name: Test::jacocoTestCoverageVerification
 #        run: ./gradlew jacocoTestCoverageVerification
-      -
+
       - name: Compile QueryDSL Query Entity
         run: ./gradlew compileQuerydsl
 
