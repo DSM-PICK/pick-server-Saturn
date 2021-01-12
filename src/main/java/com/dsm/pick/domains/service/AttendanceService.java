@@ -211,8 +211,10 @@ public class AttendanceService {
             attendanceListForm.setGradeClassNumber(a.getStudent().getNum());
             attendanceListForm.setName(a.getStudent().getName());
 
-            if(attendanceListForm.getState() == null)
+            if(attendanceListForm.getState() == null) {
                 attendanceListForm.setState(new AttendanceStateForm());
+                attendanceListForm.setMemo(new AttendanceMemoForm());
+            }
 
             int period = a.getPeriod();
             if(period == 7) {
