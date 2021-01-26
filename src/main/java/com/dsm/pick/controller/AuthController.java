@@ -63,8 +63,9 @@ public class AuthController {
             String accessToken = jwtService.createAccessToken(teacherId);
             String refreshToken = jwtService.createRefreshToken(teacherId);
             String teacherName = authService.getTeacherName(teacherId);
+            String managedClassroom = authService.findManagedClassroom(teacherId);
 
-            result = new LoginResponseForm(accessToken, refreshToken, teacherName);
+            result = new LoginResponseForm(accessToken, refreshToken, teacherName, managedClassroom);
         }
 
         return result;

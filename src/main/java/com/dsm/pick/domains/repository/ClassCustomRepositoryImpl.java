@@ -36,4 +36,12 @@ public class ClassCustomRepositoryImpl implements ClassCustomRepository {
                 .findAny()
                 .orElseThrow(SchoolClassNotFoundException::new);
     }
+
+    @Override
+    public SchoolClass findByManager(String teacherId) {
+        return entityManager.createQuery("SELECT c FROM SchoolClass c " +
+                "WHERE c.manager = :manager", SchoolClass.class)
+                .setParameter("manager", teacherId)
+                .getSingleResult();
+    }
 }

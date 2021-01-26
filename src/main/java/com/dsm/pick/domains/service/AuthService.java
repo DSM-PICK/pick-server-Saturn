@@ -1,6 +1,7 @@
 package com.dsm.pick.domains.service;
 
 import com.dsm.pick.domains.domain.Teacher;
+import com.dsm.pick.domains.repository.ClassRepository;
 import com.dsm.pick.domains.repository.TeacherRepository;
 import com.dsm.pick.utils.exception.*;
 import org.slf4j.Logger;
@@ -24,10 +25,16 @@ public class AuthService {
     private static final Logger log = LoggerFactory.getLogger(AuthService.class);
 
     private final TeacherRepository teacherRepository;
+    private final ClassRepository classRepository;
 
     @Autowired
-    public AuthService(TeacherRepository teacherRepository) {
+    public AuthService(TeacherRepository teacherRepository, ClassRepository classRepository) {
         this.teacherRepository = teacherRepository;
+        this.classRepository = classRepository;
+    }
+
+    public String findManagedClassroom(String teacherId) {
+        return classRepository.findByManager(teacherId).getName();
     }
 
     public String encodingPassword(String original) {

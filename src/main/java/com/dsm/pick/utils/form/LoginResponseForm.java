@@ -13,11 +13,14 @@ public class LoginResponseForm {
     @ApiModelProperty(example = "김정은", required = true)
     private String teacherName;
 
+    private String managedClassroom;
+
     public LoginResponseForm() {}
-    public LoginResponseForm(String accessToken, String refreshToken, String teacherName) {
+    public LoginResponseForm(String accessToken, String refreshToken, String teacherName, String managedClassroom) {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
         this.teacherName = teacherName;
+        this.managedClassroom = managedClassroom;
     }
 
     public String getAccessToken() {
@@ -42,5 +45,13 @@ public class LoginResponseForm {
 
     public void setTeacherName(String teacherName) {
         this.teacherName = teacherName;
+    }
+
+    public String getManagedClassroom() {
+        return managedClassroom;
+    }
+
+    public void setManagedClassroom(String managedClassroom) {
+        this.managedClassroom = managedClassroom;
     }
 }
