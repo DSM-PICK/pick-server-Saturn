@@ -20,9 +20,26 @@ class JwtService(
     fun createToken(teacherId: String, tokenType: Token): String =
         Jwts.builder()
             .setHeaderParam("typ", "JWT")
-            .setSubject("access token")
             .claim("id", teacherId)
             .setExpiration(Date(System.currentTimeMillis() + tokenType.expirationTime))
             .signWith(signatureAlgorithm, key)
             .compact()
+
+    fun getTeacherId(token: String): String =
+        Jwts.parser()
+            .setSigningKey(key)
+            .parseClaimsJws(token)
+            .body
+            .get("id", String::class.java)
+
+    fun isValid(token: String) =
+        try {
+            val currentTime = Date()
+            val expirationTime = Jwts.parser()
+                .setSigningKey(key)
+                .parseClaimsJws(token)
+                .body
+                .expiration
+            expirationTime.after(currentTime)
+        } catch (e: Exception) { false }
 }

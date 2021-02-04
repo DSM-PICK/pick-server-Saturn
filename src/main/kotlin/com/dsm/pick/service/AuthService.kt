@@ -2,6 +2,7 @@ package com.dsm.pick.service
 
 import com.dsm.pick.controller.response.LoginResponse
 import com.dsm.pick.exception.AccountInformationMismatchException
+import com.dsm.pick.exception.InvalidTokenException
 import com.dsm.pick.repository.ClassRepository
 import com.dsm.pick.repository.TeacherRepository
 import org.springframework.stereotype.Service
@@ -28,7 +29,16 @@ class AuthService(
         )
     }
 
-    private fun findManagedClassroom(teacherId: String) = classRepository.findByManager(teacherId)
+    fun validateToken(token: String) {
+        val isValid = jwtService.isValid(token)
+        if (!isValid) throw InvalidTokenException(token)
+    }
+
+    fun recreateAccessToken(accessToken: String): String {
+        validateToken(accessToken)
+        val teacherId = jwtService.getTeacherId(accessToken)
+        return createAccessToken(teacherId)
+    }
 
     private fun validateAccountInformation(teacherId: String, teacherPassword: String) {
         val teacher = findTeacherById(teacherId)
@@ -36,20 +46,22 @@ class AuthService(
         validateSamePassword(teacher.password, encodedPassword)
     }
 
-    private fun validateSamePassword(requestPassword: String, findPassword: String) {
-        if(requestPassword != findPassword)
-            throw AccountInformationMismatchException(requestPassword, findPassword)
-    }
-
     private fun findTeacherById(teacherId: String) = teacherRepository.findById(teacherId).orElseThrow { AccountInformationMismatchException(teacherId, "찾은 정보 없음") }
-
-    private fun createAccessToken(teacherId: String) = jwtService.createToken(teacherId, Token.ACCESS)
-
-    private fun createRefreshToken(teacherId: String) = jwtService.createToken(teacherId, Token.REFRESH)
 
     private fun encodingPassword(originalPassword: String): String {
         val messageDigest = MessageDigest.getInstance(encryptionAlgorithm)
         messageDigest.update(originalPassword.toByteArray(characterEncoding))
         return String.format("%0128x", BigInteger(1, messageDigest.digest()))
     }
+
+    private fun validateSamePassword(requestPassword: String, findPassword: String) {
+        if(requestPassword != findPassword)
+            throw AccountInformationMismatchException(requestPassword, findPassword)
+    }
+
+    private fun createAccessToken(teacherId: String) = jwtService.createToken(teacherId, Token.ACCESS)
+
+    private fun createRefreshToken(teacherId: String) = jwtService.createToken(teacherId, Token.REFRESH)
+
+    private fun findManagedClassroom(teacherId: String) = classRepository.findByManager(teacherId)
 }
