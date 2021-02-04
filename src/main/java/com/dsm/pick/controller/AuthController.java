@@ -56,14 +56,22 @@ public class AuthController {
         String encodedPassword = authService.encodingPassword(teacher.getPw());
         teacher.setPw(encodedPassword);
 
+        System.out.println("여긴 들어옴?");
+        System.out.println("id: " + teacher.getId());
+        System.out.println("pw: " + teacher.getPw());
+
         LoginResponseForm result = null;
         if(authService.checkIdAndPassword(teacher)) {
             String teacherId = teacher.getId();
 
             String accessToken = jwtService.createAccessToken(teacherId);
+            System.out.println("access: " + accessToken);
             String refreshToken = jwtService.createRefreshToken(teacherId);
+            System.out.println("refresh: " + refreshToken);
             String teacherName = authService.getTeacherName(teacherId);
+            System.out.println("teacherName: " + teacherName);
             String managedClassroom = authService.findManagedClassroom(teacherId);
+            System.out.println("managedClassroom: " + managedClassroom);
 
             result = new LoginResponseForm(accessToken, refreshToken, teacherName, managedClassroom);
         }
