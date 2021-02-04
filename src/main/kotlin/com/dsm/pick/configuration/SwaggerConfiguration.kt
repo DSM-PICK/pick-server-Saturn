@@ -19,20 +19,20 @@ class SwaggerConfiguration {
             .produces(getProduceContentTypes())
             .apiInfo(apiInfo())
             .select()
-            .apis(RequestHandlerSelectors.basePackage("com.freewheelin.push.controller"))
+            .apis(RequestHandlerSelectors.basePackage("com.dsm.pick.controller"))
             .paths(PathSelectors.any())
             .build()
     }
 
     private fun apiInfo(): ApiInfo {
         return ApiInfo(
-            "Freewheelin API Docs",
-            "Freewheelin Company APIs",
+            "PICK API Docs",
+            "Please In Class, Kids APIs",
             "1.0.0",
             "Terms of Service URL",
             "Contact Name",
             "License",
-            "License URL",
+            "License URL"
         )
     }
     private fun getConsumeContentTypes() = setOf("application/json")

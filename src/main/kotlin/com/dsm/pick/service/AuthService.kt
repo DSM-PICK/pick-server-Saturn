@@ -1,17 +1,25 @@
 package com.dsm.pick.service
 
 import com.dsm.pick.controller.response.LoginResponse
+import com.dsm.pick.domain.Teacher
 import com.dsm.pick.exception.AccountInformationMismatchException
+import com.dsm.pick.exception.AlreadyExistAccountException
+import com.dsm.pick.exception.AuthenticationNumberMismatchException
 import com.dsm.pick.exception.InvalidTokenException
 import com.dsm.pick.repository.ClassRepository
 import com.dsm.pick.repository.TeacherRepository
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.math.BigInteger
 import java.nio.charset.Charset
 import java.security.MessageDigest
 
 @Service
+@Transactional
 class AuthService(
+    @Value("\${JOIN_AUTHENTICATION_NUMBER:kotlin-good}")
+    private val authenticationNumber: String,
     private val jwtService: JwtService,
     private val teacherRepository: TeacherRepository,
     private val classRepository: ClassRepository,
@@ -36,8 +44,41 @@ class AuthService(
 
     fun recreateAccessToken(accessToken: String): String {
         validateToken(accessToken)
-        val teacherId = jwtService.getTeacherId(accessToken)
+
+        val teacherId = findTeacherIdByToken(accessToken)
         return createAccessToken(teacherId)
+    }
+
+    fun changePassword(token: String, newPassword: String, confirmNewPassword: String) {
+        validateToken(token)
+
+        val teacherId = findTeacherIdByToken(token)
+        val teacher = findTeacherById(teacherId)
+        validateSamePassword(newPassword, confirmNewPassword)
+
+        teacher.password = newPassword
+    }
+
+    fun validateAuthenticationNumber(authenticationNumber: String) {
+        if (this.authenticationNumber != authenticationNumber)
+            throw AuthenticationNumberMismatchException(authenticationNumber)
+    }
+
+    fun join(teacherId: String, teacherPassword: String, teacherConfirmPassword: String, teacherName: String) {
+        validateSamePassword(teacherPassword, teacherConfirmPassword)
+
+        val isJoinPossible = isJoinPossible(teacherId)
+        if (isJoinPossible)
+            teacherRepository.save(
+                Teacher(
+                    id = teacherId,
+                    password = teacherPassword,
+                    name = teacherName,
+                    office = "임시 교무실",
+                )
+            )
+        else
+            throw AlreadyExistAccountException(teacherId)
     }
 
     private fun validateAccountInformation(teacherId: String, teacherPassword: String) {
@@ -64,4 +105,12 @@ class AuthService(
     private fun createRefreshToken(teacherId: String) = jwtService.createToken(teacherId, Token.REFRESH)
 
     private fun findManagedClassroom(teacherId: String) = classRepository.findByManager(teacherId)
+
+    private fun findTeacherIdByToken(token: String) = jwtService.getTeacherId(token)
+
+    private fun isJoinPossible(teacherId: String) =
+        try {
+            findTeacherById(teacherId)
+            false
+        } catch (e: Exception) { true }
 }

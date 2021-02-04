@@ -1,25 +1,38 @@
 package com.dsm.pick.exception.handler
 
 import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
+import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestControllerAdvice
 
 @RestControllerAdvice
 class ExceptionHandler {
 
+    @ExceptionHandler(MethodArgumentNotValidException::class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun notValidateExceptionHandler(e: MethodArgumentNotValidException) =
+        ExceptionResponse(
+            code = "INVALID_REQUEST_BODY",
+            message = "클라이언트의 요청이 잘못되었습니다. [${e.bindingResult.allErrors.first().defaultMessage}]",
+        )
+
     @ExceptionHandler(value = [RuntimeException::class])
-    fun runtimeExceptionHandler(e: RuntimeException) =
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    fun runtimeExceptionHandler() =
         ExceptionResponse(
             code = "INTERVAL_SERVER_ERROR",
             message = "이거 서버 에러임 이진혁한테 따지러 가삼",
-            status = HttpStatus.INTERNAL_SERVER_ERROR,
         )
 
-    @ExceptionHandler(value = [CommonException::class])
+    @ExceptionHandler(CommonException::class)
     fun commonExceptionHandler(e: CommonException) =
-        ExceptionResponse(
-            code = e.code,
-            message = e.message ?: "큰 문제는 아닌데 이거 나오면 안 되긴 함",
-            status = e.status,
+        ResponseEntity(
+            ExceptionResponse(
+                code = e.code,
+                message = e.message ?: "큰 문제는 아닌데 이거 나오면 안 되긴 함",
+            ),
+            e.status,
         )
 }
