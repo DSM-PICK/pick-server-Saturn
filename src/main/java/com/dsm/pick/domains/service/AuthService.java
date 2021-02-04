@@ -1,5 +1,6 @@
 package com.dsm.pick.domains.service;
 
+import com.dsm.pick.domains.domain.SchoolClass;
 import com.dsm.pick.domains.domain.Teacher;
 import com.dsm.pick.domains.repository.ClassRepository;
 import com.dsm.pick.domains.repository.TeacherRepository;
@@ -34,7 +35,10 @@ public class AuthService {
     }
 
     public String findManagedClassroom(String teacherId) {
-        return classRepository.findByManager(teacherId).getName();
+        SchoolClass classroom = classRepository.findByManager(teacherId);
+        if (classroom == null)
+            return null;
+        return classroom.getName();
     }
 
     public String encodingPassword(String original) {

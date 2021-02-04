@@ -7,5 +7,4 @@ import java.util.List;
 public interface ClassCustomRepository {
     List<SchoolClass> findByFloor(int floor);
     SchoolClass findByFloorAndPriority(int floor, int priority);
-    SchoolClass findByManager(String teacherId);
 }
