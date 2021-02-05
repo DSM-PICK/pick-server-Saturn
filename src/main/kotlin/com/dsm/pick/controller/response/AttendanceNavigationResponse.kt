@@ -11,7 +11,7 @@ class AttendanceNavigationResponse(
     class LocationInformation(
         val location: String,
         val name: String,
-        val done: String,
-        val priority: String,
+        var done: String,
+        val priority: Int,
     )
 }

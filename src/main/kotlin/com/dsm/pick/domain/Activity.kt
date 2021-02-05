@@ -1,5 +1,7 @@
 package com.dsm.pick.domain
 
+import com.dsm.pick.domain.converter.attribute.Schedule
+import com.dsm.pick.domain.converter.ScheduleConverter
 import java.time.LocalDate
 import javax.persistence.*
 import javax.validation.constraints.NotBlank
@@ -16,7 +18,8 @@ class Activity(
 
     @Column(name = "schedule")
     @NotBlank
-    val schedule: String,
+    @Convert(converter = ScheduleConverter::class)
+    val schedule: Schedule,
 
     @ManyToOne
     @JoinColumn(name = "second_floor_teacher_id", referencedColumnName = "id")

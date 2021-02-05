@@ -6,6 +6,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestControllerAdvice
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException
 
 @RestControllerAdvice
 class ExceptionHandler {
@@ -18,12 +19,11 @@ class ExceptionHandler {
             message = "클라이언트의 요청이 잘못되었습니다. [${e.bindingResult.allErrors.first().defaultMessage}]",
         )
 
-    @ExceptionHandler(value = [RuntimeException::class])
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    fun runtimeExceptionHandler() =
+    @ExceptionHandler(MethodArgumentTypeMismatchException::class)
+    fun notValidateExceptionHandler(e: MethodArgumentTypeMismatchException) =
         ExceptionResponse(
-            code = "INTERVAL_SERVER_ERROR",
-            message = "이거 서버 에러임 이진혁한테 따지러 가삼",
+            code = "INVALID_REQUEST_BODY",
+            message = "${e.mostSpecificCause.message}",
         )
 
     @ExceptionHandler(CommonException::class)
@@ -35,4 +35,14 @@ class ExceptionHandler {
             ),
             e.status,
         )
+
+    @ExceptionHandler(value = [RuntimeException::class])
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    fun runtimeExceptionHandler(e: RuntimeException): ExceptionResponse {
+        e.printStackTrace()
+        return ExceptionResponse(
+            code = "INTERVAL_SERVER_ERROR",
+            message = "이거 서버 에러임 이진혁한테 따지러 가삼",
+        )
+    }
 }
