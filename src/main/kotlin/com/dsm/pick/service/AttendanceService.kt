@@ -4,10 +4,13 @@ import com.dsm.pick.controller.response.AttendanceNavigationResponse
 import com.dsm.pick.controller.response.AttendanceNavigationResponse.LocationInformation
 import com.dsm.pick.controller.response.AttendanceResponse
 import com.dsm.pick.controller.response.AttendanceResponse.StudentState
+import com.dsm.pick.controller.response.AttendanceResponse.StudentState.State
+import com.dsm.pick.controller.response.AttendanceResponse.StudentState.Memo
 import com.dsm.pick.domain.converter.attribute.Floor
 import com.dsm.pick.domain.converter.attribute.Schedule
 import com.dsm.pick.exception.ActivityNotFoundException
 import com.dsm.pick.exception.NonExistPriorityException
+import com.dsm.pick.exception.NonExistScheduleException
 import com.dsm.pick.repository.ActivityRepository
 import com.dsm.pick.repository.AttendanceRepository
 import com.dsm.pick.repository.ClassRepository
@@ -35,7 +38,7 @@ class AttendanceService(
 
     fun showAttendance(schedule: Schedule, floor: Floor, priority: Int) =
         AttendanceResponse(
-            attendances = ,
+            attendances = createAttendance(schedule, floor, priority)?: listOf(),
             clubHead = ,
             locationName = ,
         )
@@ -66,12 +69,33 @@ class AttendanceService(
             Schedule.SELF_STUDY, Schedule.AFTER_SCHOOL -> classRepository.findByFloor(floor).sortedBy { it.priority }.filter { it.students.isNotEmpty() }.map { LocationInformation(it.name, it.name, "none", it.priority) }
         }
 
-    private fun createAttendance(schedule: Schedule, floor: Floor, priority: Int) {
-        val attendance: MutableList<StudentState> = mutableListOf()
-        val attendances = attendanceRepository.findByActivityScheduleAndStudentClubLocationFloorAndStudentClubLocationPriority(schedule, floor, priority) ?: throw NonExistPriorityException(schedule, floor, priority)
-        attendances.groupBy { it.student.number }
-            .forEach {
-
+    private fun createAttendance(schedule: Schedule, floor: Floor, priority: Int) =
+        attendanceRepository.findByActivityScheduleAndStudentClubLocationFloorAndStudentClubLocationPriority(
+            schedule, floor, priority)
+            ?.groupBy { it.student }
+            ?.map { (student, attendance) ->
+                StudentState(
+                    studentNumber = student.number,
+                    studentName = student.name,
+                    state = State(
+                        seven = attendance.firstOrNull { it.period == 7 }?.state,
+                        eight = attendance.firstOrNull { it.period == 8 }?.state,
+                        nine = attendance.firstOrNull { it.period == 9 }?.state,
+                        ten = attendance.firstOrNull { it.period == 10 }?.state,
+                    ),
+                    memo = Memo(
+                        seven = attendance.firstOrNull { it.period == 7 }?.memo,
+                        eight = attendance.firstOrNull { it.period == 8 }?.memo,
+                        nine = attendance.firstOrNull { it.period == 9 }?.memo,
+                        ten = attendance.firstOrNull { it.period == 10 }?.memo,
+                    ),
+                )
             }
-    }
+
+    private fun findHead(schedule: Schedule, floor: Floor, priority: Int) =
+        when (schedule) {
+            Schedule.CLUB -> clubRepository.findByLocationFloorAndLocationPriority(floor, priority)?.head
+            Schedule.SELF_STUDY -> null
+            Schedule.AFTER_SCHOOL -> throw NonExistScheduleException(schedule.value)
+        }
 }

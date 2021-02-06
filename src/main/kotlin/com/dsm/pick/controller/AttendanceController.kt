@@ -35,6 +35,6 @@ class AttendanceController(
         @PathVariable("priority") priority: Int,
     ): AttendanceResponse {
         authService.validateToken(token)
-        attendanceService.showAttendance(schedule, floor, priority)
+        return attendanceService.showAttendance(schedule, floor, priority)
     }
 }

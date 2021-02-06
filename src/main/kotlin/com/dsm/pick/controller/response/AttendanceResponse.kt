@@ -20,17 +20,21 @@ class AttendanceResponse(
     ) {
 
         class State(
-            val seven: String,
-            val eight: String,
-            val nine: String,
-            val ten: String,
+            val seven: String?,
+            val eight: String?,
+            val nine: String?,
+            val ten: String?,
         )
 
         class Memo(
-            val sevenMemo: String,
-            val eightMemo: String,
-            val nineMemo: String,
-            val tenMemo: String,
+            @get:JsonProperty("sevenMemo")
+            val seven: String?,
+            @get:JsonProperty("eightMemo")
+            val eight: String?,
+            @get:JsonProperty("nineMemo")
+            val nine: String?,
+            @get:JsonProperty("tenMemo")
+            val ten: String?,
         )
     }
 }
