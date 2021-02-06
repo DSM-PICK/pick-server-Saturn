@@ -7,13 +7,13 @@ import com.dsm.pick.controller.response.AttendanceResponse.StudentState
 import com.dsm.pick.controller.response.AttendanceResponse.StudentState.State
 import com.dsm.pick.controller.response.AttendanceResponse.StudentState.Memo
 import com.dsm.pick.domain.converter.attribute.Floor
+import com.dsm.pick.domain.converter.attribute.Period
 import com.dsm.pick.domain.converter.attribute.Schedule
 import com.dsm.pick.exception.ActivityNotFoundException
-import com.dsm.pick.exception.NonExistPriorityException
 import com.dsm.pick.exception.NonExistScheduleException
 import com.dsm.pick.repository.ActivityRepository
 import com.dsm.pick.repository.AttendanceRepository
-import com.dsm.pick.repository.ClassRepository
+import com.dsm.pick.repository.ClassroomRepository
 import com.dsm.pick.repository.ClubRepository
 import org.springframework.stereotype.Service
 import java.time.LocalDate
@@ -23,7 +23,7 @@ class AttendanceService(
     private val timeService: TimeService,
     private val activityRepository: ActivityRepository,
     private val clubRepository: ClubRepository,
-    private val classRepository: ClassRepository,
+    private val classroomRepository: ClassroomRepository,
     private val attendanceRepository: AttendanceRepository,
 ) {
 
@@ -39,8 +39,16 @@ class AttendanceService(
     fun showAttendance(schedule: Schedule, floor: Floor, priority: Int) =
         AttendanceResponse(
             attendances = createAttendance(schedule, floor, priority)?: listOf(),
-            clubHead = ,
-            locationName = ,
+            clubHead = when (schedule) {
+                Schedule.CLUB -> findClub(floor, priority)?.head
+                Schedule.SELF_STUDY -> null
+                Schedule.AFTER_SCHOOL -> throw NonExistScheduleException(schedule.value)
+            },
+            name = when (schedule) {
+                Schedule.CLUB -> findClub(floor, priority)!!.name
+                Schedule.SELF_STUDY -> findClassroom(floor, priority)!!.name
+                Schedule.AFTER_SCHOOL -> throw NonExistScheduleException(schedule.value)
+            },
         )
 
     private fun findTeacherNameBySchedule(
@@ -66,7 +74,7 @@ class AttendanceService(
     private fun findLocationInformation(schedule: Schedule, floor: Floor) =
         when (schedule) {
             Schedule.CLUB -> clubRepository.findByLocationFloor(floor).sortedBy { it.location.priority }.filter { it.students.isNotEmpty() }.map { LocationInformation(it.location.location, it.name, "none", it.location.priority) }
-            Schedule.SELF_STUDY, Schedule.AFTER_SCHOOL -> classRepository.findByFloor(floor).sortedBy { it.priority }.filter { it.students.isNotEmpty() }.map { LocationInformation(it.name, it.name, "none", it.priority) }
+            Schedule.SELF_STUDY, Schedule.AFTER_SCHOOL -> classroomRepository.findByFloor(floor).sortedBy { it.priority }.filter { it.students.isNotEmpty() }.map { LocationInformation(it.name, it.name, "none", it.priority) }
         }
 
     private fun createAttendance(schedule: Schedule, floor: Floor, priority: Int) =
@@ -78,24 +86,23 @@ class AttendanceService(
                     studentNumber = student.number,
                     studentName = student.name,
                     state = State(
-                        seven = attendance.firstOrNull { it.period == 7 }?.state,
-                        eight = attendance.firstOrNull { it.period == 8 }?.state,
-                        nine = attendance.firstOrNull { it.period == 9 }?.state,
-                        ten = attendance.firstOrNull { it.period == 10 }?.state,
+                        seven = attendance.firstOrNull { it.period == Period.SEVEN }?.state,
+                        eight = attendance.firstOrNull { it.period == Period.EIGHT }?.state,
+                        nine = attendance.firstOrNull { it.period == Period.NINE }?.state,
+                        ten = attendance.firstOrNull { it.period == Period.TEN }?.state,
                     ),
                     memo = Memo(
-                        seven = attendance.firstOrNull { it.period == 7 }?.memo,
-                        eight = attendance.firstOrNull { it.period == 8 }?.memo,
-                        nine = attendance.firstOrNull { it.period == 9 }?.memo,
-                        ten = attendance.firstOrNull { it.period == 10 }?.memo,
+                        seven = attendance.firstOrNull { it.period == Period.SEVEN }?.memo,
+                        eight = attendance.firstOrNull { it.period == Period.EIGHT }?.memo,
+                        nine = attendance.firstOrNull { it.period == Period.NINE }?.memo,
+                        ten = attendance.firstOrNull { it.period == Period.TEN }?.memo,
                     ),
                 )
             }
 
-    private fun findHead(schedule: Schedule, floor: Floor, priority: Int) =
-        when (schedule) {
-            Schedule.CLUB -> clubRepository.findByLocationFloorAndLocationPriority(floor, priority)?.head
-            Schedule.SELF_STUDY -> null
-            Schedule.AFTER_SCHOOL -> throw NonExistScheduleException(schedule.value)
-        }
+    private fun findClub(floor: Floor, priority: Int) =
+        clubRepository.findByLocationFloorAndLocationPriority(floor, priority)
+
+    private fun findClassroom(floor: Floor, priority: Int) =
+        classroomRepository.findByFloorAndPriority(floor, priority)
 }

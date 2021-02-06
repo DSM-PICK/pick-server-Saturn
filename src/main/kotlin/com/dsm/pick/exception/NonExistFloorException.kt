@@ -7,6 +7,6 @@ class NonExistFloorException(
     floor: Int,
 ) : CommonException(
     code = "NON_EXIST_FLOOR",
-    message = "존재하지 않는 층입니다. [floor = $floor]",
+    message = "허용하지 않는 층입니다. [floor = $floor]",
     status = HttpStatus.BAD_REQUEST,
 )

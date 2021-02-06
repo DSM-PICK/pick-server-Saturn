@@ -5,9 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty
 class AttendanceResponse(
     val attendances: List<StudentState>,
     @get:JsonProperty("head")
-    val clubHead: String,
-    @get:JsonProperty("name")
-    val locationName: String,
+    val clubHead: String?,
+    val name: String,
 ) {
 
     class StudentState(

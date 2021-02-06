@@ -6,7 +6,7 @@ import com.dsm.pick.exception.AccountInformationMismatchException
 import com.dsm.pick.exception.AlreadyExistAccountException
 import com.dsm.pick.exception.AuthenticationNumberMismatchException
 import com.dsm.pick.exception.InvalidTokenException
-import com.dsm.pick.repository.ClassRepository
+import com.dsm.pick.repository.ClassroomRepository
 import com.dsm.pick.repository.TeacherRepository
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
@@ -22,7 +22,7 @@ class AuthService(
     private val authenticationNumber: String,
     private val jwtService: JwtService,
     private val teacherRepository: TeacherRepository,
-    private val classRepository: ClassRepository,
+    private val classroomRepository: ClassroomRepository,
 ) {
     private val encryptionAlgorithm = "SHA-512"
     private val characterEncoding = Charset.forName("UTF-8")
@@ -104,7 +104,7 @@ class AuthService(
 
     private fun createRefreshToken(teacherId: String) = jwtService.createToken(teacherId, Token.REFRESH)
 
-    private fun findManagedClassroom(teacherId: String) = classRepository.findByManager(teacherId)
+    private fun findManagedClassroom(teacherId: String) = classroomRepository.findByManager(teacherId)
 
     private fun findTeacherIdByToken(token: String) = jwtService.getTeacherId(token)
 

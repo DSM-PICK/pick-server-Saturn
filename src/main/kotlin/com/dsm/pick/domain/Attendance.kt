@@ -1,5 +1,7 @@
 package com.dsm.pick.domain
 
+import com.dsm.pick.domain.converter.PeriodConverter
+import com.dsm.pick.domain.converter.attribute.Period
 import javax.persistence.*
 
 class Attendance(
@@ -18,7 +20,8 @@ class Attendance(
     val student: Student,
 
     @Column(name = "period")
-    val period: Int,
+    @Convert(converter = PeriodConverter::class)
+    val period: Period,
 
     @ManyToOne
     @JoinColumn(name = "teacher_id", referencedColumnName = "id")
