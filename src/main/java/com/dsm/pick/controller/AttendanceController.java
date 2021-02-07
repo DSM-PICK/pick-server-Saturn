@@ -33,11 +33,12 @@ public class AttendanceController {
     private final JwtService jwtService;
 
     @Autowired
-    public AttendanceController(AttendanceService attendanceService, ActivityRepository activityRepository, JwtService jwtService, ServerTimeService serverTimeService) {
+    public AttendanceController(AttendanceService attendanceService, AuthService authService, ActivityRepository activityRepository, ServerTimeService serverTimeService, JwtService jwtService) {
         this.attendanceService = attendanceService;
+        this.authService = authService;
         this.activityRepository = activityRepository;
-        this.jwtService = jwtService;
         this.serverTimeService = serverTimeService;
+        this.jwtService = jwtService;
     }
 
     @ApiOperation(value = "출석 페이지 네비게이션 정보", notes = "방과후 교실 정보 및 선생님 정보 반환")
