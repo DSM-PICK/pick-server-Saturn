@@ -107,15 +107,15 @@ class AttendanceService(
             Schedule.SELF_STUDY, Schedule.AFTER_SCHOOL -> classroomRepository.findByFloor(floor).sortedBy { it.priority }.filter { it.students.isNotEmpty() }.map { LocationInformation(it.name, it.name, "none", it.priority) }
         }
 
-    private fun createAttendance(schedule: Schedule, floor: Floor, priority: Int, date: LocalDate = LocalDate.now()): List<StudentState>? {
-        val attendances = attendanceRepository.findByActivityScheduleAndStudentClubLocationFloorAndStudentClubLocationPriorityAndActivityDate(
-                schedule, floor, priority, date)
+    private fun createAttendance(
+        schedule: Schedule,
+        floor: Floor,
+        priority: Int,
+        attendanceDate: LocalDate = LocalDate.now()
+    ): List<StudentState>? =
+        attendanceRepository.findByActivityScheduleAndStudentClubLocationFloorAndStudentClubLocationPriorityAndActivityDate(
+            schedule, floor, priority, attendanceDate)
             ?.groupBy { it.student }
-        attendances?.forEach { (a, b) ->
-            println("-------------------------------")
-            b.forEach { println(it) }
-        }
-        return attendances
             ?.map { (student, attendance) ->
                 StudentState(
                     studentNumber = student.number,
@@ -134,28 +134,6 @@ class AttendanceService(
                     ),
                 )
             }
-    }
-//        attendanceRepository.findByActivityScheduleAndStudentClubLocationFloorAndStudentClubLocationPriority(
-//            schedule, floor, priority)
-//            ?.groupBy { it.student }
-//            ?.map { (student, attendance) ->
-//                StudentState(
-//                    studentNumber = student.number,
-//                    studentName = student.name,
-//                    state = StudentState.State(
-//                        seven = attendance.singleOrNull { it.period == Period.SEVEN }?.state?.value,
-//                        eight = attendance.singleOrNull { it.period == Period.EIGHT }?.state?.value,
-//                        nine = attendance.singleOrNull { it.period == Period.NINE }?.state?.value,
-//                        ten = attendance.singleOrNull { it.period == Period.TEN }?.state?.value,
-//                    ),
-//                    memo = Memo(
-//                        seven = attendance.singleOrNull { it.period == Period.SEVEN }?.memo,
-//                        eight = attendance.singleOrNull { it.period == Period.EIGHT }?.memo,
-//                        nine = attendance.singleOrNull { it.period == Period.NINE }?.memo,
-//                        ten = attendance.singleOrNull { it.period == Period.TEN }?.memo,
-//                    ),
-//                )
-//            }
 
     private fun findClub(floor: Floor, priority: Int) =
         clubRepository.findByLocationFloorAndLocationPriority(floor, priority)

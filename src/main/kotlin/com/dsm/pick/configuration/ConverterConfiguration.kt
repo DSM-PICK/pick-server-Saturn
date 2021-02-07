@@ -1,7 +1,6 @@
 package com.dsm.pick.configuration
 
-import com.dsm.pick.domain.converter.FloorConverter
-import com.dsm.pick.domain.converter.ScheduleConverter
+import com.dsm.pick.domain.converter.*
 import org.springframework.context.annotation.Configuration
 import org.springframework.format.FormatterRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
@@ -12,5 +11,7 @@ class ConverterConfiguration : WebMvcConfigurer {
     override fun addFormatters(registry: FormatterRegistry) {
         registry.addConverter(ScheduleConverter())
         registry.addConverter(FloorConverter())
+        registry.addConverter(PeriodConverter())
+        registry.addConverter(StateConverter())
     }
 }
