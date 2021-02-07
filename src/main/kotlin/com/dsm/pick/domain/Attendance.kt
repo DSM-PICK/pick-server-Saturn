@@ -37,4 +37,8 @@ class Attendance(
 
     @Column(name = "memo")
     var memo: String,
-)
+) {
+    override fun toString(): String {
+        return "Attendance(id=$id, activity=$activity, student=$student, period=$period, teacher=$teacher, state=$state, memo='$memo')"
+    }
+}
