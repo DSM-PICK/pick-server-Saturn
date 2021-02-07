@@ -110,9 +110,12 @@ class AttendanceService(
     private fun createAttendance(schedule: Schedule, floor: Floor, priority: Int): List<StudentState>? {
         val attendances = attendanceRepository.findByActivityScheduleAndStudentClubLocationFloorAndStudentClubLocationPriority(
                 schedule, floor, priority)
-        attendances?.forEach { println(it) }
-        return attendances
             ?.groupBy { it.student }
+        attendances?.forEach { (a, b) ->
+            println("-------------------------------")
+            b.forEach { println(it) }
+        }
+        return attendances
             ?.map { (student, attendance) ->
                 StudentState(
                     studentNumber = student.number,
