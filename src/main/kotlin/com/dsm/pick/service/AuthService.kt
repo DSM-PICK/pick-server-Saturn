@@ -82,8 +82,12 @@ class AuthService(
     }
 
     private fun validateAccountInformation(teacherId: String, teacherPassword: String) {
+        println("teacherId: $teacherId")
+        println("teacherPassword: $teacherPassword")
         val teacher = findTeacherById(teacherId)
         val encodedPassword = encodingPassword(teacherPassword)
+        println("encoding findteacherPassword: ${teacher.password}")
+        println("encoding teacherPassword: ${encodedPassword}")
         validateSamePassword(teacher.password, encodedPassword)
     }
 
