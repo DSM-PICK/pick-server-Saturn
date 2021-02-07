@@ -5,6 +5,8 @@ import com.dsm.pick.domain.converter.CategoryConverter
 import java.sql.Timestamp
 import javax.persistence.*
 
+@Entity
+@Table(name = "notice")
 class Notice(
 
     @Id

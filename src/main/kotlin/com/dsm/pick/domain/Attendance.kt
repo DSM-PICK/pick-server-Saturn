@@ -6,6 +6,8 @@ import com.dsm.pick.domain.attribute.State
 import com.dsm.pick.domain.converter.StateConverter
 import javax.persistence.*
 
+@Entity
+@Table(name = "attendance")
 class Attendance(
 
     @Id
