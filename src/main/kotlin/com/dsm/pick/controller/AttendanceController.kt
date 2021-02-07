@@ -6,10 +6,7 @@ import com.dsm.pick.domain.converter.attribute.Floor
 import com.dsm.pick.domain.converter.attribute.Schedule
 import com.dsm.pick.service.AttendanceService
 import com.dsm.pick.service.AuthService
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestHeader
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 class AttendanceController(
@@ -36,5 +33,12 @@ class AttendanceController(
     ): AttendanceResponse {
         authService.validateToken(token)
         return attendanceService.showAttendance(schedule, floor, priority)
+    }
+
+    @PatchMapping("/student-state")
+    fun changeAttendance(
+        @RequestHeader("Authorization") token: String,
+    ) {
+        authService.validateToken(token)
     }
 }
