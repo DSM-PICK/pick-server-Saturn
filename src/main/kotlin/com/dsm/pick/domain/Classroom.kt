@@ -1,5 +1,7 @@
 package com.dsm.pick.domain
 
+import com.dsm.pick.domain.attribute.Floor
+import com.dsm.pick.domain.converter.FloorConverter
 import javax.persistence.*
 import javax.validation.constraints.Min
 import javax.validation.constraints.NotBlank
@@ -14,8 +16,9 @@ class Classroom(
     val name: String,
 
     @Column(name = "floor")
+    @Convert(converter = FloorConverter::class)
     @NotBlank
-    val floor: String,
+    val floor: Floor,
 
     @Column(name = "priority")
     @Min(0)
