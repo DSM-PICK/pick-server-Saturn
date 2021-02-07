@@ -1,5 +1,6 @@
 package com.dsm.pick.configuration
 
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import springfox.documentation.builders.PathSelectors
@@ -9,7 +10,10 @@ import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spring.web.plugins.Docket
 
 @Configuration
-class SwaggerConfiguration {
+class SwaggerConfiguration(
+    @Value("\${SERVER_HOST:localhost:8889}")
+    val host: String
+) {
 
     @Bean
     fun api(): Docket {
@@ -18,6 +22,7 @@ class SwaggerConfiguration {
             .consumes(getConsumeContentTypes())
             .produces(getProduceContentTypes())
             .apiInfo(apiInfo())
+            .host(host)
             .select()
             .apis(RequestHandlerSelectors.basePackage("com.dsm.pick.controller"))
             .paths(PathSelectors.any())
