@@ -1,4 +1,4 @@
-package com.dsm.pick.domain.converter.attribute
+package com.dsm.pick.domain.attribute
 
 enum class Period(val value: Int) {
     ONE(1),

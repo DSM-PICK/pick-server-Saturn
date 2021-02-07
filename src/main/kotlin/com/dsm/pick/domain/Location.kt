@@ -1,7 +1,7 @@
 package com.dsm.pick.domain
 
 import com.dsm.pick.domain.converter.FloorConverter
-import com.dsm.pick.domain.converter.attribute.Floor
+import com.dsm.pick.domain.attribute.Floor
 import javax.persistence.*
 import javax.validation.constraints.NotBlank
 

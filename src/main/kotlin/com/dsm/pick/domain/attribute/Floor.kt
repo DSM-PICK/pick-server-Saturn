@@ -1,4 +1,4 @@
-package com.dsm.pick.domain.converter.attribute
+package com.dsm.pick.domain.attribute
 
 enum class Floor(val value: String) {
     ONE("1"),

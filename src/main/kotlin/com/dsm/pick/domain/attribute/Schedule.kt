@@ -1,4 +1,4 @@
-package com.dsm.pick.domain.converter.attribute
+package com.dsm.pick.domain.attribute
 
 enum class Schedule(val value: String) {
     CLUB("club"),

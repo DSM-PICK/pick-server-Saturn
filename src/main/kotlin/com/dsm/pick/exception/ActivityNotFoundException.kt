@@ -8,6 +8,6 @@ class ActivityNotFoundException(
     date: LocalDate,
 ) : CommonException(
     code = "ACTIVITY_NOT_FOUND",
-    message = "오늘의 일정을 찾을 수 없습니다. [date = $date]",
+    message = "${date}의 일정을 찾을 수 없습니다.",
     status = HttpStatus.NOT_FOUND,
 )

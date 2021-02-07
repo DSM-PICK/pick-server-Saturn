@@ -4,21 +4,25 @@ import com.dsm.pick.controller.response.AttendanceNavigationResponse
 import com.dsm.pick.controller.response.AttendanceNavigationResponse.LocationInformation
 import com.dsm.pick.controller.response.AttendanceResponse
 import com.dsm.pick.controller.response.AttendanceResponse.StudentState
-import com.dsm.pick.controller.response.AttendanceResponse.StudentState.State
 import com.dsm.pick.controller.response.AttendanceResponse.StudentState.Memo
-import com.dsm.pick.domain.converter.attribute.Floor
-import com.dsm.pick.domain.converter.attribute.Period
-import com.dsm.pick.domain.converter.attribute.Schedule
+import com.dsm.pick.domain.Attendance
+import com.dsm.pick.domain.attribute.Floor
+import com.dsm.pick.domain.attribute.Period
+import com.dsm.pick.domain.attribute.Schedule
+import com.dsm.pick.domain.attribute.State
 import com.dsm.pick.exception.ActivityNotFoundException
+import com.dsm.pick.exception.AttendanceNotFoundException
 import com.dsm.pick.exception.NonExistScheduleException
 import com.dsm.pick.repository.ActivityRepository
 import com.dsm.pick.repository.AttendanceRepository
 import com.dsm.pick.repository.ClassroomRepository
 import com.dsm.pick.repository.ClubRepository
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
 
 @Service
+@Transactional
 class AttendanceService(
     private val timeService: TimeService,
     private val activityRepository: ActivityRepository,
@@ -50,6 +54,32 @@ class AttendanceService(
                 Schedule.AFTER_SCHOOL -> throw NonExistScheduleException(schedule.value)
             },
         )
+
+    fun updateAttendance(
+        studentNumber: String,
+        period: Period,
+        attendanceState: State,
+        attendanceDate: LocalDate = LocalDate.now(),
+    ) {
+        findAttendance(
+            studentNumber = studentNumber,
+            period = period,
+            attendanceDate = attendanceDate,
+        ).state = attendanceState
+    }
+
+    fun updateMemo(
+        studentNumber: String,
+        period: Period,
+        attendanceMemo: String,
+        attendanceDate: LocalDate = LocalDate.now(),
+    ) {
+        findAttendance(
+            studentNumber = studentNumber,
+            period = period,
+            attendanceDate = attendanceDate,
+        ).memo = attendanceMemo
+    }
 
     private fun findTeacherNameBySchedule(
         schedule: Schedule,
@@ -85,17 +115,17 @@ class AttendanceService(
                 StudentState(
                     studentNumber = student.number,
                     studentName = student.name,
-                    state = State(
-                        seven = attendance.firstOrNull { it.period == Period.SEVEN }?.state,
-                        eight = attendance.firstOrNull { it.period == Period.EIGHT }?.state,
-                        nine = attendance.firstOrNull { it.period == Period.NINE }?.state,
-                        ten = attendance.firstOrNull { it.period == Period.TEN }?.state,
+                    state = StudentState.State(
+                        seven = attendance.singleOrNull { it.period == Period.SEVEN }?.state?.value,
+                        eight = attendance.singleOrNull { it.period == Period.EIGHT }?.state?.value,
+                        nine = attendance.singleOrNull { it.period == Period.NINE }?.state?.value,
+                        ten = attendance.singleOrNull { it.period == Period.TEN }?.state?.value,
                     ),
                     memo = Memo(
-                        seven = attendance.firstOrNull { it.period == Period.SEVEN }?.memo,
-                        eight = attendance.firstOrNull { it.period == Period.EIGHT }?.memo,
-                        nine = attendance.firstOrNull { it.period == Period.NINE }?.memo,
-                        ten = attendance.firstOrNull { it.period == Period.TEN }?.memo,
+                        seven = attendance.singleOrNull { it.period == Period.SEVEN }?.memo,
+                        eight = attendance.singleOrNull { it.period == Period.EIGHT }?.memo,
+                        nine = attendance.singleOrNull { it.period == Period.NINE }?.memo,
+                        ten = attendance.singleOrNull { it.period == Period.TEN }?.memo,
                     ),
                 )
             }
@@ -105,4 +135,14 @@ class AttendanceService(
 
     private fun findClassroom(floor: Floor, priority: Int) =
         classroomRepository.findByFloorAndPriority(floor, priority)
+
+    private fun findAttendance(
+        studentNumber: String,
+        period: Period,
+        attendanceDate: LocalDate,
+    ) = attendanceRepository.findByStudentNumberAndPeriodAndActivityDate(
+            studentNumber = studentNumber,
+            period = period,
+            attendanceDate = attendanceDate,
+        )?: throw AttendanceNotFoundException(studentNumber, period, attendanceDate)
 }

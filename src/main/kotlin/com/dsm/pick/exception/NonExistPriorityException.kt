@@ -1,7 +1,7 @@
 package com.dsm.pick.exception
 
-import com.dsm.pick.domain.converter.attribute.Floor
-import com.dsm.pick.domain.converter.attribute.Schedule
+import com.dsm.pick.domain.attribute.Floor
+import com.dsm.pick.domain.attribute.Schedule
 import com.dsm.pick.exception.handler.CommonException
 import org.springframework.http.HttpStatus
 

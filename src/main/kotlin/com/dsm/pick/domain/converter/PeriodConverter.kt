@@ -1,6 +1,6 @@
 package com.dsm.pick.domain.converter
 
-import com.dsm.pick.domain.converter.attribute.Period
+import com.dsm.pick.domain.attribute.Period
 import com.dsm.pick.exception.NonExistPeriodException
 import org.springframework.core.convert.converter.Converter
 import javax.persistence.AttributeConverter

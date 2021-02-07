@@ -1,6 +1,6 @@
 package com.dsm.pick.domain
 
-import com.dsm.pick.domain.converter.attribute.Schedule
+import com.dsm.pick.domain.attribute.Schedule
 import com.dsm.pick.domain.converter.ScheduleConverter
 import java.time.LocalDate
 import javax.persistence.*

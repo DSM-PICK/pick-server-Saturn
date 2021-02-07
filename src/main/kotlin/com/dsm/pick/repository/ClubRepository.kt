@@ -1,7 +1,7 @@
 package com.dsm.pick.repository
 
 import com.dsm.pick.domain.Club
-import com.dsm.pick.domain.converter.attribute.Floor
+import com.dsm.pick.domain.attribute.Floor
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface ClubRepository : JpaRepository<Club, String> {

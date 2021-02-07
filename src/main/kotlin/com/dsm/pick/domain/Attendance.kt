@@ -1,7 +1,9 @@
 package com.dsm.pick.domain
 
 import com.dsm.pick.domain.converter.PeriodConverter
-import com.dsm.pick.domain.converter.attribute.Period
+import com.dsm.pick.domain.attribute.Period
+import com.dsm.pick.domain.attribute.State
+import com.dsm.pick.domain.converter.StateConverter
 import javax.persistence.*
 
 class Attendance(
@@ -28,8 +30,9 @@ class Attendance(
     val teacher: Teacher,
 
     @Column(name = "state")
-    val state: String,
+    @Convert(converter = StateConverter::class)
+    var state: State,
 
     @Column(name = "memo")
-    val memo: String,
+    var memo: String,
 )
