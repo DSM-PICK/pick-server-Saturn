@@ -4,6 +4,7 @@ import com.dsm.pick.domains.domain.Club;
 import com.dsm.pick.domains.domain.SchoolClass;
 import com.dsm.pick.domains.repository.ActivityRepository;
 import com.dsm.pick.domains.service.AttendanceService;
+import com.dsm.pick.domains.service.AuthService;
 import com.dsm.pick.domains.service.JwtService;
 import com.dsm.pick.domains.service.ServerTimeService;
 import com.dsm.pick.utils.exception.*;
@@ -26,6 +27,7 @@ public class AttendanceController {
     private final static Logger log = LoggerFactory.getLogger(AttendanceController.class);
 
     private final AttendanceService attendanceService;
+    private final AuthService authService;
     private final ActivityRepository activityRepository;
     private final ServerTimeService serverTimeService;
     private final JwtService jwtService;
@@ -155,7 +157,7 @@ public class AttendanceController {
             return new AttendanceListResponseForm(club.getName(), club.getHead(), attendanceList);
         } else if(schedule.equals("self-study")) {
             SchoolClass schoolClass = attendanceService.getClassName(floor, priority);
-            return new AttendanceListResponseForm(schoolClass.getName(), null, attendanceList);
+            return new AttendanceListResponseForm(schoolClass.getName(), authService.getTeacherName(schoolClass.getManager()), attendanceList);
         } else {
             throw new NotClubAndSelfStudyException();
         }

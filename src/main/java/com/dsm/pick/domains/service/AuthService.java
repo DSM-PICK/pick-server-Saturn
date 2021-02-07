@@ -60,6 +60,12 @@ public class AuthService {
                 .getName();
     }
 
+    public String getTeacherNameOrNull(String teacherId) {
+        return teacherRepository.findById(teacherId)
+                .orElse(new Teacher(null, null, null, null))
+                .getName();
+    }
+
     public boolean checkId(String id) {
         if(id == null)
             throw new IdOrPasswordMismatchException();
