@@ -7,10 +7,10 @@ import javax.persistence.AttributeConverter
 
 class FloorConverter : AttributeConverter<Floor, Int>, Converter<String, Floor> {
 
-    override fun convertToDatabaseColumn(floor: Floor) = floor.value.toInt()
+    override fun convertToDatabaseColumn(floor: Floor) = floor.value
 
     override fun convertToEntityAttribute(floor: Int) =
-        Floor.values().singleOrNull { it.value.toInt() == floor }?: throw NonExistFloorException(floor)
+        Floor.values().singleOrNull { it.value == floor }?: throw NonExistFloorException(floor)
 
     override fun convert(request: String) = convertToEntityAttribute(request.toInt())
 }
