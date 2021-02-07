@@ -12,8 +12,3 @@ server:
   port: 8889
   servlet:
     context-path: /saturn
-logging:
-  level:
-    root: info
-  file:
-    path: logs
