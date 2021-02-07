@@ -40,9 +40,9 @@ class AttendanceService(
             locations = createLocationInformation(schedule, floor),
         )
 
-    fun showAttendance(schedule: Schedule, floor: Floor, priority: Int) =
+    fun showAttendance(schedule: Schedule, floor: Floor, priority: Int, date: LocalDate = LocalDate.now()) =
         AttendanceResponse(
-            attendances = createAttendance(schedule, floor, priority)?: listOf(),
+            attendances = createAttendance(schedule, floor, priority, date)?: listOf(),
             clubHead = when (schedule) {
                 Schedule.CLUB -> findClub(floor, priority)?.head
                 Schedule.SELF_STUDY -> null
@@ -107,9 +107,9 @@ class AttendanceService(
             Schedule.SELF_STUDY, Schedule.AFTER_SCHOOL -> classroomRepository.findByFloor(floor).sortedBy { it.priority }.filter { it.students.isNotEmpty() }.map { LocationInformation(it.name, it.name, "none", it.priority) }
         }
 
-    private fun createAttendance(schedule: Schedule, floor: Floor, priority: Int): List<StudentState>? {
-        val attendances = attendanceRepository.findByActivityScheduleAndStudentClubLocationFloorAndStudentClubLocationPriority(
-                schedule, floor, priority)
+    private fun createAttendance(schedule: Schedule, floor: Floor, priority: Int, date: LocalDate = LocalDate.now()): List<StudentState>? {
+        val attendances = attendanceRepository.findByActivityScheduleAndStudentClubLocationFloorAndStudentClubLocationPriorityAndActivityDate(
+                schedule, floor, priority, date)
             ?.groupBy { it.student }
         attendances?.forEach { (a, b) ->
             println("-------------------------------")

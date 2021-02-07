@@ -9,6 +9,6 @@ import org.springframework.data.jpa.repository.JpaRepository
 import java.time.LocalDate
 
 interface AttendanceRepository : JpaRepository<Attendance, Int> {
-    fun findByActivityScheduleAndStudentClubLocationFloorAndStudentClubLocationPriority(schedule: Schedule, floor: Floor, priority: Int): List<Attendance>?
+    fun findByActivityScheduleAndStudentClubLocationFloorAndStudentClubLocationPriorityAndActivityDate(schedule: Schedule, floor: Floor, priority: Int, attendanceDate: LocalDate): List<Attendance>?
     fun findByStudentNumberAndPeriodAndActivityDate(studentNumber: String, period: Period, attendanceDate: LocalDate): Attendance?
 }
