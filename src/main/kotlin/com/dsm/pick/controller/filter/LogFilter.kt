@@ -13,5 +13,6 @@ class LogFilter : Filter {
     override fun doFilter(request: ServletRequest?, response: ServletResponse?, chain: FilterChain?) {
         val httpServletRequest = request as HttpServletRequest
         logger.info("[${httpServletRequest.method}] ${httpServletRequest.requestURI}")
+        chain?.doFilter(request, response)
     }
 }
