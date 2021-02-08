@@ -112,11 +112,11 @@ class AttendanceService(
     ): List<StudentState>? =
             attendanceRepository.findByActivityScheduleAndStudentClubLocationFloorAndStudentClubLocationPriorityAndActivityDate(
                 schedule, floor, priority, attendanceDate)
-                ?.groupBy { it.student }
-                ?.map { (student, attendance) ->
+                ?.groupBy { it.student.number }
+                ?.map { (studentNumber, attendance) ->
                     StudentState(
-                        studentNumber = student.number,
-                        studentName = student.name,
+                        studentNumber = studentNumber,
+                        studentName = attendance.first().student.name,
                         state = StudentState.State(
                             seven = attendance.singleOrNull { it.period == Period.SEVEN }?.state?.value,
                             eight = attendance.singleOrNull { it.period == Period.EIGHT }?.state?.value,
