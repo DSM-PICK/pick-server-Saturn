@@ -10,9 +10,7 @@ import com.dsm.pick.domain.attribute.Floor
 import com.dsm.pick.domain.attribute.Period
 import com.dsm.pick.domain.attribute.Schedule
 import com.dsm.pick.domain.attribute.State
-import com.dsm.pick.exception.ActivityNotFoundException
-import com.dsm.pick.exception.AttendanceNotFoundException
-import com.dsm.pick.exception.NonExistScheduleException
+import com.dsm.pick.exception.*
 import com.dsm.pick.repository.ActivityRepository
 import com.dsm.pick.repository.AttendanceRepository
 import com.dsm.pick.repository.ClassroomRepository
@@ -44,13 +42,13 @@ class AttendanceService(
         AttendanceResponse(
             attendances = createAttendance(schedule, floor, priority, date)?: listOf(),
             clubHead = when (schedule) {
-                Schedule.CLUB -> findClub(floor, priority)?.head
+                Schedule.CLUB -> findClub(floor, priority).head
                 Schedule.SELF_STUDY -> null
                 Schedule.AFTER_SCHOOL -> throw NonExistScheduleException(schedule.value)
             },
             name = when (schedule) {
-                Schedule.CLUB -> findClub(floor, priority)!!.name
-                Schedule.SELF_STUDY -> findClassroom(floor, priority)!!.name
+                Schedule.CLUB -> findClub(floor, priority).name
+                Schedule.SELF_STUDY -> findClassroom(floor, priority).name
                 Schedule.AFTER_SCHOOL -> throw NonExistScheduleException(schedule.value)
             },
         )
@@ -136,10 +134,10 @@ class AttendanceService(
             }
 
     private fun findClub(floor: Floor, priority: Int) =
-        clubRepository.findByLocationFloorAndLocationPriority(floor, priority)
+        clubRepository.findByLocationFloorAndLocationPriority(floor, priority)?: throw ClubNotFoundException(floor, priority)
 
     private fun findClassroom(floor: Floor, priority: Int) =
-        classroomRepository.findByFloorAndPriority(floor, priority)
+        classroomRepository.findByFloorAndPriority(floor, priority)?: throw ClassroomNotFoundException(floor, priority)
 
     private fun findAttendance(
         studentNumber: String,
