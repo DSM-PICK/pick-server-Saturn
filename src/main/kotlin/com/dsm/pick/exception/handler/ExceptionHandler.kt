@@ -20,6 +20,7 @@ class ExceptionHandler {
         )
 
     @ExceptionHandler(MethodArgumentTypeMismatchException::class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     fun notValidateExceptionHandler(e: MethodArgumentTypeMismatchException) =
         ExceptionResponse(
             code = "INVALID_REQUEST_BODY",
