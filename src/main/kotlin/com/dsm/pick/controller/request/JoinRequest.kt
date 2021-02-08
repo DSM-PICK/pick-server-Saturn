@@ -3,7 +3,7 @@ package com.dsm.pick.controller.request
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.Pattern
 
-class JoinRequest(
+data class JoinRequest(
     @get:NotBlank(message = "허용하지 않는 형식 <NULL, EMPTY, BLANK>")
     @get:Pattern(regexp = "^[a-zA-Z0-9|-]{4,16}$", message = "정규표현식 = ^[a-zA-Z0-9|-]{4,16}$")
     val id: String,

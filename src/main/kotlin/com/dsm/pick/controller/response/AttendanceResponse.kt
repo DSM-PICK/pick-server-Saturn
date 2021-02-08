@@ -2,7 +2,7 @@ package com.dsm.pick.controller.response
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
-class AttendanceResponse(
+data class AttendanceResponse(
     val attendances: List<StudentState>,
     @get:JsonProperty("head")
     val clubHead: String?,

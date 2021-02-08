@@ -5,7 +5,7 @@ import com.dsm.pick.domain.attribute.State
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
 
-class StudentStateRequest(
+data class StudentStateRequest(
     @NotNull
     val period: Period,
     @NotBlank

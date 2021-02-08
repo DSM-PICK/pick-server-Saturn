@@ -1,6 +1,6 @@
 package com.dsm.pick.controller.response
 
-class LoginResponse(
+data class LoginResponse(
     val accessToken: String,
     val refreshToken: String,
     val teacherName: String,

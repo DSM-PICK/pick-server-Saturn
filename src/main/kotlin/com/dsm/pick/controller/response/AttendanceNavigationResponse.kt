@@ -1,6 +1,6 @@
 package com.dsm.pick.controller.response
 
-class AttendanceNavigationResponse(
+data class AttendanceNavigationResponse(
     val date: String,
     val dayOfWeek: String,
     val teacherName: String?,
