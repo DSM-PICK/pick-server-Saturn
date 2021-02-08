@@ -26,4 +26,9 @@ class Teacher(
     @Column(name = "office")
     @NotBlank
     val office: String,
-)
+) {
+
+    override fun toString(): String {
+        return "Teacher(id='$id', password='$password', name='$name', office='$office')"
+    }
+}

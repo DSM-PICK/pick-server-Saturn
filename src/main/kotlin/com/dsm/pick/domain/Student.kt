@@ -53,4 +53,8 @@ class Student(
         result = 31 * result + isTuesdaySelfStudy.hashCode()
         return result
     }
+
+    override fun toString(): String {
+        return "Student(number='$number', name='$name', club=$club, classroom=$classroom, isMondaySelfStudy=$isMondaySelfStudy, isTuesdaySelfStudy=$isTuesdaySelfStudy)"
+    }
 }

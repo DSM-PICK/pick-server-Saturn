@@ -118,7 +118,16 @@ class AttendanceService(
             attendanceRepository.findByActivityScheduleAndStudentClubLocationFloorAndStudentClubLocationPriorityAndActivityDate(
                 schedule, floor, priority, attendanceDate)
                 ?.groupBy { it.student }
-                ?.map { (student, attendance) ->
+
+        a?.forEach {
+            println(it.key.name)
+            it.value.forEach { t ->
+                println(t)
+            }
+        }
+
+        println("------------------------------------------------------------------------")
+                val b = a?.map { (student, attendance) ->
                     StudentState(
                         studentNumber = student.number,
                         studentName = student.name,
@@ -136,8 +145,10 @@ class AttendanceService(
                         ),
                     )
                 }
-        println(a)
-        return a
+        b?.forEach {
+            println(it)
+        }
+        return b
     }
 
     private fun findClub(floor: Floor, priority: Int) =

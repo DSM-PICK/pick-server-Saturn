@@ -30,4 +30,8 @@ class Classroom(
 
     @OneToMany(mappedBy = "classroom")
     val students: List<Student> = listOf()
+
+    override fun toString(): String {
+        return "Classroom(name='$name', floor=$floor, priority=$priority, manager=$manager, students=$students)"
+    }
 }

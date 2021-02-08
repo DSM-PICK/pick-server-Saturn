@@ -27,4 +27,9 @@ class Notice(
 
     @Column(name = "created_at")
     val date: Timestamp,
-)
+) {
+
+    override fun toString(): String {
+        return "Notice(id=$id, content='$content', admin=$admin, category=$category, date=$date)"
+    }
+}

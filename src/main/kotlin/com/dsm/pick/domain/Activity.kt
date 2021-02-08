@@ -32,4 +32,9 @@ class Activity(
     @ManyToOne
     @JoinColumn(name = "forth_floor_teacher_id", referencedColumnName = "id")
     val forthFloorTeacher: Teacher,
-)
+) {
+
+    override fun toString(): String {
+        return "Activity(date=$date, schedule=$schedule, secondFloorTeacher=$secondFloorTeacher, thirdFloorTeacher=$thirdFloorTeacher, forthFloorTeacher=$forthFloorTeacher)"
+    }
+}
