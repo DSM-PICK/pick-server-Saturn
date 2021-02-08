@@ -11,7 +11,9 @@ class FilterConfiguration {
     @Bean
     fun logFilterRegistration(): FilterRegistrationBean<LogFilter> {
         val filter = FilterRegistrationBean(LogFilter())
-        filter.addUrlPatterns("/*")
+        filter.addUrlPatterns("/auth/*")
+        filter.addUrlPatterns("/attendance/*")
+        filter.addUrlPatterns("/main/*")
         return filter
     }
 }
