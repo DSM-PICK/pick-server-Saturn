@@ -109,35 +109,29 @@ class AttendanceService(
         floor: Floor,
         priority: Int,
         attendanceDate: LocalDate = LocalDate.now()
-    ): List<StudentState>? {
-        val a =
-            attendanceRepository.findByActivityScheduleAndStudentClubLocationFloorAndStudentClubLocationPriorityAndActivityDate(
-                schedule, floor, priority, attendanceDate)
-        println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
-        a?.forEach {
-            println(it)
+    ) = when (schedule) {
+        Schedule.CLUB -> attendanceRepository.findByStudentClubLocationFloorAndStudentClubLocationPriorityAndActivityDate(floor, priority, attendanceDate)
+        Schedule.SELF_STUDY -> attendanceRepository.findByStudentClassroomFloorAndStudentClassroomPriorityAndActivityDate(floor, priority, attendanceDate)
+        Schedule.AFTER_SCHOOL -> throw NonExistScheduleException(schedule.value)
+    }?.groupBy { it.student.number }
+        ?.map { (studentNumber, attendance) ->
+            StudentState(
+                studentNumber = studentNumber,
+                studentName = attendance.first().student.name,
+                state = StudentState.State(
+                    seven = attendance.singleOrNull { it.period == Period.SEVEN }?.state?.value,
+                    eight = attendance.singleOrNull { it.period == Period.EIGHT }?.state?.value,
+                    nine = attendance.singleOrNull { it.period == Period.NINE }?.state?.value,
+                    ten = attendance.singleOrNull { it.period == Period.TEN }?.state?.value,
+                ),
+                memo = Memo(
+                    seven = attendance.singleOrNull { it.period == Period.SEVEN }?.memo,
+                    eight = attendance.singleOrNull { it.period == Period.EIGHT }?.memo,
+                    nine = attendance.singleOrNull { it.period == Period.NINE }?.memo,
+                    ten = attendance.singleOrNull { it.period == Period.TEN }?.memo,
+                ),
+            )
         }
-
-                return a?.groupBy { it.student.number }
-                ?.map { (studentNumber, attendance) ->
-                    StudentState(
-                        studentNumber = studentNumber,
-                        studentName = attendance.first().student.name,
-                        state = StudentState.State(
-                            seven = attendance.singleOrNull { it.period == Period.SEVEN }?.state?.value,
-                            eight = attendance.singleOrNull { it.period == Period.EIGHT }?.state?.value,
-                            nine = attendance.singleOrNull { it.period == Period.NINE }?.state?.value,
-                            ten = attendance.singleOrNull { it.period == Period.TEN }?.state?.value,
-                        ),
-                        memo = Memo(
-                            seven = attendance.singleOrNull { it.period == Period.SEVEN }?.memo,
-                            eight = attendance.singleOrNull { it.period == Period.EIGHT }?.memo,
-                            nine = attendance.singleOrNull { it.period == Period.NINE }?.memo,
-                            ten = attendance.singleOrNull { it.period == Period.TEN }?.memo,
-                        ),
-                    )
-                }
-    }
 
     private fun findClub(floor: Floor, priority: Int) =
         clubRepository.findByLocationFloorAndLocationPriority(floor, priority)?: throw ClubNotFoundException(floor.value, priority)
