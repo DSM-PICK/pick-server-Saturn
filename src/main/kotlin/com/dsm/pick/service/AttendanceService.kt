@@ -109,25 +109,11 @@ class AttendanceService(
         floor: Floor,
         priority: Int,
         attendanceDate: LocalDate = LocalDate.now()
-    ): List<StudentState>? {
-        println("schedule: ${schedule.value}")
-        println("floor: ${floor.value}")
-        println("priority $priority")
-        println("attendanceDate: $attendanceDate")
-        val a =
+    ): List<StudentState>? =
             attendanceRepository.findByActivityScheduleAndStudentClubLocationFloorAndStudentClubLocationPriorityAndActivityDate(
                 schedule, floor, priority, attendanceDate)
                 ?.groupBy { it.student }
-
-        a?.forEach {
-            println(it.key.name)
-            it.value.forEach { t ->
-                println(t)
-            }
-        }
-
-        println("------------------------------------------------------------------------")
-                val b = a?.map { (student, attendance) ->
+                ?.map { (student, attendance) ->
                     StudentState(
                         studentNumber = student.number,
                         studentName = student.name,
@@ -145,11 +131,6 @@ class AttendanceService(
                         ),
                     )
                 }
-        b?.forEach {
-            println(it)
-        }
-        return b
-    }
 
     private fun findClub(floor: Floor, priority: Int) =
         clubRepository.findByLocationFloorAndLocationPriority(floor, priority)?: throw ClubNotFoundException(floor.value, priority)

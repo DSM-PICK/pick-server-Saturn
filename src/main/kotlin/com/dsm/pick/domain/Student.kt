@@ -36,10 +36,6 @@ class Student(
 
         if (number != other.number) return false
         if (name != other.name) return false
-        if (club != other.club) return false
-        if (classroom != other.classroom) return false
-        if (isMondaySelfStudy != other.isMondaySelfStudy) return false
-        if (isTuesdaySelfStudy != other.isTuesdaySelfStudy) return false
 
         return true
     }
@@ -47,10 +43,6 @@ class Student(
     override fun hashCode(): Int {
         var result = number.hashCode()
         result = 31 * result + name.hashCode()
-        result = 31 * result + club.hashCode()
-        result = 31 * result + classroom.hashCode()
-        result = 31 * result + isMondaySelfStudy.hashCode()
-        result = 31 * result + isTuesdaySelfStudy.hashCode()
         return result
     }
 
