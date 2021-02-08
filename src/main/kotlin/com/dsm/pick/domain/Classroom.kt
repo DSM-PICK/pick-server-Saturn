@@ -26,4 +26,8 @@ class Classroom(
 
     @Column(name = "manager")
     val manager: String?,
-)
+) {
+
+    @OneToMany(mappedBy = "classroom")
+    val students: List<Student> = listOf()
+}

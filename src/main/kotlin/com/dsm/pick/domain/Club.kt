@@ -21,4 +21,8 @@ class Club(
 
     @Column(name = "club_head")
     val head: String?,
-)
+) {
+
+    @OneToMany(mappedBy = "club")
+    val students: List<Student> = listOf()
+}
