@@ -21,12 +21,4 @@ class Club(
 
     @Column(name = "club_head")
     val head: String?,
-) {
-
-    @OneToMany(mappedBy = "club")
-    val students: List<Student> = listOf()
-
-    override fun toString(): String {
-        return "Club(name='$name', location=$location, teacher=$teacher, head=$head, students=$students)"
-    }
-}
+)

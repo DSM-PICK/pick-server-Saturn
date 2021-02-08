@@ -20,9 +20,4 @@ class Location(
 
     @Column(name = "priority")
     val priority: Int,
-) {
-
-    override fun toString(): String {
-        return "Location(location='$location', floor=$floor, priority=$priority)"
-    }
-}
+)
