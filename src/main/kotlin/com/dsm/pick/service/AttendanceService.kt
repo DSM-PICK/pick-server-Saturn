@@ -113,6 +113,7 @@ class AttendanceService(
         val a =
             attendanceRepository.findByActivityScheduleAndStudentClubLocationFloorAndStudentClubLocationPriorityAndActivityDate(
                 schedule, floor, priority, attendanceDate)
+        println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
         a?.forEach {
             println(it)
         }
