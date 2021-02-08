@@ -113,11 +113,11 @@ class AttendanceService(
         Schedule.CLUB -> attendanceRepository.findByStudentClubLocationFloorAndStudentClubLocationPriorityAndActivityDate(floor, priority, attendanceDate)
         Schedule.SELF_STUDY -> attendanceRepository.findByStudentClassroomFloorAndStudentClassroomPriorityAndActivityDate(floor, priority, attendanceDate)
         Schedule.AFTER_SCHOOL -> throw NonExistScheduleException(schedule.value)
-    }?.groupBy { it.student.number }
-        ?.map { (studentNumber, attendance) ->
+    }?.groupBy { it.student }
+        ?.map { (student, attendance) ->
             StudentState(
-                studentNumber = studentNumber,
-                studentName = attendance.first().student.name,
+                studentNumber = student.number,
+                studentName = student.name,
                 state = StudentState.State(
                     seven = attendance.singleOrNull { it.period == Period.SEVEN }?.state?.value,
                     eight = attendance.singleOrNull { it.period == Period.EIGHT }?.state?.value,
