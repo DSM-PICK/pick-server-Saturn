@@ -1,11 +1,10 @@
 package com.dsm.pick.exception
 
-import com.dsm.pick.domain.attribute.Floor
 import com.dsm.pick.exception.handler.CommonException
 import org.springframework.http.HttpStatus
 
 class ClassroomNotFoundException(
-    floor: Floor,
+    floor: Int,
     priority: Int,
 ) : CommonException(
     code = "CLASS_NOT_FOUND",

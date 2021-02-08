@@ -5,7 +5,6 @@ import com.dsm.pick.controller.response.AttendanceNavigationResponse.LocationInf
 import com.dsm.pick.controller.response.AttendanceResponse
 import com.dsm.pick.controller.response.AttendanceResponse.StudentState
 import com.dsm.pick.controller.response.AttendanceResponse.StudentState.Memo
-import com.dsm.pick.domain.Attendance
 import com.dsm.pick.domain.attribute.Floor
 import com.dsm.pick.domain.attribute.Period
 import com.dsm.pick.domain.attribute.Schedule
@@ -110,34 +109,42 @@ class AttendanceService(
         floor: Floor,
         priority: Int,
         attendanceDate: LocalDate = LocalDate.now()
-    ): List<StudentState>? =
-        attendanceRepository.findByActivityScheduleAndStudentClubLocationFloorAndStudentClubLocationPriorityAndActivityDate(
-            schedule, floor, priority, attendanceDate)
-            ?.groupBy { it.student }
-            ?.map { (student, attendance) ->
-                StudentState(
-                    studentNumber = student.number,
-                    studentName = student.name,
-                    state = StudentState.State(
-                        seven = attendance.singleOrNull { it.period == Period.SEVEN }?.state?.value,
-                        eight = attendance.singleOrNull { it.period == Period.EIGHT }?.state?.value,
-                        nine = attendance.singleOrNull { it.period == Period.NINE }?.state?.value,
-                        ten = attendance.singleOrNull { it.period == Period.TEN }?.state?.value,
-                    ),
-                    memo = Memo(
-                        seven = attendance.singleOrNull { it.period == Period.SEVEN }?.memo,
-                        eight = attendance.singleOrNull { it.period == Period.EIGHT }?.memo,
-                        nine = attendance.singleOrNull { it.period == Period.NINE }?.memo,
-                        ten = attendance.singleOrNull { it.period == Period.TEN }?.memo,
-                    ),
-                )
-            }
+    ): List<StudentState>? {
+        println("schedule: ${schedule.value}")
+        println("floor: ${floor.value}")
+        println("priority $priority")
+        println("attendanceDate: $attendanceDate")
+        val a =
+            attendanceRepository.findByActivityScheduleAndStudentClubLocationFloorAndStudentClubLocationPriorityAndActivityDate(
+                schedule, floor, priority, attendanceDate)
+                ?.groupBy { it.student }
+                ?.map { (student, attendance) ->
+                    StudentState(
+                        studentNumber = student.number,
+                        studentName = student.name,
+                        state = StudentState.State(
+                            seven = attendance.singleOrNull { it.period == Period.SEVEN }?.state?.value,
+                            eight = attendance.singleOrNull { it.period == Period.EIGHT }?.state?.value,
+                            nine = attendance.singleOrNull { it.period == Period.NINE }?.state?.value,
+                            ten = attendance.singleOrNull { it.period == Period.TEN }?.state?.value,
+                        ),
+                        memo = Memo(
+                            seven = attendance.singleOrNull { it.period == Period.SEVEN }?.memo,
+                            eight = attendance.singleOrNull { it.period == Period.EIGHT }?.memo,
+                            nine = attendance.singleOrNull { it.period == Period.NINE }?.memo,
+                            ten = attendance.singleOrNull { it.period == Period.TEN }?.memo,
+                        ),
+                    )
+                }
+        println(a)
+        return a
+    }
 
     private fun findClub(floor: Floor, priority: Int) =
-        clubRepository.findByLocationFloorAndLocationPriority(floor, priority)?: throw ClubNotFoundException(floor, priority)
+        clubRepository.findByLocationFloorAndLocationPriority(floor, priority)?: throw ClubNotFoundException(floor.value, priority)
 
     private fun findClassroom(floor: Floor, priority: Int) =
-        classroomRepository.findByFloorAndPriority(floor, priority)?: throw ClassroomNotFoundException(floor, priority)
+        classroomRepository.findByFloorAndPriority(floor, priority)?: throw ClassroomNotFoundException(floor.value, priority)
 
     private fun findAttendance(
         studentNumber: String,
@@ -147,5 +154,5 @@ class AttendanceService(
             studentNumber = studentNumber,
             period = period,
             attendanceDate = attendanceDate,
-        )?: throw AttendanceNotFoundException(studentNumber, period, attendanceDate)
+        )?: throw AttendanceNotFoundException(studentNumber, period.value, attendanceDate)
 }

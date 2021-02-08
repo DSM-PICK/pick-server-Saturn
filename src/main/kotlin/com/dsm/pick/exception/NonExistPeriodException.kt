@@ -7,6 +7,6 @@ class NonExistPeriodException(
     period: Int,
 ) : CommonException(
     code = "NON_EXIST_PERIOD",
-    message = "허용하지 않는 교실 [period = $period]",
+    message = "허용하지 않는 교실 [period = ${period}]",
     status = HttpStatus.BAD_REQUEST
 )

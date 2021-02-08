@@ -1,12 +1,10 @@
 package com.dsm.pick.exception
 
-import com.dsm.pick.domain.attribute.Floor
 import com.dsm.pick.exception.handler.CommonException
 import org.springframework.http.HttpStatus
-import java.time.LocalDate
 
 class ClubNotFoundException(
-    floor: Floor,
+    floor: Int,
     priority: Int,
 ) : CommonException(
     code = "CLUB_NOT_FOUND",
