@@ -1,6 +1,7 @@
 package com.dsm.pick.service
 
 import com.dsm.pick.controller.response.LoginResponse
+import com.dsm.pick.controller.response.LoginResponse.ManagedClassroom
 import com.dsm.pick.domain.Teacher
 import com.dsm.pick.exception.AccountInformationMismatchException
 import com.dsm.pick.exception.AlreadyExistAccountException
@@ -33,7 +34,15 @@ class AuthService(
             accessToken = createAccessToken(teacherId),
             refreshToken = createRefreshToken(teacherId),
             teacherName = findTeacherById(teacherId).name,
-            managedClassroom = findManagedClassroom(teacherId)?.name,
+            managedClassroom = findManagedClassroom(teacherId)
+                .let {
+                    if (it == null) null
+                    else ManagedClassroom(
+                        name = it.name,
+                        floor = it.floor.value,
+                        priority = it.priority,
+                    )
+                }
         )
     }
 
