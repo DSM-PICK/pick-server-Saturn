@@ -17,4 +17,12 @@ class FilterConfiguration {
         filter.addUrlPatterns("/main/*")
         return filter
     }
+
+    @Bean
+    fun validationFilterRegistration(): FilterRegistrationBean<ValidationFilter> {
+        val filter = FilterRegistrationBean(ValidationFilter())
+        filter.addUrlPatterns("/attendance/*")
+        filter.addUrlPatterns("/main/*")
+        return filter
+    }
 }
