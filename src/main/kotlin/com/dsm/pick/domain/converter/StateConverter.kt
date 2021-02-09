@@ -5,6 +5,7 @@ import com.dsm.pick.exception.NonExistStateException
 import org.springframework.core.convert.converter.Converter
 import javax.persistence.AttributeConverter
 
+@javax.persistence.Converter
 class StateConverter : AttributeConverter<State, String>, Converter<String, State> {
 
     override fun convertToDatabaseColumn(state: State) = state.value

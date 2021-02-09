@@ -5,6 +5,7 @@ import com.dsm.pick.exception.NonExistPeriodException
 import org.springframework.core.convert.converter.Converter
 import javax.persistence.AttributeConverter
 
+@javax.persistence.Converter
 class PeriodConverter : AttributeConverter<Period, Int>, Converter<String, Period> {
 
     override fun convertToDatabaseColumn(period: Period) = period.value

@@ -5,6 +5,7 @@ import com.dsm.pick.exception.NonExistFloorException
 import org.springframework.core.convert.converter.Converter
 import javax.persistence.AttributeConverter
 
+@javax.persistence.Converter
 class FloorConverter : AttributeConverter<Floor, Int>, Converter<String, Floor> {
 
     override fun convertToDatabaseColumn(floor: Floor) = floor.value

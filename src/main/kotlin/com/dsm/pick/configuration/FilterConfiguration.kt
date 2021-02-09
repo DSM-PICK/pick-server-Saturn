@@ -1,6 +1,7 @@
 package com.dsm.pick.configuration
 
 import com.dsm.pick.controller.filter.LogFilter
+import com.dsm.pick.controller.filter.ValidationFilter
 import org.springframework.boot.web.servlet.FilterRegistrationBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

@@ -5,6 +5,7 @@ import com.dsm.pick.exception.NonExistScheduleException
 import org.springframework.core.convert.converter.Converter
 import javax.persistence.AttributeConverter
 
+@javax.persistence.Converter
 class ScheduleConverter : AttributeConverter<Schedule, String>, Converter<String, Schedule> {
 
     override fun convertToDatabaseColumn(schedule: Schedule) = schedule.value
