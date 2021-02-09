@@ -50,7 +50,8 @@ class ExceptionHandler {
 
     @ExceptionHandler(RuntimeException::class)
     fun runtimeExceptionHandler(e: RuntimeException) =
-        if (e is CommonException)
+        if (e is CommonException) {
+            println("400대 에러야")
             ResponseEntity(
                 ExceptionResponse(
                     code = e.code,
@@ -58,7 +59,11 @@ class ExceptionHandler {
                 ),
                 e.status,
             )
-        else
+        }
+        else {
+            println("500대 에러야")
+            e.printStackTrace()
+            println("message: ${e.message}")
             ResponseEntity(
                 ExceptionResponse(
                     code = "INTERNAL_SERVER_ERROR",
@@ -66,4 +71,5 @@ class ExceptionHandler {
                 ),
                 HttpStatus.INTERNAL_SERVER_ERROR,
             )
+        }
 }
