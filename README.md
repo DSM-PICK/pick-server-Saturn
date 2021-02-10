@@ -1,2 +1,2 @@
-# pick-server-Saturn
-Backend APIs (with Spring)
+# PICK Server - Saturn
+기존에 종이로 이루어지던 출석부의 단점들을 분석하고 이를 웹 서비스로 해결하려는 프로젝트
