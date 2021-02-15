@@ -5,11 +5,9 @@ import com.dsm.pick.controller.request.JoinRequest
 import com.dsm.pick.controller.request.LoginRequest
 import com.dsm.pick.controller.request.PasswordRequest
 import com.dsm.pick.controller.response.AccessTokenResponse
-import com.dsm.pick.exception.AccountInformationMismatchException
 import com.dsm.pick.service.AuthService
 import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
-import javax.validation.constraints.Null
 
 @RestController
 @RequestMapping("/auth")
