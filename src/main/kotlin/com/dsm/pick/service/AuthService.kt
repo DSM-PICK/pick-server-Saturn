@@ -118,9 +118,5 @@ class AuthService(
 
     private fun findTeacherIdByToken(token: String) = jwtService.getTeacherId(token)
 
-    private fun isJoinPossible(teacherId: String) =
-        try {
-            findTeacherById(teacherId)
-            false
-        } catch (e: Exception) { true }
+    private fun isJoinPossible(teacherId: String) = teacherRepository.existsById(teacherId)
 }
