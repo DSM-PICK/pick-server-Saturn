@@ -81,7 +81,7 @@ class AuthService(
             teacherRepository.save(
                 Teacher(
                     id = teacherId,
-                    password = teacherPassword,
+                    password = encodingPassword(teacherPassword),
                     name = teacherName,
                     office = "임시 교무실",
                 )
