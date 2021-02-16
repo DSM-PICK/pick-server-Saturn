@@ -7,6 +7,7 @@ plugins {
     kotlin("plugin.spring") version "1.4.21"
     kotlin("plugin.jpa") version "1.4.21"
     kotlin("plugin.allopen") version "1.4.21"
+    jacoco
 }
 
 group = "com.dsm"
@@ -37,6 +38,9 @@ dependencies {
     implementation("io.springfox:springfox-swagger2:2.9.2")
     implementation("io.springfox:springfox-swagger-ui:2.9.2")
 
+    testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0")
+    testImplementation("org.mockito:mockito-inline:2.21.0")
+
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testRuntimeOnly("com.h2database:h2")
 }
@@ -50,4 +54,41 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+}
+
+jacoco {
+    toolVersion = "0.8.5"
+}
+
+tasks.jacocoTestReport {
+    reports {
+        html.isEnabled = true
+        xml.isEnabled = false
+        csv.isEnabled = false
+    }
+}
+
+tasks.jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            enabled = true
+            element = "CLASS"
+
+            limit {
+                counter = "METHOD"
+                value = "COVEREDRATIO"
+                minimum = "1.00".toBigDecimal()
+            }
+
+            excludes = mutableListOf(
+                "com.dsm.pick.domain.*",
+                "com.dsm.pick.configuration.*",
+                "com.dsm.pick.exception.*",
+                "com.dsm.pick.controller.request.*",
+                "com.dsm.pick.controller.response.*",
+                "com.dsm.pick.controller.filter.*",
+                "com.dsm.pick.service.Token"
+            )
+        }
+    }
 }

@@ -6,8 +6,10 @@ INSERT INTO club(name, location, teacher, club_head) VALUES('테스트동아리'
 
 INSERT INTO class(name, floor, priority, manager) VALUES('테스트교실', 3, 0, 'teacherId');
 
-INSERT INTO student(num, name, club_name, class_name, is_monday_self_study, is_tuesday_self_study) VALUES('1101', '김학생', '테스트동아리', '테스트교실', true, true);
+INSERT INTO student(num, name, club_name, class_name, is_monday_self_study, is_tuesday_self_study) VALUES('3417', '이진혁', '테스트동아리', '테스트교실', true, true);
 
 INSERT INTO activity(date, schedule, second_floor_teacher_id, third_floor_teacher_id, forth_floor_teacher_id) VALUES('2021-01-01', 'club', 'teacherId', 'teacherId', 'teacherId');
+INSERT INTO activity(date, schedule, second_floor_teacher_id, third_floor_teacher_id, forth_floor_teacher_id) VALUES('2021-01-02', 'self-study', 'teacherId', 'teacherId', 'teacherId');
 
-INSERT INTO attendance(id, date, student_num, period, teacher_id, state, memo) VALUES(1, '2021-01-01', '1101', '7', 'teacherId', '출석', null);
+INSERT INTO attendance(id, date, student_num, period, teacher_id, state, memo) VALUES(1, '2021-01-01', '3417', '8', 'teacherId', '출석', null);
+INSERT INTO attendance(id, date, student_num, period, teacher_id, state, memo) VALUES(2, '2021-01-02', '3417', '8', 'teacherId', '이동', 'Undefined 놀러감');

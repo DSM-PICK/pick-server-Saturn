@@ -10,12 +10,14 @@ import com.dsm.pick.exception.InvalidTokenException
 import com.dsm.pick.repository.ClassroomRepository
 import com.dsm.pick.repository.TeacherRepository
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.data.repository.CrudRepository
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.math.BigInteger
 import java.nio.charset.Charset
 import java.security.MessageDigest
+import kotlin.jvm.internal.Intrinsics
 
 @Service
 @Transactional
@@ -97,7 +99,8 @@ class AuthService(
         validateSamePassword(teacher.password, encodedPassword)
     }
 
-    private fun findTeacherById(teacherId: String) = teacherRepository.findByIdOrNull(teacherId)?: throw AccountInformationMismatchException(teacherId, "찾은 정보 없음")
+    private fun findTeacherById(teacherId: String) =
+        teacherRepository.findAllById(teacherId)?: throw AccountInformationMismatchException(teacherId, "찾은 정보 없음")
 
     private fun encodingPassword(originalPassword: String): String {
         val messageDigest = MessageDigest.getInstance(encryptionAlgorithm)
@@ -118,5 +121,5 @@ class AuthService(
 
     private fun findTeacherIdByToken(token: String) = jwtService.getTeacherId(token)
 
-    private fun isJoinPossible(teacherId: String) = teacherRepository.existsById(teacherId)
+    private fun isJoinPossible(teacherId: String) = !teacherRepository.existsById(teacherId)
 }
