@@ -37,8 +37,15 @@ internal class AuthServiceTest {
         assertThat(actual).isEqualTo(expected)
     }
 
-//    @Test
-//    fun `로그인 존재하지 않는 계정
+    @Test
+    fun `로그인 존재하지 않는 계정 Account Information Mismatch Exception`() {
+        assertThrows<AccountInformationMismatchException> {
+            authService.login(
+                teacherId = "failId",
+                teacherPassword = "teacherPassword",
+            )
+        }
+    }
 
     @Test
     fun `토큰 검사 OK`() {
@@ -147,16 +154,17 @@ internal class AuthServiceTest {
                         name = "teacherName",
                         office = "teacherOffice",
                     )
-            onGeneric { findAllById("teacherId") } doReturn
-                    Teacher(
+            onGeneric { findTeacherById("teacherId") } doAnswer {
+                if (it.arguments[0] != "teacherId") null
+                else Teacher(
                         id = "teacherId",
                         password = "bcc11c9fd8ab1e74e1bc0717239f8f7be24921abca9d5f31705612834dd1d6da3111df3f7120a0e445a91d6c3158b3e09595cd5d06c034c9997d4be2de5a02ca",
                         name = "teacherName",
                         office = "teacherOffice",
                     )
+            }
             onGeneric { existsById(any()) } doAnswer {
-                val teacherId = it.arguments[0] as String
-                teacherId == "teacherId"
+                it.arguments[0] == "teacherId"
             }
         },
         classroomRepository = mock {

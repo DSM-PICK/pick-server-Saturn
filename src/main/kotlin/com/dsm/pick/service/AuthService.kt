@@ -100,7 +100,7 @@ class AuthService(
     }
 
     private fun findTeacherById(teacherId: String) =
-        teacherRepository.findAllById(teacherId)?: throw AccountInformationMismatchException(teacherId, "찾은 정보 없음")
+        teacherRepository.findTeacherById(teacherId)?: throw AccountInformationMismatchException(teacherId, "찾은 정보 없음")
 
     private fun encodingPassword(originalPassword: String): String {
         val messageDigest = MessageDigest.getInstance(encryptionAlgorithm)

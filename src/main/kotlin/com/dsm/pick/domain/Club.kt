@@ -24,5 +24,5 @@ class Club(
 ) {
 
     @OneToMany(mappedBy = "club")
-    val students: List<Student> = listOf()
+    var students: List<Student> = listOf()
 }

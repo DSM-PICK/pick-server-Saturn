@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository
 import java.util.*
 
 interface TeacherRepository : JpaRepository<Teacher, String> {
-    fun findAllById(id: String): Teacher?
+    fun findTeacherById(id: String): Teacher?
 }
