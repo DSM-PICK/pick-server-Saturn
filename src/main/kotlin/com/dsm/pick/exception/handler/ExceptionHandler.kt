@@ -38,12 +38,14 @@ class ExceptionHandler {
         )
 
     @ExceptionHandler(RuntimeException::class)
-    fun runtimeExceptionHandler() =
-        ResponseEntity(
+    fun runtimeExceptionHandler(e: RuntimeException): ResponseEntity<ExceptionResponse> {
+        e.printStackTrace()
+        return ResponseEntity(
             ExceptionResponse(
                 code = "INTERNAL_SERVER_ERROR",
                 message = "큰 문제긴 한데 이거 나오면 안 되긴 함",
             ),
             HttpStatus.INTERNAL_SERVER_ERROR,
         )
+    }
 }

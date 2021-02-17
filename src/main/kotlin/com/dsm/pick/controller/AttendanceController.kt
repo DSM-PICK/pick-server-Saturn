@@ -10,6 +10,8 @@ import com.dsm.pick.domain.attribute.Schedule
 import com.dsm.pick.service.AttendanceService
 import com.dsm.pick.service.AuthService
 import org.springframework.web.bind.annotation.*
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 @RestController
 @RequestMapping("/attendance")
@@ -23,9 +25,10 @@ class AttendanceController(
         @RequestHeader("Authorization") token: String,
         @PathVariable("schedule") schedule: Schedule,
         @PathVariable("floor") floor: Floor,
+        @RequestParam(value = "date", required = false) date: String = LocalDate.now().toString(),
     ): AttendanceNavigationResponse {
         authService.validateToken(token)
-        return attendanceService.showAttendanceNavigation(schedule, floor)
+        return attendanceService.showAttendanceNavigation(schedule, floor, LocalDate.parse(date, DateTimeFormatter.ISO_DATE))
     }
 
     @GetMapping("/student-state/{schedule}/{floor}/{priority}")
@@ -34,21 +37,24 @@ class AttendanceController(
         @PathVariable("schedule") schedule: Schedule,
         @PathVariable("floor") floor: Floor,
         @PathVariable("priority") priority: Int,
+        @RequestParam(value = "date", required = false) date: String = LocalDate.now().toString(),
     ): AttendanceResponse {
         authService.validateToken(token)
-        return attendanceService.showAttendance(schedule, floor, priority)
+        return attendanceService.showAttendance(schedule, floor, priority, LocalDate.parse(date, DateTimeFormatter.ISO_DATE))
     }
 
     @PatchMapping("/student-state")
     fun changeAttendance(
         @RequestHeader("Authorization") token: String,
         @RequestBody request: StudentStateRequest,
+        @RequestParam(value = "date", required = false) date: String = LocalDate.now().toString(),
     ) {
         authService.validateToken(token)
         attendanceService.updateAttendance(
             studentNumber = request.number,
             period = request.period,
             attendanceState = request.state,
+            attendanceDate = LocalDate.parse(date, DateTimeFormatter.ISO_DATE),
         )
     }
 
@@ -58,12 +64,14 @@ class AttendanceController(
         @RequestBody request: MemoRequest,
         @PathVariable("student") studentNumber: String,
         @PathVariable("period") period: Period,
+        @RequestParam(value = "date", required = false) date: String = LocalDate.now().toString(),
     ) {
         authService.validateToken(token)
         attendanceService.updateMemo(
             studentNumber = studentNumber,
             period = period,
             attendanceMemo = request.memo,
+            attendanceDate = LocalDate.parse(date, DateTimeFormatter.ISO_DATE),
         )
     }
 }

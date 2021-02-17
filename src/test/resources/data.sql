@@ -13,3 +13,8 @@ INSERT INTO activity(date, schedule, second_floor_teacher_id, third_floor_teache
 
 INSERT INTO attendance(id, date, student_num, period, teacher_id, state, memo) VALUES(1, '2021-01-01', '3417', '8', 'teacherId', '출석', null);
 INSERT INTO attendance(id, date, student_num, period, teacher_id, state, memo) VALUES(2, '2021-01-02', '3417', '8', 'teacherId', '이동', 'Undefined 놀러감');
+
+INSERT INTO admin(id, pw) VALUES('admin', '어차피 쓸 일 없음');
+
+INSERT INTO notice(notice_id, content, admin_id, category, created_at) VALUES(1, '멤버공지', 'admin', 'member', NOW());
+INSERT INTO notice(notice_id, content, admin_id, category, created_at) VALUES(2, '동아리공지', 'admin', 'club', NOW());

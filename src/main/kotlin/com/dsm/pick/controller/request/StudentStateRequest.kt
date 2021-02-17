@@ -6,10 +6,10 @@ import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
 
 data class StudentStateRequest(
-    @NotNull
+    @NotNull(message = "허용하지 않는 형식 <NULL>")
     val period: Period,
-    @NotBlank
+    @NotBlank(message = "허용하지 않는 형식 <NULL, EMPTY, BLANK>")
     val number: String,
-    @NotNull
+    @NotNull(message = "허용하지 않는 형식 <NULL>")
     val state: State,
 )
