@@ -42,7 +42,7 @@ class AuthService(
                         floor = it.floor.value,
                         priority = it.priority,
                     )
-                }
+                },
         )
     }
 
@@ -96,7 +96,8 @@ class AuthService(
         validateSamePassword(teacher.password, encodedPassword)
     }
 
-    private fun findTeacherById(teacherId: String) = teacherRepository.findById(teacherId).orElseThrow { AccountInformationMismatchException(teacherId, "찾은 정보 없음") }
+    private fun findTeacherById(teacherId: String) =
+        teacherRepository.findTeacherById(teacherId)?: throw AccountInformationMismatchException(teacherId, "찾은 정보 없음")
 
     private fun encodingPassword(originalPassword: String): String {
         val messageDigest = MessageDigest.getInstance(encryptionAlgorithm)
@@ -117,9 +118,5 @@ class AuthService(
 
     private fun findTeacherIdByToken(token: String) = jwtService.getTeacherId(token)
 
-    private fun isJoinPossible(teacherId: String) =
-        try {
-            findTeacherById(teacherId)
-            false
-        } catch (e: Exception) { true }
+    private fun isJoinPossible(teacherId: String) = !teacherRepository.existsById(teacherId)
 }

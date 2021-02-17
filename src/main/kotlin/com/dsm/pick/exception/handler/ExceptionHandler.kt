@@ -27,26 +27,25 @@ class ExceptionHandler {
             message = "${e.mostSpecificCause.message}",
         )
 
+    @ExceptionHandler(CommonException::class)
+    fun commonExceptionHandler(e: CommonException) =
+        ResponseEntity(
+            ExceptionResponse(
+                code = e.code,
+                message = e.message?: "큰 문제는 아닌데 이거 나오면 안 되긴 함",
+            ),
+            e.status,
+        )
+
     @ExceptionHandler(RuntimeException::class)
-    fun runtimeExceptionHandler(e: RuntimeException) =
-        if (e is CommonException) {
-            ResponseEntity(
-                ExceptionResponse(
-                    code = e.code,
-                    message = e.message?: "큰 문제는 아닌데 이거 나오면 안 되긴 함",
-                ),
-                e.status,
-            )
-        }
-        else {
-            println("이 로그를 보고 있는 넌 망했어 500이야")
-            e.printStackTrace()
-            ResponseEntity(
-                ExceptionResponse(
-                    code = "INTERNAL_SERVER_ERROR",
-                    message = "큰 문제긴 한데 이거 나오면 안 되긴 함",
-                ),
-                HttpStatus.INTERNAL_SERVER_ERROR,
-            )
-        }
+    fun runtimeExceptionHandler(e: RuntimeException): ResponseEntity<ExceptionResponse> {
+        e.printStackTrace()
+        return ResponseEntity(
+            ExceptionResponse(
+                code = "INTERNAL_SERVER_ERROR",
+                message = "큰 문제긴 한데 이거 나오면 안 되긴 함",
+            ),
+            HttpStatus.INTERNAL_SERVER_ERROR,
+        )
+    }
 }

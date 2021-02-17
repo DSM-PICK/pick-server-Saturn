@@ -28,18 +28,18 @@ class AttendanceService(
     private val attendanceRepository: AttendanceRepository,
 ) {
 
-    fun showAttendanceNavigation(schedule: Schedule, floor: Floor) =
+    fun showAttendanceNavigation(schedule: Schedule, floor: Floor, date: LocalDate = LocalDate.now()) =
         AttendanceNavigationResponse(
-            date = timeService.changeDateToString(),
-            dayOfWeek = timeService.getDayOfWeek(),
-            teacherName = findTeacherNameBySchedule(schedule, floor),
-            schedule = findSchedule().schedule.value,
+            date = timeService.changeDateToString(date),
+            dayOfWeek = timeService.getDayOfWeek(date),
+            teacherName = findTeacherNameBySchedule(schedule, floor, date),
+            schedule = findSchedule(date).schedule.value,
             locations = createLocationInformation(schedule, floor),
         )
 
     fun showAttendance(schedule: Schedule, floor: Floor, priority: Int, date: LocalDate = LocalDate.now()) =
         AttendanceResponse(
-            attendances = createAttendance(schedule, floor, priority, date)?: listOf(),
+            attendances = createAttendance(schedule, floor, priority, date),
             clubHead = when (schedule) {
                 Schedule.CLUB -> findClub(floor, priority).head
                 Schedule.SELF_STUDY -> null
@@ -90,18 +90,24 @@ class AttendanceService(
             Floor.FOUR -> findSchedule(date).forthFloorTeacher.name
         }
 
-    private fun findSchedule(date: LocalDate = LocalDate.now()) = activityRepository.findById(date).orElseThrow { ActivityNotFoundException(date) }
+    private fun findSchedule(date: LocalDate = LocalDate.now()) = activityRepository.findActivityByDate(date)?: throw ActivityNotFoundException(date)
 
     private fun createLocationInformation(schedule: Schedule, floor: Floor): List<LocationInformation> {
-        val locationInformation = findLocationInformation(schedule, floor)
+        val locationInformation = findLocationInformation(schedule, floor).ifEmpty { return listOf() }
         locationInformation.first().done = "done"
         return locationInformation
     }
 
     private fun findLocationInformation(schedule: Schedule, floor: Floor) =
         when (schedule) {
-            Schedule.CLUB -> clubRepository.findByLocationFloor(floor).sortedBy { it.location.priority }.filter { it.students.isNotEmpty() }.map { LocationInformation(it.location.location, it.name, "none", it.location.priority) }
-            Schedule.SELF_STUDY, Schedule.AFTER_SCHOOL -> classroomRepository.findByFloor(floor).sortedBy { it.priority }.filter { it.students.isNotEmpty() }.map { LocationInformation(it.name, it.name, "none", it.priority) }
+            Schedule.CLUB -> clubRepository.findByLocationFloor(floor)
+                .sortedBy { it.location.priority }
+                .filter { it.students.isNotEmpty() }
+                .map { LocationInformation(it.location.location, it.name, "none", it.location.priority) }
+            Schedule.SELF_STUDY, Schedule.AFTER_SCHOOL -> classroomRepository.findByFloor(floor)
+                .sortedBy { it.priority }
+                .filter { it.students.isNotEmpty() }
+                .map { LocationInformation(it.name, it.name, "none", it.priority) }
         }
 
     private fun createAttendance(
@@ -113,8 +119,8 @@ class AttendanceService(
         Schedule.CLUB -> attendanceRepository.findByStudentClubLocationFloorAndStudentClubLocationPriorityAndActivityDate(floor, priority, attendanceDate)
         Schedule.SELF_STUDY -> attendanceRepository.findByStudentClassroomFloorAndStudentClassroomPriorityAndActivityDate(floor, priority, attendanceDate)
         Schedule.AFTER_SCHOOL -> throw NonExistScheduleException(schedule.value)
-    }?.groupBy { it.student }
-        ?.map { (student, attendance) ->
+    }.groupBy { it.student }
+        .map { (student, attendance) ->
             StudentState(
                 studentNumber = student.number,
                 studentName = student.name,

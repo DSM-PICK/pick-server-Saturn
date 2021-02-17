@@ -29,5 +29,5 @@ class Classroom(
 ) {
 
     @OneToMany(mappedBy = "classroom")
-    val students: List<Student> = listOf()
+    var students: List<Student> = listOf()
 }

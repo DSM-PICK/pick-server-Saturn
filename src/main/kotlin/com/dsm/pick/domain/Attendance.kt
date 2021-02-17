@@ -36,5 +36,5 @@ class Attendance(
     var state: State,
 
     @Column(name = "memo")
-    var memo: String,
+    var memo: String?,
 )
