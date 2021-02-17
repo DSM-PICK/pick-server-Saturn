@@ -10,14 +10,11 @@ import com.dsm.pick.exception.InvalidTokenException
 import com.dsm.pick.repository.ClassroomRepository
 import com.dsm.pick.repository.TeacherRepository
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.data.repository.CrudRepository
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.math.BigInteger
 import java.nio.charset.Charset
 import java.security.MessageDigest
-import kotlin.jvm.internal.Intrinsics
 
 @Service
 @Transactional
@@ -45,7 +42,7 @@ class AuthService(
                         floor = it.floor.value,
                         priority = it.priority,
                     )
-                }
+                },
         )
     }
 

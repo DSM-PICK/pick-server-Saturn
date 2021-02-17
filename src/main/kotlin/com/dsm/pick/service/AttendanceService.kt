@@ -39,7 +39,7 @@ class AttendanceService(
 
     fun showAttendance(schedule: Schedule, floor: Floor, priority: Int, date: LocalDate = LocalDate.now()) =
         AttendanceResponse(
-            attendances = createAttendance(schedule, floor, priority, date)?: listOf(),
+            attendances = createAttendance(schedule, floor, priority, date),
             clubHead = when (schedule) {
                 Schedule.CLUB -> findClub(floor, priority).head
                 Schedule.SELF_STUDY -> null
@@ -119,8 +119,8 @@ class AttendanceService(
         Schedule.CLUB -> attendanceRepository.findByStudentClubLocationFloorAndStudentClubLocationPriorityAndActivityDate(floor, priority, attendanceDate)
         Schedule.SELF_STUDY -> attendanceRepository.findByStudentClassroomFloorAndStudentClassroomPriorityAndActivityDate(floor, priority, attendanceDate)
         Schedule.AFTER_SCHOOL -> throw NonExistScheduleException(schedule.value)
-    }?.groupBy { it.student }
-        ?.map { (student, attendance) ->
+    }.groupBy { it.student }
+        .map { (student, attendance) ->
             StudentState(
                 studentNumber = student.number,
                 studentName = student.name,
