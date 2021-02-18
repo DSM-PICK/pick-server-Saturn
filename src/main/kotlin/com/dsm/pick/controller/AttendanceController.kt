@@ -25,7 +25,7 @@ class AttendanceController(
         @RequestHeader("Authorization") token: String,
         @PathVariable("schedule") schedule: Schedule,
         @PathVariable("floor") floor: Floor,
-        @RequestParam(value = "date", required = false) date: String = LocalDate.now().toString(),
+        @RequestParam(value = "date", required = false) date: String? = LocalDate.now().toString(),
     ): AttendanceNavigationResponse {
         println("tostring: ${LocalDate.now()}")
         println("realdate: $date")
@@ -39,7 +39,7 @@ class AttendanceController(
         @PathVariable("schedule") schedule: Schedule,
         @PathVariable("floor") floor: Floor,
         @PathVariable("priority") priority: Int,
-        @RequestParam(value = "date", required = false) date: String = LocalDate.now().toString(),
+        @RequestParam(value = "date", required = false) date: String? = LocalDate.now().toString(),
     ): AttendanceResponse {
         authService.validateToken(token)
         return attendanceService.showAttendance(schedule, floor, priority, LocalDate.parse(date, DateTimeFormatter.ISO_DATE))
