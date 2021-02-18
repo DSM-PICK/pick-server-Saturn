@@ -27,6 +27,8 @@ class AttendanceController(
         @PathVariable("floor") floor: Floor,
         @RequestParam(value = "date", required = false) date: String = LocalDate.now().toString(),
     ): AttendanceNavigationResponse {
+        println("tostring: ${LocalDate.now()}")
+        println("realdate: $date")
         authService.validateToken(token)
         return attendanceService.showAttendanceNavigation(schedule, floor, LocalDate.parse(date, DateTimeFormatter.ISO_DATE))
     }
