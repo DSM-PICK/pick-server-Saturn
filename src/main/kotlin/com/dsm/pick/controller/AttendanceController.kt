@@ -25,10 +25,9 @@ class AttendanceController(
         @RequestHeader("Authorization") token: String,
         @PathVariable("schedule") schedule: Schedule,
         @PathVariable("floor") floor: Floor,
-        @RequestParam(value = "date", required = false) date: String = LocalDate.now().toString(),
     ): AttendanceNavigationResponse {
         authService.validateToken(token)
-        return attendanceService.showAttendanceNavigation(schedule, floor, LocalDate.parse(date, DateTimeFormatter.ISO_DATE))
+        return attendanceService.showAttendanceNavigation(schedule, floor)
     }
 
     @GetMapping("/student-state/{schedule}/{floor}/{priority}")
@@ -37,10 +36,9 @@ class AttendanceController(
         @PathVariable("schedule") schedule: Schedule,
         @PathVariable("floor") floor: Floor,
         @PathVariable("priority") priority: Int,
-        @RequestParam(value = "date", required = false) date: String = LocalDate.now().toString(),
     ): AttendanceResponse {
         authService.validateToken(token)
-        return attendanceService.showAttendance(schedule, floor, priority, LocalDate.parse(date, DateTimeFormatter.ISO_DATE))
+        return attendanceService.showAttendance(schedule, floor, priority)
     }
 
     @PatchMapping("/student-state")
