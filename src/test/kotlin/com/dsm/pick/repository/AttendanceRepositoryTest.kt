@@ -33,6 +33,17 @@ internal class AttendanceRepositoryTest(
     }
 
     @Test
+    fun `없는 Club(floor, priority), date 로 출석부 조회 OK`() {
+        assertThat(
+            attendanceRepository.findByStudentClubLocationFloorAndStudentClubLocationPriorityAndActivityDate(
+                floor = Floor.TWO,
+                priority = 10,
+                attendanceDate = LocalDate.of(2003, 8, 16),
+            )
+        ).isEmpty()
+    }
+
+    @Test
     fun `Classroom(floor, priority), date 로 출석부 조회 OK`() {
         val attendance =
             attendanceRepository.findByStudentClassroomFloorAndStudentClassroomPriorityAndActivityDate(
@@ -50,6 +61,17 @@ internal class AttendanceRepositoryTest(
     }
 
     @Test
+    fun `없는 Classroom(floor, priority), date 로 출석부 조회 OK`() {
+        assertThat(
+            attendanceRepository.findByStudentClassroomFloorAndStudentClassroomPriorityAndActivityDate(
+                floor = Floor.TWO,
+                priority = 10,
+                attendanceDate = LocalDate.of(2003, 8, 16),
+            )
+        ).isEmpty()
+    }
+
+    @Test
     fun `student number, period, date 로 출석부 조회 OK`() {
         val attendance =
             attendanceRepository.findByStudentNumberAndPeriodAndActivityDate(
@@ -64,5 +86,16 @@ internal class AttendanceRepositoryTest(
         assertThat(attendance.period).isEqualTo(Period.EIGHT)
         assertThat(attendance.state).isEqualTo(State.ATTENDANCE)
         assertThat(attendance.teacher.id).isEqualTo("teacherId")
+    }
+
+    @Test
+    fun `없는 student number, period, date 로 출석부 조회 OK`() {
+        assertThat(
+            attendanceRepository.findByStudentNumberAndPeriodAndActivityDate(
+                studentNumber = "없는학생",
+                period = Period.ONE,
+                attendanceDate = LocalDate.of(2003, 8, 16)
+            )
+        ).isNull()
     }
 }
