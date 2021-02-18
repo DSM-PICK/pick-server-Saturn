@@ -17,10 +17,16 @@ internal class ActivityRepositoryTest(
     fun `날짜로 일정 조회 OK`() {
         val activity = activityRepository.findActivityByDate(LocalDate.of(2021, 1, 1))!!
 
+        assertThat(activity).isNotNull
         assertThat(activity.date).isEqualTo(LocalDate.of(2021, 1, 1))
         assertThat(activity.schedule).isEqualTo(Schedule.CLUB)
         assertThat(activity.secondFloorTeacher.id).isEqualTo("teacherId")
         assertThat(activity.thirdFloorTeacher.id).isEqualTo("teacherId")
         assertThat(activity.forthFloorTeacher.id).isEqualTo("teacherId")
+    }
+
+    @Test
+    fun `없는 날짜로 일정 조회 OK`() {
+        assertThat(activityRepository.findActivityByDate(LocalDate.of(2003, 8, 16))).isNull()
     }
 }
