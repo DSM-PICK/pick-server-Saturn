@@ -11,7 +11,7 @@ import java.time.LocalDate
 
 @DataJpaTest
 @TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
-class AttendanceRepositoryTest(
+internal class AttendanceRepositoryTest(
     private val attendanceRepository: AttendanceRepository
 ) {
 
@@ -22,7 +22,7 @@ class AttendanceRepositoryTest(
                 floor = Floor.THREE,
                 priority = 0,
                 attendanceDate = LocalDate.of(2021, 1, 1),
-            )!!.single()
+            ).single()
 
         assertThat(attendance.id).isEqualTo(1)
         assertThat(attendance.activity.date).isEqualTo(LocalDate.of(2021, 1, 1))
@@ -39,7 +39,7 @@ class AttendanceRepositoryTest(
                 floor = Floor.THREE,
                 priority = 0,
                 attendanceDate = LocalDate.of(2021, 1, 2),
-            )!!.single()
+            ).single()
 
         assertThat(attendance.id).isEqualTo(2)
         assertThat(attendance.activity.date).isEqualTo(LocalDate.of(2021, 1, 2))

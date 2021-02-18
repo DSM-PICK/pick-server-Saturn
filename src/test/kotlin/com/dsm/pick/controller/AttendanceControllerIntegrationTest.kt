@@ -26,7 +26,7 @@ import org.springframework.transaction.annotation.Transactional
 @AutoConfigureMockMvc
 @TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
 @Transactional
-class AttendanceControllerIntegrationTest(
+internal class AttendanceControllerIntegrationTest(
     private val mock: MockMvc,
     private val objectMapper: ObjectMapper,
 ) {
