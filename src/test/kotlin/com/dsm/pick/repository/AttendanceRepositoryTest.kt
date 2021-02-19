@@ -92,7 +92,7 @@ internal class AttendanceRepositoryTest(
     fun `없는 student number, period, date 로 출석부 조회 OK`() {
         assertThat(
             attendanceRepository.findByStudentNumberAndPeriodAndActivityDate(
-                studentNumber = "없는학생",
+                studentNumber = "void",
                 period = Period.ONE,
                 attendanceDate = LocalDate.of(2003, 8, 16)
             )

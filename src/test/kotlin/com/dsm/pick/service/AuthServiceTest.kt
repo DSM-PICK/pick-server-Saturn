@@ -28,7 +28,7 @@ internal class AuthServiceTest {
             refreshToken = "this-is-test-token",
             teacherName = "teacherName",
             managedClassroom = ManagedClassroom(
-                name = "테스트교실",
+                name = "testClassroom",
                 floor = 3,
                 priority = 0,
             ),
@@ -41,7 +41,7 @@ internal class AuthServiceTest {
     fun `로그인 존재하지 않는 계정 Account Information Mismatch Exception`() {
         assertThrows<AccountInformationMismatchException> {
             authService.login(
-                teacherId = "failId",
+                teacherId = "void",
                 teacherPassword = "teacherPassword",
             )
         }
@@ -55,7 +55,7 @@ internal class AuthServiceTest {
     @Test
     fun `토큰 검사 중 토큰 유효성 검사 실패 Invalid Token Exception`() {
         assertThrows<InvalidTokenException> {
-            authService.validateToken(token = "fail-token")
+            authService.validateToken(token = "invalid token")
         }
     }
 
@@ -70,7 +70,7 @@ internal class AuthServiceTest {
     @Test
     fun `토큰 재발급 중 토큰 유효성 검사 실패 Invalid Token Exception`() {
         assertThrows<InvalidTokenException> {
-            authService.recreateAccessToken(accessToken = "fail-token")
+            authService.recreateAccessToken(accessToken = "invalid token")
         }
     }
 
@@ -87,9 +87,9 @@ internal class AuthServiceTest {
     fun `비밀번호 변경 중 토큰 유효성 검사 실패 Invalid Token Exception`() {
         assertThrows<InvalidTokenException> {
             authService.changePassword(
-                token = "fail-token",
+                token = "invalid token",
                 newPassword = "newPassword",
-                confirmNewPassword = "confirmNewPassword",
+                confirmNewPassword = "newPassword",
             )
         }
     }
@@ -100,7 +100,7 @@ internal class AuthServiceTest {
             authService.changePassword(
                 token = "this-is-test-token",
                 newPassword = "newPassword",
-                confirmNewPassword = "confirmNewPassword",
+                confirmNewPassword = "void",
             )
         }
     }
@@ -170,7 +170,7 @@ internal class AuthServiceTest {
         classroomRepository = mock {
             on { findByManager("teacherId") } doReturn
                     Classroom(
-                        name = "테스트교실",
+                        name = "testClassroom",
                         floor = Floor.THREE,
                         priority = 0,
                         manager = "teacherId"

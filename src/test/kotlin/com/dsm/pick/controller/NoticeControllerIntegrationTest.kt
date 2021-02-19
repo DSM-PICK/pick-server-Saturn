@@ -37,7 +37,7 @@ internal class NoticeControllerIntegrationTest(
                 .contentAsString
         )
 
-        assertThat(response.clubNotice).containsAll(listOf("동아리공지"))
-        assertThat(response.memberNotice).containsAll(listOf("멤버공지"))
+        assertThat(response.clubNotice).containsAll(listOf("clubNotice"))
+        assertThat(response.memberNotice).containsAll(listOf("memberNotice"))
     }
 }

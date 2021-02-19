@@ -17,8 +17,8 @@ internal class NoticeServiceTest {
     fun `최근 1주간의 공지사항 찾기 OK`() {
         val noticeResponse = noticeService.findNotice()
 
-        assertThat(noticeResponse.clubNotice).containsAll(listOf("동아리공지"))
-        assertThat(noticeResponse.memberNotice).containsAll(listOf("멤버공지"))
+        assertThat(noticeResponse.clubNotice).containsAll(listOf("clubNotice"))
+        assertThat(noticeResponse.memberNotice).containsAll(listOf("memberNotice"))
     }
 
     private val noticeService = NoticeService(
@@ -26,7 +26,7 @@ internal class NoticeServiceTest {
             on { findByCategoryAndDateAfter(eq(Category.CLUB), any()) } doReturn listOf(
                 Notice(
                     id = 1,
-                    content = "동아리공지",
+                    content = "clubNotice",
                     admin = Admin("admin", "admin"),
                     category = Category.CLUB,
                     date = Timestamp(1)
@@ -35,7 +35,7 @@ internal class NoticeServiceTest {
             on { findByCategoryAndDateAfter(eq(Category.MEMBER), any()) } doReturn listOf(
                 Notice(
                     id = 2,
-                    content = "멤버공지",
+                    content = "memberNotice",
                     admin = Admin("admin", "admin"),
                     category = Category.MEMBER,
                     date = Timestamp(1)
