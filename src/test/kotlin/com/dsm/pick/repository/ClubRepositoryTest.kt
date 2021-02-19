@@ -14,7 +14,7 @@ internal class ClubRepositoryTest(
 
     @Test
     fun `층으로 동아리 조회 OK`() {
-        assertThat(clubRepository.findByLocationFloor(Floor.THREE)).map<String> { it.name }.isEqualTo(listOf("테스트동아리"))
+        assertThat(clubRepository.findByLocationFloor(Floor.THREE)).map<String> { it.name }.isEqualTo(listOf("testClub"))
     }
 
     @Test
@@ -24,7 +24,7 @@ internal class ClubRepositoryTest(
 
     @Test
     fun `층과 우선순위로 동아리 조회 OK`() {
-        assertThat(clubRepository.findByLocationFloorAndLocationPriority(Floor.THREE, 0)?.name).isEqualTo("테스트동아리")
+        assertThat(clubRepository.findByLocationFloorAndLocationPriority(Floor.THREE, 0)?.name).isEqualTo("testClub")
     }
 
     @Test

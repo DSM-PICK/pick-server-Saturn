@@ -23,6 +23,6 @@ class TeacherRepositoryTest(
 
     @Test
     fun `없는 아이디로 선생님 조회 OK`() {
-        assertThat(teacherRepository.findTeacherById("없는선생님아이디")).isNull()
+        assertThat(teacherRepository.findTeacherById("void")).isNull()
     }
 }

@@ -16,7 +16,7 @@ internal class ClassroomRepositoryTest(
     fun `담당자로 교실 조회 OK`() {
         val classroom = classroomRepository.findByManager("teacherId")!!
 
-        assertThat(classroom.name).isEqualTo("테스트교실")
+        assertThat(classroom.name).isEqualTo("testClassroom")
         assertThat(classroom.floor).isEqualTo(Floor.THREE)
         assertThat(classroom.priority).isEqualTo(0)
         assertThat(classroom.manager).isEqualTo("teacherId")
@@ -25,12 +25,12 @@ internal class ClassroomRepositoryTest(
 
     @Test
     fun `없는 담당자로 교실 조회 OK`() {
-        assertThat(classroomRepository.findByManager("없는담당자")).isNull()
+        assertThat(classroomRepository.findByManager("void")).isNull()
     }
 
     @Test
     fun `층으로 교실 조회 OK`() {
-        assertThat(classroomRepository.findByFloor(Floor.THREE).map { it.name }).isEqualTo(listOf("테스트교실"))
+        assertThat(classroomRepository.findByFloor(Floor.THREE).map { it.name }).isEqualTo(listOf("testClassroom"))
     }
 
     @Test
@@ -42,7 +42,7 @@ internal class ClassroomRepositoryTest(
     fun `층과 우선순위로 교실 조회 OK`() {
         val classroom = classroomRepository.findByFloorAndPriority(Floor.THREE, 0)!!
 
-        assertThat(classroom.name).isEqualTo("테스트교실")
+        assertThat(classroom.name).isEqualTo("testClassroom")
         assertThat(classroom.floor).isEqualTo(Floor.THREE)
         assertThat(classroom.priority).isEqualTo(0)
         assertThat(classroom.manager).isEqualTo("teacherId")
