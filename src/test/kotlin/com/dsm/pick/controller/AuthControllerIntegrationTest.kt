@@ -54,7 +54,7 @@ internal class AuthControllerIntegrationTest(
         assertThat(response.accessToken).isNotBlank
         assertThat(response.refreshToken).isNotBlank
         assertThat(response.teacherName).isEqualTo("teacherName")
-        assertThat(response.managedClassroom?.name).isEqualTo("테스트교실")
+        assertThat(response.managedClassroom?.name).isEqualTo("testClassroom")
         assertThat(response.managedClassroom?.floor).isEqualTo(Floor.THREE.value)
         assertThat(response.managedClassroom?.priority).isEqualTo(0)
     }
@@ -63,7 +63,7 @@ internal class AuthControllerIntegrationTest(
     fun `로그인 - 아이디와 일치하는 계정 없음 Account Information Mismatch Exception`() {
         val requestBody = objectMapper.writeValueAsString(
             LoginRequest(
-                id = "없는 아이디",
+                id = "void",
                 password = "teacherPassword",
             )
         )
@@ -87,7 +87,7 @@ internal class AuthControllerIntegrationTest(
         val requestBody = objectMapper.writeValueAsString(
             LoginRequest(
                 id = "teacherId",
-                password = "없는 비밀번호",
+                password = "void",
             )
         )
         val response = objectMapper.readValue<ExceptionResponse>(
@@ -119,7 +119,7 @@ internal class AuthControllerIntegrationTest(
     fun `토큰 유효성 검사 - 토큰이 잘못됨 Invalid Token Exception`() {
         val response = objectMapper.readValue<ExceptionResponse>(
             mock.perform(post("/auth/token")
-                .header("Authorization", "잘못된 토큰")
+                .header("Authorization", "invalid token")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .characterEncoding("UTF-8"))
@@ -153,7 +153,7 @@ internal class AuthControllerIntegrationTest(
     fun `토큰 재발급 - 토큰이 잘못됨 Invalid Token Exception`() {
         val response = objectMapper.readValue<ExceptionResponse>(
             mock.perform(get("/auth/access-token")
-                .header("Authorization", "잘못된 토큰")
+                .header("Authorization", "invalid token")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .characterEncoding("UTF-8"))
@@ -193,7 +193,7 @@ internal class AuthControllerIntegrationTest(
         )
         val response = objectMapper.readValue<ExceptionResponse>(
             mock.perform(patch("/auth/password")
-                .header("Authorization", "잘못된 토큰")
+                .header("Authorization", "invalid token")
                 .content(requestBody)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
@@ -212,7 +212,7 @@ internal class AuthControllerIntegrationTest(
         val requestBody = objectMapper.writeValueAsString(
             PasswordRequest(
                 newPassword = "newPassword",
-                confirmNewPassword = "다른 비밀번호",
+                confirmNewPassword = "void",
             )
         )
         val response = objectMapper.readValue<ExceptionResponse>(
@@ -247,7 +247,7 @@ internal class AuthControllerIntegrationTest(
     @Test
     fun `인증번호 확인 - 인증번호가 다름 Authentication Number Mismatch Exception`() {
         val requestBody = objectMapper.writeValueAsString(
-            AuthenticationNumberRequest("잘못된 인증번호")
+            AuthenticationNumberRequest("invalid authentication number")
         )
         val response = objectMapper.readValue<ExceptionResponse>(
             mock.perform(post("/auth/authentication-number")

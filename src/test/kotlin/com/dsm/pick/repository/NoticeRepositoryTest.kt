@@ -22,7 +22,7 @@ internal class NoticeRepositoryTest(
         assertThat(notices).isNotNull
         assertThat(notices?.id).isEqualTo(1)
         assertThat(notices?.category).isEqualTo(Category.MEMBER)
-        assertThat(notices?.content).isEqualTo("멤버공지")
+        assertThat(notices?.content).isEqualTo("memberNotice")
     }
 
     @Test
@@ -34,7 +34,7 @@ internal class NoticeRepositoryTest(
         assertThat(notices).isNotNull
         assertThat(notices?.id).isEqualTo(2)
         assertThat(notices?.category).isEqualTo(Category.CLUB)
-        assertThat(notices?.content).isEqualTo("동아리공지")
+        assertThat(notices?.content).isEqualTo("clubNotice")
     }
 
     @Test

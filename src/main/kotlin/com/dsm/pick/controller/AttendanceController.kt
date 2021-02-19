@@ -45,14 +45,12 @@ class AttendanceController(
     fun changeAttendance(
         @RequestHeader("Authorization") token: String,
         @RequestBody request: StudentStateRequest,
-        @RequestParam(value = "date", required = false) date: String = LocalDate.now().toString(),
     ) {
         authService.validateToken(token)
         attendanceService.updateAttendance(
             studentNumber = request.number,
             period = request.period,
             attendanceState = request.state,
-            attendanceDate = LocalDate.parse(date, DateTimeFormatter.ISO_DATE),
         )
     }
 
@@ -62,14 +60,12 @@ class AttendanceController(
         @RequestBody request: MemoRequest,
         @PathVariable("student") studentNumber: String,
         @PathVariable("period") period: Period,
-        @RequestParam(value = "date", required = false) date: String = LocalDate.now().toString(),
     ) {
         authService.validateToken(token)
         attendanceService.updateMemo(
             studentNumber = studentNumber,
             period = period,
             attendanceMemo = request.memo,
-            attendanceDate = LocalDate.parse(date, DateTimeFormatter.ISO_DATE),
         )
     }
 }

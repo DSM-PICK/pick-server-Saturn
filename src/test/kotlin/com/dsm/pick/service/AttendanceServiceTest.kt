@@ -25,10 +25,9 @@ internal class AttendanceServiceTest {
         )
 
         assertThat(attendanceNavigation.date).isEqualTo("0101")
-        assertThat(attendanceNavigation.dayOfWeek).isEqualTo("금")
         assertThat(attendanceNavigation.schedule).isEqualTo("club")
         assertThat(attendanceNavigation.teacherName).isEqualTo("teacherName")
-        assertThat(attendanceNavigation.locations).map<String> { it.name }.containsAll(listOf("테스트동아리"))
+        assertThat(attendanceNavigation.locations).map<String> { it.name }.containsAll(listOf("testClub"))
     }
 
     @Test
@@ -40,10 +39,9 @@ internal class AttendanceServiceTest {
         )
 
         assertThat(attendanceNavigation.date).isEqualTo("0102")
-        assertThat(attendanceNavigation.dayOfWeek).isEqualTo("토")
         assertThat(attendanceNavigation.schedule).isEqualTo("self-study")
         assertThat(attendanceNavigation.teacherName).isEqualTo("teacherName")
-        assertThat(attendanceNavigation.locations).map<String> { it.name }.containsAll(listOf("테스트교실"))
+        assertThat(attendanceNavigation.locations).map<String> { it.name }.containsAll(listOf("testClassroom"))
     }
 
     @Test
@@ -66,8 +64,8 @@ internal class AttendanceServiceTest {
             date = LocalDate.of(2021, 1, 1)
         )
         println(attendance.attendances.first())
-        assertThat(attendance.clubHead).isEqualTo("3417 이진혁")
-        assertThat(attendance.name).isEqualTo("테스트동아리")
+        assertThat(attendance.clubHead).isEqualTo("3417 Jin")
+        assertThat(attendance.name).isEqualTo("testClub")
         assertThat(attendance.attendances).map<String> { it.studentNumber }.containsAll(listOf("3417"))
     }
 
@@ -81,7 +79,7 @@ internal class AttendanceServiceTest {
         )
         println(attendance.attendances.first())
         assertThat(attendance.clubHead).isNull()
-        assertThat(attendance.name).isEqualTo("테스트교실")
+        assertThat(attendance.name).isEqualTo("testClassroom")
         assertThat(attendance.attendances).map<String> { it.studentNumber }.containsAll(listOf("3417"))
     }
 
@@ -135,7 +133,7 @@ internal class AttendanceServiceTest {
     fun `출석 상태 변환 중 해당하는 출석부를 찾을 수 없음 Attendance Not Found Exception`() {
         assertThrows<AttendanceNotFoundException> {
             attendanceService.updateAttendance(
-                studentNumber = "잘못된 번호",
+                studentNumber = "void",
                 period = Period.EIGHT,
                 attendanceState = State.MOVE,
                 attendanceDate = LocalDate.of(2021, 1, 1)
@@ -148,7 +146,7 @@ internal class AttendanceServiceTest {
         attendanceService.updateMemo(
             studentNumber = "3417",
             period = Period.EIGHT,
-            attendanceMemo = "안뇽",
+            attendanceMemo = "memo",
             attendanceDate = LocalDate.of(2021, 1, 1)
         )
     }
@@ -157,9 +155,9 @@ internal class AttendanceServiceTest {
     fun `메모 변환 중 해당하는 출석부를 찾을 수 없음 Attendance Not Found Exception`() {
         assertThrows<AttendanceNotFoundException> {
             attendanceService.updateMemo(
-                studentNumber = "잘못된 번호",
+                studentNumber = "void",
                 period = Period.EIGHT,
-                attendanceMemo = "안뇽",
+                attendanceMemo = "memo",
                 attendanceDate = LocalDate.of(2021, 1, 1)
             )
         }
@@ -173,18 +171,18 @@ internal class AttendanceServiceTest {
     )
 
     private val club = Club(
-        name = "테스트동아리",
+        name = "testClub",
         location = Location(
-            location = "정보보안2실",
+            location = "testLocation",
             floor = Floor.THREE,
             priority = 0,
         ),
-        head = "3417 이진혁",
+        head = "3417 Jin",
         teacher = "teacherId",
     )
 
     private val classroom = Classroom(
-        name = "테스트교실",
+        name = "testClassroom",
         floor = Floor.THREE,
         priority = 0,
         manager = "teacherId",
@@ -192,7 +190,7 @@ internal class AttendanceServiceTest {
 
     private val student = Student(
         number = "3417",
-        name = "이진혁",
+        name = "Jin",
         club = club,
         classroom = classroom,
         isMondaySelfStudy = false,
@@ -232,7 +230,7 @@ internal class AttendanceServiceTest {
         period = Period.EIGHT,
         teacher = teacher,
         state = State.MOVE,
-        memo = "Undefined 놀러감",
+        memo = "go undefined",
     )
 
     private val attendanceService = AttendanceService(
