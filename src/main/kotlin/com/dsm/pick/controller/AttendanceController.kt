@@ -50,6 +50,10 @@ class AttendanceController(
         @RequestHeader("Authorization") token: String,
         @RequestBody request: StudentStateRequest,
     ) {
+        println("authorization: $token")
+        println("number: ${request.number}")
+        println("period: ${request.period.value}")
+        println("state: ${request.state.value}")
         authService.validateToken(token)
         attendanceService.updateAttendance(
             studentNumber = request.number,
