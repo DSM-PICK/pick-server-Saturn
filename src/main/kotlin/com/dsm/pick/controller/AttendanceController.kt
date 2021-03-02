@@ -37,10 +37,6 @@ class AttendanceController(
         @PathVariable("floor") floor: Floor,
         @PathVariable("priority") priority: Int,
     ): AttendanceResponse {
-        println("authorization: $token")
-        println("schedule: ${schedule.value}")
-        println("floor: ${floor.value}")
-        println("priority: $priority")
         authService.validateToken(token)
         return attendanceService.showAttendance(schedule, floor, priority)
     }
@@ -50,10 +46,6 @@ class AttendanceController(
         @RequestHeader("Authorization") token: String,
         @RequestBody request: StudentStateRequest,
     ) {
-        println("authorization: $token")
-        println("number: ${request.number}")
-        println("period: ${request.period.value}")
-        println("state: ${request.state.value}")
         authService.validateToken(token)
         attendanceService.updateAttendance(
             studentNumber = request.number,

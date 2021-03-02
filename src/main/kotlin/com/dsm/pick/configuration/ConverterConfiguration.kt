@@ -9,9 +9,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 class ConverterConfiguration : WebMvcConfigurer {
 
     override fun addFormatters(registry: FormatterRegistry) {
+        registry.addConverter(StateConverter())
         registry.addConverter(ScheduleConverter())
         registry.addConverter(FloorConverter())
         registry.addConverter(PeriodConverter())
-        registry.addConverter(StateConverter())
     }
 }
