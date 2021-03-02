@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull
 
 data class StudentStateRequest(
     @NotNull(message = "허용하지 않는 형식 <NULL>")
-    val period: Period,
+    val period: String,
     @NotBlank(message = "허용하지 않는 형식 <NULL, EMPTY, BLANK>")
     val number: String,
     @NotNull(message = "허용하지 않는 형식 <NULL>")
