@@ -2,12 +2,14 @@ package com.dsm.pick.service
 
 import com.dsm.pick.controller.response.LoginResponse
 import com.dsm.pick.controller.response.LoginResponse.ManagedClassroom
+import com.dsm.pick.controller.response.LoginResponse.ManagedClub
 import com.dsm.pick.domain.Teacher
 import com.dsm.pick.exception.AccountInformationMismatchException
 import com.dsm.pick.exception.AlreadyExistAccountException
 import com.dsm.pick.exception.AuthenticationNumberMismatchException
 import com.dsm.pick.exception.InvalidTokenException
 import com.dsm.pick.repository.ClassroomRepository
+import com.dsm.pick.repository.ClubRepository
 import com.dsm.pick.repository.TeacherRepository
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
@@ -24,6 +26,7 @@ class AuthService(
     private val jwtService: JwtService,
     private val teacherRepository: TeacherRepository,
     private val classroomRepository: ClassroomRepository,
+    private val clubRepository: ClubRepository,
 ) {
     private val encryptionAlgorithm = "SHA-512"
     private val characterEncoding = Charset.forName("UTF-8")
@@ -43,6 +46,17 @@ class AuthService(
                         priority = it.priority,
                     )
                 },
+            managedClub = findManagedClub(
+                teacherName = findTeacherById(teacherId).name
+            ).let {
+                if (it == null) null
+                else ManagedClub(
+                    name = it.name,
+                    location = it.location.location,
+                    floor = it.location.floor.value,
+                    priority = it.location.priority,
+                )
+            }
         )
     }
 
@@ -115,6 +129,8 @@ class AuthService(
     private fun createRefreshToken(teacherId: String) = jwtService.createToken(teacherId, Token.REFRESH)
 
     private fun findManagedClassroom(teacherId: String) = classroomRepository.findByManager(teacherId)
+
+    private fun findManagedClub(teacherName: String) = clubRepository.findByTeacher(teacherName)
 
     private fun findTeacherIdByToken(token: String) = jwtService.getTeacherId(token)
 

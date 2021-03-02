@@ -2,7 +2,10 @@ package com.dsm.pick.service
 
 import com.dsm.pick.controller.response.LoginResponse
 import com.dsm.pick.controller.response.LoginResponse.ManagedClassroom
+import com.dsm.pick.controller.response.LoginResponse.ManagedClub
 import com.dsm.pick.domain.Classroom
+import com.dsm.pick.domain.Club
+import com.dsm.pick.domain.Location
 import com.dsm.pick.domain.Teacher
 import com.dsm.pick.domain.attribute.Floor
 import com.dsm.pick.exception.AccountInformationMismatchException
@@ -29,6 +32,12 @@ internal class AuthServiceTest {
             teacherName = "teacherName",
             managedClassroom = ManagedClassroom(
                 name = "testClassroom",
+                floor = 3,
+                priority = 0,
+            ),
+            managedClub = ManagedClub(
+                name = "testClub",
+                location = "testLocation",
                 floor = 3,
                 priority = 0,
             ),
@@ -176,5 +185,18 @@ internal class AuthServiceTest {
                         manager = "teacherId"
                     )
         },
+        clubRepository = mock {
+            on { findByTeacher("teacherName") } doReturn
+                    Club(
+                        name = "testClub",
+                        location = Location(
+                            location = "testLocation",
+                            floor = Floor.THREE,
+                            priority = 0,
+                        ),
+                        teacher = "teacherName",
+                        head = "3417 Jin"
+                    )
+        }
     )
 }
