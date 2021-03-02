@@ -55,14 +55,14 @@ class AttendanceService(
     fun updateAttendance(
         studentNumber: String,
         period: Period,
-        attendanceState: State,
+        attendanceState: String,
         attendanceDate: LocalDate = LocalDate.now(),
     ) {
         findAttendance(
             studentNumber = studentNumber,
             period = period,
             attendanceDate = attendanceDate,
-        ).state = attendanceState
+        ).state = State.values().singleOrNull { it.value == attendanceState }?: throw NonExistStateException(attendanceState)
     }
 
     fun updateMemo(
