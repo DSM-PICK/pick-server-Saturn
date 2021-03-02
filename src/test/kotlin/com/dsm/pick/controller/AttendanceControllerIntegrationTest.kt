@@ -163,7 +163,7 @@ internal class AttendanceControllerIntegrationTest(
             StudentStateRequest(
                 number = "3417",
                 period = Period.EIGHT,
-                state = State.ATTENDANCE
+                state = "출석"
             )
         )
         mock.perform(patch("/attendance/student-state")
@@ -184,7 +184,7 @@ internal class AttendanceControllerIntegrationTest(
             StudentStateRequest(
                 number = "3417",
                 period = Period.EIGHT,
-                state = State.ATTENDANCE
+                state = "출석"
             )
         )
         val response = objectMapper.readValue<ExceptionResponse>(

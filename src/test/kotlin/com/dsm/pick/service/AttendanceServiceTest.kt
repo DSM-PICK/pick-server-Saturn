@@ -124,7 +124,7 @@ internal class AttendanceServiceTest {
         attendanceService.updateAttendance(
             studentNumber = "3417",
             period = Period.EIGHT,
-            attendanceState = State.MOVE,
+            attendanceState = "이동",
             attendanceDate = LocalDate.of(2021, 1, 1)
         )
     }
@@ -135,7 +135,7 @@ internal class AttendanceServiceTest {
             attendanceService.updateAttendance(
                 studentNumber = "void",
                 period = Period.EIGHT,
-                attendanceState = State.MOVE,
+                attendanceState = "이동",
                 attendanceDate = LocalDate.of(2021, 1, 1)
             )
         }
