@@ -26,6 +26,9 @@ class AttendanceController(
         @PathVariable("schedule") schedule: Schedule,
         @PathVariable("floor") floor: Floor,
     ): AttendanceNavigationResponse {
+        println("authorization: $token")
+        println("schedule: ${schedule.value}")
+        println("floor: ${floor.value}")
         authService.validateToken(token)
         return attendanceService.showAttendanceNavigation(schedule, floor)
     }
