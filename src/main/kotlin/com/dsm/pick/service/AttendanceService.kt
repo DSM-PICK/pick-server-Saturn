@@ -54,13 +54,13 @@ class AttendanceService(
 
     fun updateAttendance(
         studentNumber: String,
-        period: String,
+        period: Int,
         attendanceState: String,
         attendanceDate: LocalDate = LocalDate.now(),
     ) {
         findAttendance(
             studentNumber = studentNumber,
-            period = Period.values().singleOrNull { it.value == period.toInt() }?: throw NonExistPeriodException(period.toInt()),
+            period = Period.values().singleOrNull { it.value == period }?: throw NonExistPeriodException(period),
             attendanceDate = attendanceDate,
         ).state = State.values().singleOrNull { it.value == attendanceState }?: throw NonExistStateException(attendanceState)
     }
