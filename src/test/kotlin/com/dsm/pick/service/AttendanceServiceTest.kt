@@ -123,7 +123,7 @@ internal class AttendanceServiceTest {
     fun `출석 상태 변환 OK`() {
         attendanceService.updateAttendance(
             studentNumber = "3417",
-            period = Period.EIGHT,
+            period = 8,
             attendanceState = "이동",
             attendanceDate = LocalDate.of(2021, 1, 1)
         )
@@ -134,7 +134,7 @@ internal class AttendanceServiceTest {
         assertThrows<AttendanceNotFoundException> {
             attendanceService.updateAttendance(
                 studentNumber = "void",
-                period = Period.EIGHT,
+                period = 8,
                 attendanceState = "이동",
                 attendanceDate = LocalDate.of(2021, 1, 1)
             )

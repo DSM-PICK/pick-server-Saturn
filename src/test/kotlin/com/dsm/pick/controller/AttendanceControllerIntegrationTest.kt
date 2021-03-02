@@ -162,7 +162,7 @@ internal class AttendanceControllerIntegrationTest(
         val requestBody = objectMapper.writeValueAsString(
             StudentStateRequest(
                 number = "3417",
-                period = Period.EIGHT,
+                period = 8,
                 state = "출석"
             )
         )
@@ -183,7 +183,7 @@ internal class AttendanceControllerIntegrationTest(
         val requestBody = objectMapper.writeValueAsString(
             StudentStateRequest(
                 number = "3417",
-                period = Period.EIGHT,
+                period = 8,
                 state = "출석"
             )
         )
