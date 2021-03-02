@@ -10,8 +10,12 @@ class StateConverter : AttributeConverter<State, String>, Converter<String, Stat
 
     override fun convertToDatabaseColumn(state: State) = state.value
 
-    override fun convertToEntityAttribute(state: String) =
-        State.values().singleOrNull { it.value == state }?: throw NonExistStateException(state)
+    override fun convertToEntityAttribute(state: String): State {
+        return State.values().singleOrNull {
+            println("it.value: ${it.value}")
+            it.value == state
+        }?: throw NonExistStateException(state)
+    }
 
     override fun convert(request: String) = convertToEntityAttribute(request)
 }
