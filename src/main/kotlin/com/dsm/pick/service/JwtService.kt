@@ -22,7 +22,7 @@ class JwtService(
             .setHeaderParam("typ", "JWT")
             .claim("id", teacherId)
             .setExpiration(Date(System.currentTimeMillis() + tokenType.expirationTime))
-            .signWith(signatureAlgorithm, key)
+            .signWith(signatureAlgorithm, securityKey)
             .compact()
 
     fun getTeacherId(token: String): String =
