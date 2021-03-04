@@ -11,9 +11,10 @@ import javax.xml.bind.DatatypeConverter
 @Service
 class JwtService(
     @Value("\${TOKEN_SECURE_KEY:kotlin-love}")
-    private val securityKey: String,
+    private val secretKey: String,
 ) {
-    private val apiKeySecretBytes = DatatypeConverter.parseBase64Binary(securityKey)
+//    private val apiKeySecretBytes = DatatypeConverter.parseBase64Binary(securityKey)
+    private val base64SecretKey = Base64.getEncoder().encodeToString(secretKey.toByteArray())
     private val signatureAlgorithm = SignatureAlgorithm.HS256
 //    private val key = SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.jcaName)
 
@@ -22,12 +23,12 @@ class JwtService(
             .setHeaderParam("typ", "JWT")
             .claim("id", teacherId)
             .setExpiration(Date(System.currentTimeMillis() + tokenType.expirationTime))
-            .signWith(signatureAlgorithm, securityKey)
+            .signWith(signatureAlgorithm, base64SecretKey)
             .compact()
 
     fun getTeacherId(token: String): String =
         Jwts.parser()
-            .setSigningKey(securityKey)
+            .setSigningKey(base64SecretKey)
             .parseClaimsJws(token)
             .body
             .get("id", String::class.java)
@@ -36,7 +37,7 @@ class JwtService(
         try {
             val currentTime = Date()
             val expirationTime = Jwts.parser()
-                .setSigningKey(securityKey)
+                .setSigningKey(base64SecretKey)
                 .parseClaimsJws(token)
                 .body
                 .expiration
