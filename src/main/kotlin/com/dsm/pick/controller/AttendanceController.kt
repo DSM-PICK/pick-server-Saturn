@@ -5,6 +5,7 @@ import com.dsm.pick.controller.request.StudentStateRequest
 import com.dsm.pick.controller.response.AttendanceNavigationResponse
 import com.dsm.pick.controller.response.AttendanceResponse
 import com.dsm.pick.domain.attribute.Floor
+import com.dsm.pick.domain.attribute.Grade
 import com.dsm.pick.domain.attribute.Period
 import com.dsm.pick.domain.attribute.Schedule
 import com.dsm.pick.service.AttendanceService
@@ -67,5 +68,12 @@ class AttendanceController(
             period = period,
             attendanceMemo = request.memo,
         )
+    }
+
+    @GetMapping("/record/{grade}")
+    fun showAttendanceRecordByGrade(
+        @PathVariable("grade") grade: Grade
+    ) {
+
     }
 }

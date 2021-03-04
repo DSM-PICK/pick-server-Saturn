@@ -13,5 +13,6 @@ class ConverterConfiguration : WebMvcConfigurer {
         registry.addConverter(ScheduleConverter())
         registry.addConverter(FloorConverter())
         registry.addConverter(PeriodConverter())
+        registry.addConverter(GradeConverter())
     }
 }
