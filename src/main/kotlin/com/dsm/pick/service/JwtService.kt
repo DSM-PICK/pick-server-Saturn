@@ -15,19 +15,19 @@ class JwtService(
 ) {
     private val apiKeySecretBytes = DatatypeConverter.parseBase64Binary(securityKey)
     private val signatureAlgorithm = SignatureAlgorithm.HS256
-    private val key = SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.jcaName)
+//    private val key = SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.jcaName)
 
     fun createToken(teacherId: String, tokenType: Token): String =
         Jwts.builder()
             .setHeaderParam("typ", "JWT")
             .claim("id", teacherId)
             .setExpiration(Date(System.currentTimeMillis() + tokenType.expirationTime))
-            .signWith(signatureAlgorithm, key)
+            .signWith(signatureAlgorithm, securityKey)
             .compact()
 
     fun getTeacherId(token: String): String =
         Jwts.parser()
-            .setSigningKey(key)
+            .setSigningKey(securityKey)
             .parseClaimsJws(token)
             .body
             .get("id", String::class.java)
@@ -36,7 +36,7 @@ class JwtService(
         try {
             val currentTime = Date()
             val expirationTime = Jwts.parser()
-                .setSigningKey(key)
+                .setSigningKey(securityKey)
                 .parseClaimsJws(token)
                 .body
                 .expiration
