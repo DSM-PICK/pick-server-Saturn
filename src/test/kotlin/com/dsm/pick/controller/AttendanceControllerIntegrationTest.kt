@@ -2,6 +2,7 @@ package com.dsm.pick.controller
 
 import com.dsm.pick.controller.request.MemoRequest
 import com.dsm.pick.controller.request.StudentStateRequest
+import com.dsm.pick.controller.response.ActivityResponse
 import com.dsm.pick.controller.response.AttendanceNavigationResponse
 import com.dsm.pick.controller.response.AttendanceRecordResponse
 import com.dsm.pick.controller.response.AttendanceResponse
@@ -242,24 +243,95 @@ internal class AttendanceControllerIntegrationTest(
         assertThat(response.code).isEqualTo("INVALID_TOKEN")
     }
 
-//    @Test
-//    fun `학년별 간략한 출결 현황 OK`() {
-//        val response = objectMapper.readValue<AttendanceRecordResponse>(
-//            mock.perform(get("/attendance/record/3")
-//                .header("Authorization", "this-is-test-token")
-//                .contentType(MediaType.APPLICATION_JSON_UTF8)
-//                .accept(MediaType.APPLICATION_JSON_UTF8)
-//                .characterEncoding("UTF-8"))
-//                .andExpect(status().isOk)
-//                .andReturn()
-//                .response
-//                .contentAsString
-//        )
-//
-//        assertThat(response.outing).isZero
-//        assertThat(response.fieldExperience).isZero
-//        assertThat(response.homeComing).isZero
-//        assertThat(response.move).isZero
-//        assertThat(response.truancy).isZero
-//    }
+    @Test
+    fun `학년별 간략한 출결 현황 OK`() {
+        val response = objectMapper.readValue<AttendanceRecordResponse>(
+            mock.perform(get("/attendance/record/3")
+                .header("Authorization", "this-is-test-token")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .characterEncoding("UTF-8"))
+                .andExpect(status().isOk)
+                .andReturn()
+                .response
+                .contentAsString
+        )
+
+        assertThat(response.outing).isOne
+        assertThat(response.fieldExperience).isZero
+        assertThat(response.homeComing).isZero
+        assertThat(response.move).isZero
+        assertThat(response.truancy).isZero
+    }
+
+    @Test
+    fun `학년별 간략한 출결 현황 - 잘못된 토큰 Invalid Token`() {
+        val response = objectMapper.readValue<ExceptionResponse>(
+            mock.perform(get("/attendance/record/3")
+                .header("Authorization", "invalid token")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .characterEncoding("UTF-8"))
+                .andExpect(status().isUnauthorized)
+                .andReturn()
+                .response
+                .contentAsString
+        )
+
+        assertThat(response.code).isEqualTo("INVALID_TOKEN")
+    }
+
+    @Test
+    fun `특정 날짜의 일정 가져오기 OK`() {
+        val response = objectMapper.readValue<ActivityResponse>(
+            mock.perform(get("/attendance/activity/2021-01-01")
+                .header("Authorization", "this-is-test-token")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .characterEncoding("UTF-8"))
+                .andExpect(status().isOk)
+                .andReturn()
+                .response
+                .contentAsString
+        )
+
+        assertThat(response.schedule).isEqualTo("club")
+        assertThat(response.secondFloorTeacherName).isEqualTo("teacherName")
+        assertThat(response.thirdFloorTeacherName).isEqualTo("teacherName")
+        assertThat(response.forthFloorTeacherName).isEqualTo("teacherName")
+    }
+
+    @Test
+    fun `특정 날짜의 일정 가져오기 - 잘못된 토큰 Invalid Token`() {
+        val response = objectMapper.readValue<ExceptionResponse>(
+            mock.perform(get("/attendance/activity/2021-01-01")
+                .header("Authorization", "invalid token")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .characterEncoding("UTF-8"))
+                .andExpect(status().isUnauthorized)
+                .andReturn()
+                .response
+                .contentAsString
+        )
+
+        assertThat(response.code).isEqualTo("INVALID_TOKEN")
+    }
+
+    @Test
+    fun `특정 날짜의 일정 가져오기 - 일정을 찾을 수 없음 Activity Not Found Exception`() {
+        val response = objectMapper.readValue<ExceptionResponse>(
+            mock.perform(get("/attendance/activity/2003-08-16")
+                .header("Authorization", "this-is-test-token")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .characterEncoding("UTF-8"))
+                .andExpect(status().isNotFound)
+                .andReturn()
+                .response
+                .contentAsString
+        )
+
+        assertThat(response.code).isEqualTo("ACTIVITY_NOT_FOUND")
+    }
 }

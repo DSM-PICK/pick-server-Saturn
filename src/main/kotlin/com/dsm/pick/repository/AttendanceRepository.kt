@@ -10,5 +10,5 @@ interface AttendanceRepository : JpaRepository<Attendance, Int> {
     fun findByStudentClubLocationFloorAndStudentClubLocationPriorityAndActivityDate(floor: Floor, priority: Int, attendanceDate: LocalDate): List<Attendance>
     fun findByStudentClassroomFloorAndStudentClassroomPriorityAndActivityDate(floor: Floor, priority: Int, attendanceDate: LocalDate): List<Attendance>
     fun findByStudentNumberAndPeriodAndActivityDate(studentNumber: String, period: Period, attendanceDate: LocalDate): Attendance?
-    fun findByStudentNumberStartingWithAndActivityDate(grade: String, date: LocalDate): List<Attendance>
+    fun findByActivityDateAndStudentNumberStartsWith(date: LocalDate, studentNumber: String): List<Attendance>
 }

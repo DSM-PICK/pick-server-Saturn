@@ -12,6 +12,7 @@ import com.dsm.pick.domain.attribute.Period
 import com.dsm.pick.domain.attribute.Schedule
 import com.dsm.pick.service.AttendanceService
 import com.dsm.pick.service.AuthService
+import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -78,13 +79,14 @@ class AttendanceController(
         @PathVariable("grade") grade: Grade,
     ): AttendanceRecordResponse {
         authService.validateToken(token)
+        println("grade: ${grade.value}")
         return attendanceService.showAttendanceRecordByGrade(grade)
     }
 
     @GetMapping("/activity/{date}")
     fun showActivityByDate(
         @RequestHeader("Authorization") token: String,
-        @PathVariable("date") date: LocalDate,
+        @PathVariable("date") @DateTimeFormat(pattern = "yyyy-MM-dd") date: LocalDate,
     ): ActivityResponse {
         authService.validateToken(token)
         return attendanceService.showActivityByDate(date)

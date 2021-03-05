@@ -8,10 +8,10 @@ import javax.persistence.AttributeConverter
 @javax.persistence.Converter
 class PeriodConverter : AttributeConverter<Period, Int>, Converter<String, Period> {
 
-    override fun convertToDatabaseColumn(period: Period) = period.value
+    override fun convertToDatabaseColumn(period: Period?) = period?.value
 
-    override fun convertToEntityAttribute(period: Int) =
-        Period.values().singleOrNull { it.value == period }?: throw NonExistPeriodException(period)
+    override fun convertToEntityAttribute(period: Int?) =
+        Period.values().singleOrNull { it.value == period }?: throw NonExistPeriodException(period?: -1)
 
     override fun convert(request: String) = convertToEntityAttribute(request.toInt())
 }

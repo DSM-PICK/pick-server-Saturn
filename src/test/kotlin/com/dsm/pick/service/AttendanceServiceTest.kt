@@ -170,6 +170,15 @@ internal class AttendanceServiceTest {
         assertThat(attendanceRecord.truancy).isZero
     }
 
+    @Test
+    fun `특정 날짜의 일정 가져오기 OK`() {
+        val activity = attendanceService.showActivityByDate(LocalDate.of(2021, 1, 1))
+        assertThat(activity.schedule).isEqualTo("club")
+        assertThat(activity.secondFloorTeacherName).isEqualTo("teacherName")
+        assertThat(activity.thirdFloorTeacherName).isEqualTo("teacherName")
+        assertThat(activity.forthFloorTeacherName).isEqualTo("teacherName")
+    }
+
     private val teacher = Teacher(
         id = "teacherId",
         password = "teacherPassword",
@@ -260,7 +269,7 @@ internal class AttendanceServiceTest {
             on { findByStudentNumberAndPeriodAndActivityDate("3417", Period.EIGHT, LocalDate.of(2021, 1, 1)) } doReturn clubAttendance
             on { findByStudentClassroomFloorAndStudentClassroomPriorityAndActivityDate(Floor.THREE, 0, LocalDate.of(2021, 1, 2)) } doReturn listOf(classroomAttendance)
             on { findByStudentClubLocationFloorAndStudentClubLocationPriorityAndActivityDate(Floor.THREE, 0, LocalDate.of(2021, 1, 1)) } doReturn listOf(clubAttendance)
-            on { findByStudentNumberStartingWithAndActivityDate("3", LocalDate.of(2021, 1, 1)) } doReturn listOf(clubAttendance)
+            on { findByActivityDateAndStudentNumberStartsWith(LocalDate.of(2021, 1, 1), "3") } doReturn listOf(clubAttendance)
         },
     )
 }
