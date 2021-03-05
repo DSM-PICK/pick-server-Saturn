@@ -73,7 +73,5 @@ class AttendanceController(
     @GetMapping("/record/{grade}")
     fun showAttendanceRecordByGrade(
         @PathVariable("grade") grade: Grade
-    ) {
-
-    }
+    ) = attendanceService.showAttendanceRecordByGrade(grade)
 }

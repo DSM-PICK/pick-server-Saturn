@@ -2,13 +2,11 @@ package com.dsm.pick.service
 
 import com.dsm.pick.controller.response.AttendanceNavigationResponse
 import com.dsm.pick.controller.response.AttendanceNavigationResponse.LocationInformation
+import com.dsm.pick.controller.response.AttendanceRecordResponse
 import com.dsm.pick.controller.response.AttendanceResponse
 import com.dsm.pick.controller.response.AttendanceResponse.StudentState
 import com.dsm.pick.controller.response.AttendanceResponse.StudentState.Memo
-import com.dsm.pick.domain.attribute.Floor
-import com.dsm.pick.domain.attribute.Period
-import com.dsm.pick.domain.attribute.Schedule
-import com.dsm.pick.domain.attribute.State
+import com.dsm.pick.domain.attribute.*
 import com.dsm.pick.exception.*
 import com.dsm.pick.repository.ActivityRepository
 import com.dsm.pick.repository.AttendanceRepository
@@ -76,6 +74,18 @@ class AttendanceService(
             period = period,
             attendanceDate = attendanceDate,
         ).memo = attendanceMemo
+    }
+
+    fun showAttendanceRecordByGrade(grade: Grade): AttendanceRecordResponse {
+        val attendanceByGrade = attendanceRepository.findByStudentNumberStartingWith(grade.value.toString())
+
+        return AttendanceRecordResponse(
+            outing = attendanceByGrade.filter { it.state == State.OUTING }.count(),
+            fieldExperience = attendanceByGrade.filter { it.state == State.FIELD_EXPERIENCE }.count(),
+            homeComing = attendanceByGrade.filter { it.state == State.HOME_COMING }.count(),
+            move = attendanceByGrade.filter { it.state == State.MOVE }.count(),
+            truancy = attendanceByGrade.filter { it.state == State.TRUANCY }.count(),
+        )
     }
 
     private fun findTeacherNameBySchedule(
