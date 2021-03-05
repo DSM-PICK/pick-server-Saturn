@@ -2,6 +2,7 @@ package com.dsm.pick.controller
 
 import com.dsm.pick.controller.request.MemoRequest
 import com.dsm.pick.controller.request.StudentStateRequest
+import com.dsm.pick.controller.response.ActivityResponse
 import com.dsm.pick.controller.response.AttendanceNavigationResponse
 import com.dsm.pick.controller.response.AttendanceRecordResponse
 import com.dsm.pick.controller.response.AttendanceResponse
@@ -78,5 +79,14 @@ class AttendanceController(
     ): AttendanceRecordResponse {
         authService.validateToken(token)
         return attendanceService.showAttendanceRecordByGrade(grade)
+    }
+
+    @GetMapping("/activity/{date}")
+    fun showActivityByDate(
+        @RequestHeader("Authorization") token: String,
+        @PathVariable("date") date: LocalDate,
+    ): ActivityResponse {
+        authService.validateToken(token)
+        return attendanceService.showActivityByDate(date)
     }
 }

@@ -1,5 +1,6 @@
 package com.dsm.pick.service
 
+import com.dsm.pick.controller.response.ActivityResponse
 import com.dsm.pick.controller.response.AttendanceNavigationResponse
 import com.dsm.pick.controller.response.AttendanceNavigationResponse.LocationInformation
 import com.dsm.pick.controller.response.AttendanceRecordResponse
@@ -90,6 +91,14 @@ class AttendanceService(
             truancy = attendanceByGrade.filter { it.state == State.TRUANCY }.count(),
         )
     }
+
+    fun showActivityByDate(date: LocalDate) =
+        ActivityResponse(
+            schedule = findSchedule(date).schedule.value,
+            secondFloorTeacherName = findSchedule(date).secondFloorTeacher.name,
+            thirdFloorTeacherName = findSchedule(date).thirdFloorTeacher.name,
+            forthFloorTeacherName = findSchedule(date).forthFloorTeacher.name,
+        )
 
     private fun findTeacherNameBySchedule(
         schedule: Schedule,
