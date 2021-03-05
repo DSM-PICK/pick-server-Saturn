@@ -76,8 +76,11 @@ class AttendanceService(
         ).memo = attendanceMemo
     }
 
-    fun showAttendanceRecordByGrade(grade: Grade): AttendanceRecordResponse {
-        val attendanceByGrade = attendanceRepository.findByStudentNumberStartingWith(grade.value.toString())
+    fun showAttendanceRecordByGrade(
+        grade: Grade,
+        date: LocalDate = LocalDate.now(),
+    ): AttendanceRecordResponse {
+        val attendanceByGrade = attendanceRepository.findByStudentNumberStartingWithAndActivityDate(grade.value.toString(), date)
 
         return AttendanceRecordResponse(
             outing = attendanceByGrade.filter { it.state == State.OUTING }.count(),
