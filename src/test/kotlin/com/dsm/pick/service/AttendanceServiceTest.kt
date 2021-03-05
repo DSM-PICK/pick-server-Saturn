@@ -1,10 +1,7 @@
 package com.dsm.pick.service
 
 import com.dsm.pick.domain.*
-import com.dsm.pick.domain.attribute.Floor
-import com.dsm.pick.domain.attribute.Period
-import com.dsm.pick.domain.attribute.Schedule
-import com.dsm.pick.domain.attribute.State
+import com.dsm.pick.domain.attribute.*
 import com.dsm.pick.exception.*
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doReturn
@@ -163,6 +160,16 @@ internal class AttendanceServiceTest {
         }
     }
 
+    @Test
+    fun `학년별 간략한 출석 현황 반환 OK`() {
+        val attendanceRecord = attendanceService.showAttendanceRecordByGrade(Grade.THREE, LocalDate.of(2021, 1, 1))
+        assertThat(attendanceRecord.outing).isZero
+        assertThat(attendanceRecord.fieldExperience).isZero
+        assertThat(attendanceRecord.homeComing).isZero
+        assertThat(attendanceRecord.move).isZero
+        assertThat(attendanceRecord.truancy).isZero
+    }
+
     private val teacher = Teacher(
         id = "teacherId",
         password = "teacherPassword",
@@ -224,7 +231,7 @@ internal class AttendanceServiceTest {
     )
 
     private val classroomAttendance = Attendance(
-        id = 1,
+        id = 2,
         activity = classroomActivity,
         student = student,
         period = Period.EIGHT,
@@ -253,6 +260,7 @@ internal class AttendanceServiceTest {
             on { findByStudentNumberAndPeriodAndActivityDate("3417", Period.EIGHT, LocalDate.of(2021, 1, 1)) } doReturn clubAttendance
             on { findByStudentClassroomFloorAndStudentClassroomPriorityAndActivityDate(Floor.THREE, 0, LocalDate.of(2021, 1, 2)) } doReturn listOf(classroomAttendance)
             on { findByStudentClubLocationFloorAndStudentClubLocationPriorityAndActivityDate(Floor.THREE, 0, LocalDate.of(2021, 1, 1)) } doReturn listOf(clubAttendance)
+            on { findByStudentNumberStartingWithAndActivityDate("3", LocalDate.of(2021, 1, 1)) } doReturn listOf(clubAttendance)
         },
     )
 }

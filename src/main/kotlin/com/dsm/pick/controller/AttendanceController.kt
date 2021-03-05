@@ -72,6 +72,10 @@ class AttendanceController(
 
     @GetMapping("/record/{grade}")
     fun showAttendanceRecordByGrade(
-        @PathVariable("grade") grade: Grade
-    ) = attendanceService.showAttendanceRecordByGrade(grade)
+        @RequestHeader("Authorization") token: String,
+        @PathVariable("grade") grade: Grade,
+    ) {
+        authService.validateToken(token)
+        attendanceService.showAttendanceRecordByGrade(grade)
+    }
 }
