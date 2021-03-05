@@ -3,6 +3,7 @@ package com.dsm.pick.controller
 import com.dsm.pick.controller.request.MemoRequest
 import com.dsm.pick.controller.request.StudentStateRequest
 import com.dsm.pick.controller.response.AttendanceNavigationResponse
+import com.dsm.pick.controller.response.AttendanceRecordResponse
 import com.dsm.pick.controller.response.AttendanceResponse
 import com.dsm.pick.domain.attribute.Floor
 import com.dsm.pick.domain.attribute.Grade
@@ -74,8 +75,8 @@ class AttendanceController(
     fun showAttendanceRecordByGrade(
         @RequestHeader("Authorization") token: String,
         @PathVariable("grade") grade: Grade,
-    ) {
+    ): AttendanceRecordResponse {
         authService.validateToken(token)
-        attendanceService.showAttendanceRecordByGrade(grade)
+        return attendanceService.showAttendanceRecordByGrade(grade)
     }
 }
