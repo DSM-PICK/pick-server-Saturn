@@ -4,6 +4,7 @@ import com.dsm.pick.domain.attribute.Grade
 import com.dsm.pick.exception.NonExistGradeException
 import org.springframework.core.convert.converter.Converter
 
+@javax.persistence.Converter
 class GradeConverter : Converter<String, Grade> {
 
     override fun convert(request: String) =
