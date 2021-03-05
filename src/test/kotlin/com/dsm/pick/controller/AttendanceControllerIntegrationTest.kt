@@ -162,8 +162,8 @@ internal class AttendanceControllerIntegrationTest(
         val requestBody = objectMapper.writeValueAsString(
             StudentStateRequest(
                 number = "3417",
-                period = Period.EIGHT,
-                state = State.ATTENDANCE
+                period = 8,
+                state = "출석"
             )
         )
         mock.perform(patch("/attendance/student-state")
@@ -183,8 +183,8 @@ internal class AttendanceControllerIntegrationTest(
         val requestBody = objectMapper.writeValueAsString(
             StudentStateRequest(
                 number = "3417",
-                period = Period.EIGHT,
-                state = State.ATTENDANCE
+                period = 8,
+                state = "출석"
             )
         )
         val response = objectMapper.readValue<ExceptionResponse>(
