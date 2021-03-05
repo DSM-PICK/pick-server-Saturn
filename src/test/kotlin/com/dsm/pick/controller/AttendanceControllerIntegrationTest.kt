@@ -242,24 +242,24 @@ internal class AttendanceControllerIntegrationTest(
         assertThat(response.code).isEqualTo("INVALID_TOKEN")
     }
 
-    @Test
-    fun `학년별 간략한 출결 현황 OK`() {
-        val response = objectMapper.readValue<AttendanceRecordResponse>(
-            mock.perform(get("/attendance/record/3")
-                .header("Authorization", "this-is-test-token")
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .accept(MediaType.APPLICATION_JSON_UTF8)
-                .characterEncoding("UTF-8"))
-                .andExpect(status().isOk)
-                .andReturn()
-                .response
-                .contentAsString
-        )
-
-        assertThat(response.outing).isZero
-        assertThat(response.fieldExperience).isZero
-        assertThat(response.homeComing).isZero
-        assertThat(response.move).isZero
-        assertThat(response.truancy).isZero
-    }
+//    @Test
+//    fun `학년별 간략한 출결 현황 OK`() {
+//        val response = objectMapper.readValue<AttendanceRecordResponse>(
+//            mock.perform(get("/attendance/record/3")
+//                .header("Authorization", "this-is-test-token")
+//                .contentType(MediaType.APPLICATION_JSON_UTF8)
+//                .accept(MediaType.APPLICATION_JSON_UTF8)
+//                .characterEncoding("UTF-8"))
+//                .andExpect(status().isOk)
+//                .andReturn()
+//                .response
+//                .contentAsString
+//        )
+//
+//        assertThat(response.outing).isZero
+//        assertThat(response.fieldExperience).isZero
+//        assertThat(response.homeComing).isZero
+//        assertThat(response.move).isZero
+//        assertThat(response.truancy).isZero
+//    }
 }
