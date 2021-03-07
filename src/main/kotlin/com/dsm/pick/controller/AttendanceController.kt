@@ -91,5 +91,10 @@ class AttendanceController(
         return attendanceService.showActivityByDate(date)
     }
 
-
+    @GetMapping("/test")
+    fun test(
+        @RequestParam("date") date: LocalDate
+    ) {
+        println("date: $date")
+    }
 }
