@@ -13,10 +13,8 @@ class JwtService(
     @Value("\${TOKEN_SECURE_KEY:kotlin-love}")
     private val secretKey: String,
 ) {
-//    private val apiKeySecretBytes = DatatypeConverter.parseBase64Binary(securityKey)
     private val base64SecretKey = Base64.getEncoder().encodeToString(secretKey.toByteArray())
     private val signatureAlgorithm = SignatureAlgorithm.HS256
-//    private val key = SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.jcaName)
 
     fun createToken(teacherId: String, tokenType: Token): String =
         Jwts.builder()

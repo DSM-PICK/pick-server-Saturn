@@ -269,7 +269,7 @@ internal class AttendanceServiceTest {
             on { findByStudentNumberAndPeriodAndActivityDate("3417", Period.EIGHT, LocalDate.of(2021, 1, 1)) } doReturn clubAttendance
             on { findByStudentClassroomFloorAndStudentClassroomPriorityAndActivityDate(Floor.THREE, 0, LocalDate.of(2021, 1, 2)) } doReturn listOf(classroomAttendance)
             on { findByStudentClubLocationFloorAndStudentClubLocationPriorityAndActivityDate(Floor.THREE, 0, LocalDate.of(2021, 1, 1)) } doReturn listOf(clubAttendance)
-            on { findByActivityDateAndStudentNumberStartsWith(LocalDate.of(2021, 1, 1), "3") } doReturn listOf(clubAttendance)
+            on { findByActivityDateAndStudentNumberStartingWith(LocalDate.of(2021, 1, 1), "3") } doReturn listOf(clubAttendance)
         },
     )
 }

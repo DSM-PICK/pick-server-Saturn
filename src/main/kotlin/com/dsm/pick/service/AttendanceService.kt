@@ -81,10 +81,7 @@ class AttendanceService(
         grade: Grade,
         date: LocalDate = LocalDate.now(),
     ): AttendanceRecordResponse {
-        println("grade: ${grade.value}")
-        println("date: $date")
-        val attendanceByGrade = attendanceRepository.findByActivityDateAndStudentNumberStartsWith(date, grade.value.toString())
-        println("여기는 옴")
+        val attendanceByGrade = attendanceRepository.findByActivityDateAndStudentNumberStartingWith(date, grade.value.toString())
         
         return AttendanceRecordResponse(
             outing = attendanceByGrade.filter { it.state == State.OUTING }.count(),

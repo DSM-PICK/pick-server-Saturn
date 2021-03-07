@@ -79,7 +79,6 @@ class AttendanceController(
         @PathVariable("grade") grade: Grade,
     ): AttendanceRecordResponse {
         authService.validateToken(token)
-        println("grade: ${grade.value}")
         return attendanceService.showAttendanceRecordByGrade(grade)
     }
 
