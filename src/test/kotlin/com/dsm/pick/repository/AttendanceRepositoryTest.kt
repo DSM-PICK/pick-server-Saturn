@@ -102,7 +102,7 @@ internal class AttendanceRepositoryTest(
     @Test
     fun `학년과 날짜로 출석부 조회 OK`() {
         val attendance =
-            attendanceRepository.findByActivityDateAndStudentNumberStartsWith(LocalDate.of(2021, 1, 1), "3")
+            attendanceRepository.findByActivityDateAndStudentNumberStartingWith(LocalDate.of(2021, 1, 1), "3")
                 .single()
 
         assertThat(attendance.id).isEqualTo(1)
