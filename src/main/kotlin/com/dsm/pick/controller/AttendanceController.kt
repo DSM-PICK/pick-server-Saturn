@@ -93,7 +93,7 @@ class AttendanceController(
 
     @GetMapping("/test")
     fun test(
-        @RequestParam("date") date: LocalDate
+        @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) date: LocalDate
     ) {
         println("date: $date")
     }
