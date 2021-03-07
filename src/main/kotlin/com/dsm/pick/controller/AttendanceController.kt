@@ -90,4 +90,6 @@ class AttendanceController(
         authService.validateToken(token)
         return attendanceService.showActivityByDate(date)
     }
+
+
 }
