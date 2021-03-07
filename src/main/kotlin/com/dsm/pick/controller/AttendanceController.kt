@@ -40,9 +40,10 @@ class AttendanceController(
         @PathVariable("schedule") schedule: Schedule,
         @PathVariable("floor") floor: Floor,
         @PathVariable("priority") priority: Int,
+        @RequestParam("date", defaultValue = "#{T(java.time.LocalDate).now()}") date: LocalDate,
     ): AttendanceResponse {
         authService.validateToken(token)
-        return attendanceService.showAttendance(schedule, floor, priority)
+        return attendanceService.showAttendance(schedule, floor, priority, date)
     }
 
     @PatchMapping("/student-state")
@@ -79,7 +80,6 @@ class AttendanceController(
         @PathVariable("grade") grade: Grade,
     ): AttendanceRecordResponse {
         authService.validateToken(token)
-        println("grade: ${grade.value}")
         return attendanceService.showAttendanceRecordByGrade(grade)
     }
 

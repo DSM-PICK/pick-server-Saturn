@@ -8,10 +8,10 @@ import javax.persistence.AttributeConverter
 @javax.persistence.Converter
 class StateConverter : AttributeConverter<State, String>, Converter<String, State> {
 
-    override fun convertToDatabaseColumn(state: State?) = state?.value
+    override fun convertToDatabaseColumn(state: State) = state.value
 
-    override fun convertToEntityAttribute(state: String?) =
-        State.values().singleOrNull { it.value == state }?: throw NonExistStateException(state?: "-1")
+    override fun convertToEntityAttribute(state: String) =
+        State.values().singleOrNull { it.value == state }?: throw NonExistStateException(state)
 
     override fun convert(request: String) = convertToEntityAttribute(request)
 }
