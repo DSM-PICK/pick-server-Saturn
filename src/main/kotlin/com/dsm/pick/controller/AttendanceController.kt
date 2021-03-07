@@ -40,7 +40,8 @@ class AttendanceController(
         @PathVariable("schedule") schedule: Schedule,
         @PathVariable("floor") floor: Floor,
         @PathVariable("priority") priority: Int,
-        @RequestParam("date") date: LocalDate = LocalDate.now()
+        @RequestParam("date", required = false)
+        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) date: LocalDate = LocalDate.now()
     ): AttendanceResponse {
         authService.validateToken(token)
         return attendanceService.showAttendance(schedule, floor, priority, date)
