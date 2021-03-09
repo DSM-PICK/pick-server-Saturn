@@ -158,6 +158,7 @@ class AttendanceService(
                     nine = attendance.singleOrNull { it.period == Period.NINE }?.memo,
                     ten = attendance.singleOrNull { it.period == Period.TEN }?.memo,
                 ),
+                reason = attendance.first().reason,
             )
         }
 

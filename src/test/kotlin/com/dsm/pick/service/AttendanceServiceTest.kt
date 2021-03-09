@@ -237,6 +237,7 @@ internal class AttendanceServiceTest {
         teacher = teacher,
         state = State.ATTENDANCE,
         memo = null,
+        reason = null,
     )
 
     private val classroomAttendance = Attendance(
@@ -247,6 +248,7 @@ internal class AttendanceServiceTest {
         teacher = teacher,
         state = State.MOVE,
         memo = "go undefined",
+        reason = null,
     )
 
     private val attendanceService = AttendanceService(

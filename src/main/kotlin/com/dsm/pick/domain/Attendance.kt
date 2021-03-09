@@ -37,4 +37,7 @@ class Attendance(
 
     @Column(name = "memo")
     var memo: String?,
+
+    @Column(name = "reason")
+    val reason: String?,
 )
