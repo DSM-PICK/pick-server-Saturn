@@ -16,6 +16,7 @@ import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import javax.validation.Valid
 
 @RestController
 @RequestMapping("/attendance")
@@ -40,7 +41,7 @@ class AttendanceController(
         @PathVariable("schedule") schedule: Schedule,
         @PathVariable("floor") floor: Floor,
         @PathVariable("priority") priority: Int,
-        @RequestParam("date", defaultValue = "#{T(java.time.LocalDate).now()}") date: LocalDate,
+            @RequestParam("date", defaultValue = "#{T(java.time.LocalDate).now()}") date: LocalDate,
     ): AttendanceResponse {
         authService.validateToken(token)
         return attendanceService.showAttendance(schedule, floor, priority, date)
@@ -49,7 +50,7 @@ class AttendanceController(
     @PatchMapping("/student-state")
     fun changeAttendance(
         @RequestHeader("Authorization") token: String,
-        @RequestBody request: StudentStateRequest,
+        @RequestBody @Valid request: StudentStateRequest,
     ) {
         authService.validateToken(token)
         attendanceService.updateAttendance(
@@ -62,7 +63,7 @@ class AttendanceController(
     @PatchMapping("/memo/{student}/{period}")
     fun changeMemo(
         @RequestHeader("Authorization") token: String,
-        @RequestBody request: MemoRequest,
+        @RequestBody @Valid request: MemoRequest,
         @PathVariable("student") studentNumber: String,
         @PathVariable("period") period: Period,
     ) {
