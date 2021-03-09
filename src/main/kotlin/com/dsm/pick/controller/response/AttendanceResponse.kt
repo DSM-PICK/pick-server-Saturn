@@ -16,6 +16,7 @@ data class AttendanceResponse(
         val studentName: String,
         val state: State,
         val memo: Memo,
+        val reason: String?,
     ) {
 
         class State(
