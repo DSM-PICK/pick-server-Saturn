@@ -22,6 +22,7 @@ class AttendanceService(
     private val clubRepository: ClubRepository,
     private val classroomRepository: ClassroomRepository,
     private val attendanceRepository: AttendanceRepository,
+    private val teacherRepository: TeacherRepository,
 ) {
 
     fun showAttendanceNavigation(schedule: Schedule, floor: Floor, date: LocalDate = LocalDate.now()) =
@@ -48,7 +49,7 @@ class AttendanceService(
             },
             managerTeacher = when (schedule) {
                 Schedule.CLUB -> findClub(floor, priority).teacher
-                Schedule.SELF_STUDY -> findClassroom(floor, priority).manager
+                Schedule.SELF_STUDY -> findNameOfManager(floor, priority)
                 Schedule.AFTER_SCHOOL -> throw NonExistScheduleException(schedule.value)
             }
         )
@@ -179,4 +180,11 @@ class AttendanceService(
             period = period,
             attendanceDate = attendanceDate,
         )?: throw AttendanceNotFoundException(studentNumber, period.value, attendanceDate)
+
+    private fun findNameOfManager(floor: Floor, priority: Int): String? {
+        val classroomManagerId = findClassroom(floor, priority).manager
+
+        return if (classroomManagerId == null) null
+        else teacherRepository.findTeacherById(classroomManagerId)?.name
+    }
 }
