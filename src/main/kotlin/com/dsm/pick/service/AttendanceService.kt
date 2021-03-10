@@ -9,10 +9,7 @@ import com.dsm.pick.controller.response.AttendanceResponse.StudentState
 import com.dsm.pick.controller.response.AttendanceResponse.StudentState.Memo
 import com.dsm.pick.domain.attribute.*
 import com.dsm.pick.exception.*
-import com.dsm.pick.repository.ActivityRepository
-import com.dsm.pick.repository.AttendanceRepository
-import com.dsm.pick.repository.ClassroomRepository
-import com.dsm.pick.repository.ClubRepository
+import com.dsm.pick.repository.*
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
@@ -25,6 +22,7 @@ class AttendanceService(
     private val clubRepository: ClubRepository,
     private val classroomRepository: ClassroomRepository,
     private val attendanceRepository: AttendanceRepository,
+    private val teacherRepository: TeacherRepository,
 ) {
 
     fun showAttendanceNavigation(schedule: Schedule, floor: Floor, date: LocalDate = LocalDate.now()) =
@@ -49,6 +47,11 @@ class AttendanceService(
                 Schedule.SELF_STUDY -> findClassroom(floor, priority).name
                 Schedule.AFTER_SCHOOL -> throw NonExistScheduleException(schedule.value)
             },
+            managerTeacher = when (schedule) {
+                Schedule.CLUB -> findClub(floor, priority).teacher
+                Schedule.SELF_STUDY -> findNameOfManager(floor, priority)
+                Schedule.AFTER_SCHOOL -> throw NonExistScheduleException(schedule.value)
+            }
         )
 
     fun updateAttendance(
@@ -177,4 +180,11 @@ class AttendanceService(
             period = period,
             attendanceDate = attendanceDate,
         )?: throw AttendanceNotFoundException(studentNumber, period.value, attendanceDate)
+
+    private fun findNameOfManager(floor: Floor, priority: Int): String? {
+        val classroomManagerId = findClassroom(floor, priority).manager
+
+        return if (classroomManagerId == null) null
+        else teacherRepository.findTeacherById(classroomManagerId)?.name
+    }
 }

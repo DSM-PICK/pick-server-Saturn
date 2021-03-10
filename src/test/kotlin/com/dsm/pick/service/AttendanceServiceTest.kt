@@ -4,6 +4,7 @@ import com.dsm.pick.domain.*
 import com.dsm.pick.domain.attribute.*
 import com.dsm.pick.exception.*
 import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.doAnswer
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import org.assertj.core.api.Assertions.assertThat
@@ -272,6 +273,17 @@ internal class AttendanceServiceTest {
             on { findByStudentClassroomFloorAndStudentClassroomPriorityAndActivityDate(Floor.THREE, 0, LocalDate.of(2021, 1, 2)) } doReturn listOf(classroomAttendance)
             on { findByStudentClubLocationFloorAndStudentClubLocationPriorityAndActivityDate(Floor.THREE, 0, LocalDate.of(2021, 1, 1)) } doReturn listOf(clubAttendance)
             on { findByActivityDateAndStudentNumberStartingWith(LocalDate.of(2021, 1, 1), "3") } doReturn listOf(clubAttendance)
+        },
+        teacherRepository = mock {
+            onGeneric { findTeacherById("teacherId") } doAnswer {
+                if (it.arguments[0] != "teacherId") null
+                else Teacher(
+                    id = "teacherId",
+                    password = "bcc11c9fd8ab1e74e1bc0717239f8f7be24921abca9d5f31705612834dd1d6da3111df3f7120a0e445a91d6c3158b3e09595cd5d06c034c9997d4be2de5a02ca",
+                    name = "teacherName",
+                    office = "teacherOffice",
+                )
+            }
         },
     )
 }
