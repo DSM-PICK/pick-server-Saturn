@@ -9,10 +9,7 @@ import com.dsm.pick.controller.response.AttendanceResponse.StudentState
 import com.dsm.pick.controller.response.AttendanceResponse.StudentState.Memo
 import com.dsm.pick.domain.attribute.*
 import com.dsm.pick.exception.*
-import com.dsm.pick.repository.ActivityRepository
-import com.dsm.pick.repository.AttendanceRepository
-import com.dsm.pick.repository.ClassroomRepository
-import com.dsm.pick.repository.ClubRepository
+import com.dsm.pick.repository.*
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
@@ -49,6 +46,11 @@ class AttendanceService(
                 Schedule.SELF_STUDY -> findClassroom(floor, priority).name
                 Schedule.AFTER_SCHOOL -> throw NonExistScheduleException(schedule.value)
             },
+            managerTeacher = when (schedule) {
+                Schedule.CLUB -> findClub(floor, priority).teacher
+                Schedule.SELF_STUDY -> findClassroom(floor, priority).manager
+                Schedule.AFTER_SCHOOL -> throw NonExistScheduleException(schedule.value)
+            }
         )
 
     fun updateAttendance(
