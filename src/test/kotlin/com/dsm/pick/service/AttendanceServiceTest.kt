@@ -61,7 +61,7 @@ internal class AttendanceServiceTest {
             priority = 0,
             date = LocalDate.of(2021, 1, 1)
         )
-        println(attendance.attendances.first())
+
         assertThat(attendance.clubHead).isEqualTo("3417 Jin")
         assertThat(attendance.name).isEqualTo("testClub")
         assertThat(attendance.attendances).map<String> { it.studentNumber }.containsAll(listOf("3417"))
@@ -75,7 +75,7 @@ internal class AttendanceServiceTest {
             priority = 0,
             date = LocalDate.of(2021, 1, 2)
         )
-        println(attendance.attendances.first())
+
         assertThat(attendance.clubHead).isNull()
         assertThat(attendance.name).isEqualTo("testClassroom")
         assertThat(attendance.attendances).map<String> { it.studentNumber }.containsAll(listOf("3417"))
