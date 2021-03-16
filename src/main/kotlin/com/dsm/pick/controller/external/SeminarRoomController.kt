@@ -15,7 +15,7 @@ class SeminarRoomController(
 
     @PatchMapping("/student-state")
     fun reserveSeminarRoom(
-        @RequestHeader("API-KEY") apiKey: String,
+        @RequestHeader("x-api-key") apiKey: String,
         @RequestBody @Valid request: StudentStateRequest,
     ) {
         externalValidationService.validateApiKey(apiKey)
