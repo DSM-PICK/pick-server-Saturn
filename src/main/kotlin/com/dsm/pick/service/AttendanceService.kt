@@ -73,7 +73,7 @@ class AttendanceService(
         attendanceState: String,
         attendanceDate: LocalDate = LocalDate.now(),
     ) {
-        attendanceRepository.test(
+        attendanceRepository.updateByStudentNumbersAndPeriodsAndDate(
             state = State.values().singleOrNull { it.value == attendanceState } ?: throw NonExistStateException(attendanceState),
             numbers = studentNumbers,
             periods = periods.map { period -> Period.values().singleOrNull { it.value == period } ?: throw NonExistPeriodException(period) },

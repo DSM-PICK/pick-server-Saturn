@@ -18,7 +18,7 @@ interface AttendanceRepository : JpaRepository<Attendance, Int> {
 
     @Modifying
     @Query(value = "UPDATE Attendance a SET a.state = :state WHERE a.student.number IN :numbers AND a.period IN :periods AND a.activity.date = :date")
-    fun test(
+    fun updateByStudentNumbersAndPeriodsAndDate(
         @Param("state") state: State,
         @Param("numbers") numbers: List<String>,
         @Param("periods") periods: List<Period>,
