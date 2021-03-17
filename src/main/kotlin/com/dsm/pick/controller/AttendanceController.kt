@@ -1,6 +1,7 @@
 package com.dsm.pick.controller
 
 import com.dsm.pick.controller.request.MemoRequest
+import com.dsm.pick.controller.request.StudentStateModificationRequest
 import com.dsm.pick.controller.request.StudentStateRequest
 import com.dsm.pick.controller.response.ActivityResponse
 import com.dsm.pick.controller.response.AttendanceNavigationResponse
@@ -56,6 +57,19 @@ class AttendanceController(
         attendanceService.updateAttendance(
             studentNumber = request.number,
             period = request.period,
+            attendanceState = request.state,
+        )
+    }
+
+    @PutMapping("/student-state")
+    fun modifyAllStudentState(
+        @RequestHeader("Authorization") token: String,
+        @RequestBody @Valid request: StudentStateModificationRequest,
+    ) {
+        authService.validateToken(token)
+        attendanceService.modifyAllStudentState(
+            studentNumbers = request.numbers,
+            periods = request.periods,
             attendanceState = request.state,
         )
     }
