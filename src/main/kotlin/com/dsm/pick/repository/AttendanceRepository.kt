@@ -16,7 +16,7 @@ interface AttendanceRepository : JpaRepository<Attendance, Int> {
     fun findByStudentNumberAndPeriodAndActivityDate(studentNumber: String, period: Period, attendanceDate: LocalDate): Attendance?
     fun findByActivityDateAndStudentNumberStartingWith(date: LocalDate, grade: String): List<Attendance>
 
-    @Modifying
+    @Modifying(flushAutomatically = true)
     @Query(value = "UPDATE Attendance a SET a.state = :state WHERE a.student.number IN :numbers AND a.period IN :periods AND a.activity.date = :date")
     fun updateByStudentNumbersAndPeriodsAndDate(
         @Param("state") state: State,
