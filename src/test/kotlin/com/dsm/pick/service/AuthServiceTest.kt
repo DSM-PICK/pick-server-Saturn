@@ -35,12 +35,12 @@ internal class AuthServiceTest {
                 floor = 3,
                 priority = 0,
             ),
-            managedClub = ManagedClub(
+            managedClub = listOf(ManagedClub(
                 name = "testClub",
                 location = "testLocation",
                 floor = 3,
                 priority = 0,
-            ),
+            )),
         )
 
         assertThat(actual).isEqualTo(expected)
@@ -187,7 +187,7 @@ internal class AuthServiceTest {
         },
         clubRepository = mock {
             on { findByTeacher("teacherName") } doReturn
-                    Club(
+                    listOf(Club(
                         name = "testClub",
                         location = Location(
                             location = "testLocation",
@@ -196,7 +196,7 @@ internal class AuthServiceTest {
                         ),
                         teacher = "teacherName",
                         head = "3417 Jin"
-                    )
+                    ))
         }
     )
 }
