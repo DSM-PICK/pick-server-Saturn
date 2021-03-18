@@ -48,9 +48,8 @@ class AuthService(
                 },
             managedClub = findManagedClub(
                 teacherName = findTeacherById(teacherId).name
-            ).let {
-                if (it == null) null
-                else ManagedClub(
+            ).map {
+                ManagedClub(
                     name = it.name,
                     location = it.location.location,
                     floor = it.location.floor.value,

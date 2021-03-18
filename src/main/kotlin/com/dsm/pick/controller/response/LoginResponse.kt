@@ -5,7 +5,7 @@ data class LoginResponse(
     val refreshToken: String,
     val teacherName: String,
     val managedClassroom: ManagedClassroom?,
-    val managedClub: ManagedClub?,
+    val managedClub: List<ManagedClub>,
 ) {
 
     data class ManagedClassroom(

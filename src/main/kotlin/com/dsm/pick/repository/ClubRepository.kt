@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository
 interface ClubRepository : JpaRepository<Club, String> {
     fun findByLocationFloor(floor: Floor): List<Club>
     fun findByLocationFloorAndLocationPriority(floor: Floor, priority: Int): Club?
-    fun findByTeacher(teacherName: String): Club?
+    fun findByTeacher(teacherName: String): List<Club>
 }
