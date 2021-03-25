@@ -2,10 +2,7 @@ package com.dsm.pick.controller
 
 import com.dsm.pick.controller.request.*
 import com.dsm.pick.controller.response.*
-import com.dsm.pick.domain.attribute.Floor
-import com.dsm.pick.domain.attribute.Grade
-import com.dsm.pick.domain.attribute.Period
-import com.dsm.pick.domain.attribute.Schedule
+import com.dsm.pick.domain.attribute.*
 import com.dsm.pick.service.AttendanceService
 import com.dsm.pick.service.AuthService
 import org.springframework.format.annotation.DateTimeFormat
@@ -127,12 +124,13 @@ class AttendanceController(
     @GetMapping("/student")
     fun searchStudentByState(
         @RequestHeader("Autorization") token: String,
-        @RequestBody @Valid request: StudentSearchRequest,
+        @RequestParam("schedule") schedule: Schedule,
+        @RequestParam("state") state: State,
     ): StudentSearchResponse {
         authService.validateToken(token)
         return attendanceService.getStudentByScheduleAndState(
-            state = request.getStudentState(),
-            schedule = request.getSchedule(),
+            schedule = schedule,
+            state = state,
         )
     }
 }
