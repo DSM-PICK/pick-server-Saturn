@@ -1,3 +1,7 @@
 package com.dsm.pick.controller.response
 
-data class MemoKindResponse(val locationNames: List<String>)
+data class MemoKindResponse(
+    val twoFloorMemoKind: List<String>,
+    val threeFloorMemoKind: List<String>,
+    val fourFloorMemoKind: List<String>,
+)

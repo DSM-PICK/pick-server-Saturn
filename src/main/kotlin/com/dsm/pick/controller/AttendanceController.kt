@@ -1,14 +1,8 @@
 package com.dsm.pick.controller
 
-import com.dsm.pick.controller.request.MemoRequest
-import com.dsm.pick.controller.request.StudentMemoModificationRequest
-import com.dsm.pick.controller.request.StudentStateModificationRequest
-import com.dsm.pick.controller.request.StudentStateRequest
+import com.dsm.pick.controller.request.*
 import com.dsm.pick.controller.response.*
-import com.dsm.pick.domain.attribute.Floor
-import com.dsm.pick.domain.attribute.Grade
-import com.dsm.pick.domain.attribute.Period
-import com.dsm.pick.domain.attribute.Schedule
+import com.dsm.pick.domain.attribute.*
 import com.dsm.pick.service.AttendanceService
 import com.dsm.pick.service.AuthService
 import org.springframework.format.annotation.DateTimeFormat
@@ -124,6 +118,19 @@ class AttendanceController(
         @PathVariable("floor") floor: Floor,
     ): MemoKindResponse {
         authService.validateToken(token)
-        return attendanceService.getMemoKindByFloor(floor)
+        return attendanceService.getMemoKind()
+    }
+
+    @GetMapping("/student")
+    fun searchStudentByState(
+        @RequestHeader("Autorization") token: String,
+        @RequestParam("schedule") schedule: Schedule,
+        @RequestParam("state") state: State,
+    ): StudentSearchResponse {
+        authService.validateToken(token)
+        return attendanceService.getStudentByScheduleAndState(
+            schedule = schedule,
+            state = state,
+        )
     }
 }
