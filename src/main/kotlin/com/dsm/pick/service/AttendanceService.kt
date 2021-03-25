@@ -221,8 +221,12 @@ class AttendanceService(
                 .map { it.shortName }
         )
 
-    fun getStudentByScheduleAndState(state: State, schedule: Schedule, floor: Floor, date: LocalDate) =
-        when (schedule) {
+    fun getStudentByScheduleAndState(
+        state: State,
+        schedule: Schedule,
+        floor: Floor,
+        date: LocalDate = LocalDate.now(),
+    ) = when (schedule) {
             Schedule.CLUB ->
                 attendanceRepository.findByStateAndActivityDate(state, date)
                     .distinctBy { it.student.number }
