@@ -10,7 +10,6 @@ import com.dsm.pick.exception.NonExistStateException
 data class StudentSearchRequest(
     val schedule: String,
     val studentState: String,
-    val floor: Int,
 ) {
 
     fun getSchedule() =
@@ -24,10 +23,4 @@ data class StudentSearchRequest(
             .values()
             .singleOrNull { it.value == studentState }
             ?: throw NonExistStateException(studentState)
-
-    fun getFloor() =
-        Floor
-            .values()
-            .singleOrNull { it.value == floor }
-            ?: throw NonExistFloorException(floor)
 }

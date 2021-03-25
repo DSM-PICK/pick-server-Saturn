@@ -121,7 +121,7 @@ class AttendanceController(
         @PathVariable("floor") floor: Floor,
     ): MemoKindResponse {
         authService.validateToken(token)
-        return attendanceService.getMemoKindByFloor(floor)
+        return attendanceService.getMemoKind()
     }
 
     @GetMapping("/student")
@@ -130,12 +130,9 @@ class AttendanceController(
         @RequestBody @Valid request: StudentSearchRequest,
     ): StudentSearchResponse {
         authService.validateToken(token)
-        return StudentSearchResponse(
-            students = attendanceService.getStudentByScheduleAndState(
-                state = request.getStudentState(),
-                schedule = request.getSchedule(),
-                floor = request.getFloor(),
-            )
+        return attendanceService.getStudentByScheduleAndState(
+            state = request.getStudentState(),
+            schedule = request.getSchedule(),
         )
     }
 }

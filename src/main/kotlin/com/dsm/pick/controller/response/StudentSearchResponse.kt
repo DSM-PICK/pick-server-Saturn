@@ -1,7 +1,9 @@
 package com.dsm.pick.controller.response
 
 data class StudentSearchResponse(
-    val students: List<StudentInfo>
+    val twoFloorStudents: List<StudentInfo>,
+    val threeFloorStudents: List<StudentInfo>,
+    val fourFloorStudents: List<StudentInfo>,
 ) {
 
     data class StudentInfo(

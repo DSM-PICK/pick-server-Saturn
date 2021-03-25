@@ -5,6 +5,8 @@ import com.dsm.pick.controller.response.AttendanceNavigationResponse.LocationInf
 import com.dsm.pick.controller.response.AttendanceResponse.StudentState
 import com.dsm.pick.controller.response.AttendanceResponse.StudentState.Memo
 import com.dsm.pick.controller.response.StudentSearchResponse.StudentInfo
+import com.dsm.pick.domain.Attendance
+import com.dsm.pick.domain.Location
 import com.dsm.pick.domain.attribute.*
 import com.dsm.pick.exception.*
 import com.dsm.pick.repository.*
@@ -112,7 +114,7 @@ class AttendanceService(
         date: LocalDate = LocalDate.now(),
     ): AttendanceRecordResponse {
         val attendanceByGrade = attendanceRepository.findByActivityDateAndStudentNumberStartingWith(date, grade.value.toString())
-        
+
         return AttendanceRecordResponse(
             outing = attendanceByGrade.filter { it.state == State.OUTING }.count(),
             fieldExperience = attendanceByGrade.filter { it.state == State.FIELD_EXPERIENCE }.count(),
@@ -215,31 +217,50 @@ class AttendanceService(
         else teacherRepository.findTeacherById(classroomManagerId)?.name
     }
 
-    fun getMemoKindByFloor(floor: Floor) =
-        MemoKindResponse(
-            locationRepository.findByFloor(floor)
-                .map { it.shortName }
+    fun getMemoKind(): MemoKindResponse {
+        val locations = locationRepository.findAll()
+            .groupBy { it.floor }
+
+        return MemoKindResponse(
+            twoFloorMemoKind = toMemoKindByFloor(locations, Floor.TWO),
+            threeFloorMemoKind = toMemoKindByFloor(locations, Floor.THREE),
+            fourFloorMemoKind = toMemoKindByFloor(locations, Floor.FOUR),
         )
+    }
+
+    private fun toMemoKindByFloor(locations: Map<Floor, List<Location>>, floor: Floor) =
+        locations[floor]
+            ?.map { it.shortName }
+            ?: listOf()
 
     fun getStudentByScheduleAndState(
         state: State,
         schedule: Schedule,
-        floor: Floor,
         date: LocalDate = LocalDate.now(),
     ) = when (schedule) {
-            Schedule.CLUB ->
-                attendanceRepository.findByStateAndActivityDate(state, date)
-                    .distinctBy { it.student.number }
-                    .filter { it.student.club.location.floor == floor }
-            Schedule.SELF_STUDY ->
-                attendanceRepository.findByStateAndActivityDate(state, date)
-                    .distinctBy { it.student.number }
-                    .filter { it.student.classroom.floor == floor }
-            Schedule.AFTER_SCHOOL -> throw NonExistScheduleException(schedule.value)
-        }.map {
-            StudentInfo(
-                studentNumber = it.student.number,
-                studentName = it.student.name,
-            )
-        }
+        Schedule.CLUB ->
+            attendanceRepository.findByStateAndActivityDate(state, date)
+                .distinctBy { it.student.number }
+                .groupBy { it.student.club.location.floor }
+        Schedule.SELF_STUDY ->
+            attendanceRepository.findByStateAndActivityDate(state, date)
+                .distinctBy { it.student.number }
+                .groupBy { it.student.classroom.floor }
+        Schedule.AFTER_SCHOOL -> throw NonExistScheduleException(schedule.value)
+    }.let {
+        StudentSearchResponse(
+            twoFloorStudents = toStudentInfo(it, Floor.TWO),
+            threeFloorStudents = toStudentInfo(it, Floor.THREE),
+            fourFloorStudents = toStudentInfo(it, Floor.FOUR),
+        )
+    }
+
+    private fun toStudentInfo(it: Map<Floor, List<Attendance>>, floor: Floor) =
+        it[floor]
+            ?.map { attendance ->
+                StudentInfo(
+                    studentNumber = attendance.student.number,
+                    studentName = attendance.student.name,
+                )
+            } ?: listOf()
 }
