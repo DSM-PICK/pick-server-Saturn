@@ -1,12 +1,10 @@
 package com.dsm.pick.controller
 
 import com.dsm.pick.controller.request.MemoRequest
+import com.dsm.pick.controller.request.StudentMemoModificationRequest
 import com.dsm.pick.controller.request.StudentStateModificationRequest
 import com.dsm.pick.controller.request.StudentStateRequest
-import com.dsm.pick.controller.response.ActivityResponse
-import com.dsm.pick.controller.response.AttendanceNavigationResponse
-import com.dsm.pick.controller.response.AttendanceRecordResponse
-import com.dsm.pick.controller.response.AttendanceResponse
+import com.dsm.pick.controller.response.*
 import com.dsm.pick.domain.attribute.Floor
 import com.dsm.pick.domain.attribute.Grade
 import com.dsm.pick.domain.attribute.Period
@@ -74,6 +72,19 @@ class AttendanceController(
         )
     }
 
+    @PutMapping("/student-memo")
+    fun modifyAllStudentMemo(
+        @RequestHeader("Authorization") token: String,
+        @RequestBody @Valid request: StudentMemoModificationRequest,
+    ) {
+        authService.validateToken(token)
+        attendanceService.modifyAllStudentMemo(
+            studentNumbers = request.numbers,
+            periods = request.periods,
+            attendanceMemo = request.memo,
+        )
+    }
+
     @PatchMapping("/memo/{student}/{period}")
     fun changeMemo(
         @RequestHeader("Authorization") token: String,
@@ -105,5 +116,14 @@ class AttendanceController(
     ): ActivityResponse {
         authService.validateToken(token)
         return attendanceService.showActivityByDate(date)
+    }
+
+    @GetMapping("/memo/{floor}")
+    fun searchMemoKind(
+        @RequestHeader("Authorization") token: String,
+        @PathVariable("floor") floor: Floor,
+    ): MemoKindResponse {
+        authService.validateToken(token)
+        return attendanceService.getMemoKindByFloor(floor)
     }
 }

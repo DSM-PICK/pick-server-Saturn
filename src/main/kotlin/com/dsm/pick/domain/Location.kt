@@ -20,4 +20,7 @@ class Location(
 
     @Column(name = "priority")
     val priority: Int,
+
+    @Column(name = "short_name")
+    val shortName: String,
 )
