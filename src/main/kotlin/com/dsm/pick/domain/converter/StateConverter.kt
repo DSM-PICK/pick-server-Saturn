@@ -13,5 +13,6 @@ class StateConverter : AttributeConverter<State, String>, Converter<String, Stat
     override fun convertToEntityAttribute(state: String) =
         State.values().singleOrNull { it.value == state }?: throw NonExistStateException(state)
 
-    override fun convert(request: String) = convertToEntityAttribute(request)
+    override fun convert(request: String) =
+        State.values().singleOrNull { it.englishValue == request } ?: throw NonExistStateException(request)
 }
