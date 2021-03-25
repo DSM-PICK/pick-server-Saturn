@@ -65,7 +65,7 @@ class AttendanceService(
             studentNumber = studentNumber,
             period = Period.values().singleOrNull { it.value == period }?: throw NonExistPeriodException(period),
             attendanceDate = attendanceDate,
-        ).state = State.values().singleOrNull { it.englishValue == attendanceState }?: throw NonExistStateException(attendanceState)
+        ).state = State.values().singleOrNull { it.value == attendanceState }?: throw NonExistStateException(attendanceState)
     }
 
     fun modifyAllStudentState(
@@ -75,7 +75,7 @@ class AttendanceService(
         attendanceDate: LocalDate = LocalDate.now(),
     ) {
         attendanceRepository.updateByStudentNumbersAndPeriodsAndDate(
-            state = State.values().singleOrNull { it.englishValue == attendanceState } ?: throw NonExistStateException(attendanceState),
+            state = State.values().singleOrNull { it.value == attendanceState } ?: throw NonExistStateException(attendanceState),
             numbers = studentNumbers,
             periods = periods.map { period -> Period.values().singleOrNull { it.value == period } ?: throw NonExistPeriodException(period) },
             date = attendanceDate,
