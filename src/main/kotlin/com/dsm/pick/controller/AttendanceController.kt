@@ -1,9 +1,6 @@
 package com.dsm.pick.controller
 
-import com.dsm.pick.controller.request.MemoRequest
-import com.dsm.pick.controller.request.StudentMemoModificationRequest
-import com.dsm.pick.controller.request.StudentStateModificationRequest
-import com.dsm.pick.controller.request.StudentStateRequest
+import com.dsm.pick.controller.request.*
 import com.dsm.pick.controller.response.*
 import com.dsm.pick.domain.attribute.Floor
 import com.dsm.pick.domain.attribute.Grade
@@ -125,5 +122,20 @@ class AttendanceController(
     ): MemoKindResponse {
         authService.validateToken(token)
         return attendanceService.getMemoKindByFloor(floor)
+    }
+
+    @GetMapping("/student")
+    fun searchStudentByState(
+        @RequestHeader("Autorization") token: String,
+        @RequestBody @Valid request: StudentSearchRequest,
+    ): StudentSearchResponse {
+        authService.validateToken(token)
+        return StudentSearchResponse(
+            students = attendanceService.getStudentByScheduleAndState(
+                state = request.getStudentState(),
+                schedule = request.getSchedule(),
+                floor = request.getFloor(),
+            )
+        )
     }
 }

@@ -4,6 +4,7 @@ import com.dsm.pick.controller.response.*
 import com.dsm.pick.controller.response.AttendanceNavigationResponse.LocationInformation
 import com.dsm.pick.controller.response.AttendanceResponse.StudentState
 import com.dsm.pick.controller.response.AttendanceResponse.StudentState.Memo
+import com.dsm.pick.controller.response.StudentSearchResponse.StudentInfo
 import com.dsm.pick.domain.attribute.*
 import com.dsm.pick.exception.*
 import com.dsm.pick.repository.*
@@ -219,4 +220,22 @@ class AttendanceService(
             locationRepository.findByFloor(floor)
                 .map { it.shortName }
         )
+
+    fun getStudentByScheduleAndState(state: State, schedule: Schedule, floor: Floor, date: LocalDate) =
+        when (schedule) {
+            Schedule.CLUB ->
+                attendanceRepository.findByStateAndActivityDate(state, date)
+                    .distinctBy { it.student.number }
+                    .filter { it.student.club.location.floor == floor }
+            Schedule.SELF_STUDY ->
+                attendanceRepository.findByStateAndActivityDate(state, date)
+                    .distinctBy { it.student.number }
+                    .filter { it.student.classroom.floor == floor }
+            Schedule.AFTER_SCHOOL -> throw NonExistScheduleException(schedule.value)
+        }.map {
+            StudentInfo(
+                studentNumber = it.student.number,
+                studentName = it.student.name,
+            )
+        }
 }
