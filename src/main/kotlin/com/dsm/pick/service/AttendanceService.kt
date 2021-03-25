@@ -79,6 +79,20 @@ class AttendanceService(
         )
     }
 
+    fun modifyAllStudentMemo(
+        studentNumbers: List<String>,
+        periods: List<Int>,
+        attendanceMemo: String,
+        attendanceDate: LocalDate = LocalDate.now(),
+    ) {
+        attendanceRepository.updateByStudentNumbersAndPeriodsAndDate(
+            memo = attendanceMemo,
+            numbers = studentNumbers,
+            periods = periods.map { period -> Period.values().singleOrNull { it.value == period } ?: throw NonExistPeriodException(period) },
+            date = attendanceDate,
+        )
+    }
+
     fun updateMemo(
         studentNumber: String,
         period: Period,
