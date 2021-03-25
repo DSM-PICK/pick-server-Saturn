@@ -1,10 +1,7 @@
 package com.dsm.pick.service
 
-import com.dsm.pick.controller.response.ActivityResponse
-import com.dsm.pick.controller.response.AttendanceNavigationResponse
+import com.dsm.pick.controller.response.*
 import com.dsm.pick.controller.response.AttendanceNavigationResponse.LocationInformation
-import com.dsm.pick.controller.response.AttendanceRecordResponse
-import com.dsm.pick.controller.response.AttendanceResponse
 import com.dsm.pick.controller.response.AttendanceResponse.StudentState
 import com.dsm.pick.controller.response.AttendanceResponse.StudentState.Memo
 import com.dsm.pick.domain.attribute.*
@@ -23,6 +20,7 @@ class AttendanceService(
     private val classroomRepository: ClassroomRepository,
     private val attendanceRepository: AttendanceRepository,
     private val teacherRepository: TeacherRepository,
+    private val locationRepository: LocationRepository,
 ) {
 
     fun showAttendanceNavigation(schedule: Schedule, floor: Floor, date: LocalDate = LocalDate.now()) =
@@ -201,4 +199,10 @@ class AttendanceService(
         return if (classroomManagerId == null) null
         else teacherRepository.findTeacherById(classroomManagerId)?.name
     }
+
+    fun getMemoKindByFloor(floor: Floor) =
+        MemoKindResponse(
+            locationRepository.findByFloor(floor)
+                .map { it.shortName }
+        )
 }

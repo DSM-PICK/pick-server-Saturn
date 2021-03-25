@@ -3,10 +3,7 @@ package com.dsm.pick.controller
 import com.dsm.pick.controller.request.MemoRequest
 import com.dsm.pick.controller.request.StudentStateModificationRequest
 import com.dsm.pick.controller.request.StudentStateRequest
-import com.dsm.pick.controller.response.ActivityResponse
-import com.dsm.pick.controller.response.AttendanceNavigationResponse
-import com.dsm.pick.controller.response.AttendanceRecordResponse
-import com.dsm.pick.controller.response.AttendanceResponse
+import com.dsm.pick.controller.response.*
 import com.dsm.pick.domain.attribute.Floor
 import com.dsm.pick.domain.attribute.Grade
 import com.dsm.pick.domain.attribute.Period
@@ -105,5 +102,14 @@ class AttendanceController(
     ): ActivityResponse {
         authService.validateToken(token)
         return attendanceService.showActivityByDate(date)
+    }
+
+    @GetMapping("/memo/{floor}")
+    fun searchMemoKind(
+        @RequestHeader("Authorization") token: String,
+        @PathVariable("floor") floor: Floor,
+    ): MemoKindResponse {
+        authService.validateToken(token)
+        return attendanceService.getMemoKindByFloor(floor)
     }
 }
