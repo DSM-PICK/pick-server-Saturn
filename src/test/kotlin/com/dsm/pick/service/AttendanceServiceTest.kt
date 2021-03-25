@@ -193,6 +193,7 @@ internal class AttendanceServiceTest {
             location = "testLocation",
             floor = Floor.THREE,
             priority = 0,
+            shortName = "testLocation"
         ),
         head = "3417 Jin",
         teacher = "teacherId",
@@ -285,5 +286,6 @@ internal class AttendanceServiceTest {
                 )
             }
         },
+        locationRepository = mock(),
     )
 }

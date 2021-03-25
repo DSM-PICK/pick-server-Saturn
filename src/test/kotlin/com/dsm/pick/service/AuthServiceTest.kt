@@ -193,6 +193,7 @@ internal class AuthServiceTest {
                             location = "testLocation",
                             floor = Floor.THREE,
                             priority = 0,
+                            shortName = "testLocation",
                         ),
                         teacher = "teacherName",
                         head = "3417 Jin"
