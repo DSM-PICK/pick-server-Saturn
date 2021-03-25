@@ -11,7 +11,7 @@ class StateConverter : AttributeConverter<State, String>, Converter<String, Stat
     override fun convertToDatabaseColumn(state: State) = state.value
 
     override fun convertToEntityAttribute(state: String) =
-        State.values().singleOrNull { it.value == state }?: throw NonExistStateException(state)
+        State.values().singleOrNull { it.englishValue == state }?: throw NonExistStateException(state)
 
     override fun convert(request: String) = convertToEntityAttribute(request)
 }
