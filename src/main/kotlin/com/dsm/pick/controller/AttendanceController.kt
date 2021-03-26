@@ -71,6 +71,11 @@ class AttendanceController(
         @RequestHeader("Authorization") token: String,
         @RequestBody @Valid request: StudentMemoModificationRequest,
     ) {
+        println("-----------------------------")
+        println("memo: ${request.memo}")
+        println("student numbers: ${request.numbers}")
+        println("periods: ${request.periods}")
+        println("-----------------------------")
         authService.validateToken(token)
         attendanceService.modifyAllStudentMemo(
             studentNumbers = request.numbers,
