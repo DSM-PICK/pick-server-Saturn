@@ -57,19 +57,15 @@ internal class AttendanceControllerIntegrationTest(
 
     @Test
     fun `동아리 출석부 네비게이션 반환 - 잘못된 층 요청 Invalid Request Body Exception`() {
-        val response = objectMapper.readValue<ExceptionResponse>(
-            mock.perform(get("/attendance/navigation/club/10")
-                .header("Authorization", "this-is-test-token")
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .accept(MediaType.APPLICATION_JSON_UTF8)
-                .characterEncoding("UTF-8"))
-                .andExpect(status().isBadRequest)
-                .andReturn()
-                .response
-                .contentAsString
-        )
-
-        assertThat(response.code).isEqualTo("INVALID_REQUEST_BODY")
+        mock.perform(get("/attendance/navigation/club/10")
+            .header("Authorization", "this-is-test-token")
+            .contentType(MediaType.APPLICATION_JSON_UTF8)
+            .accept(MediaType.APPLICATION_JSON_UTF8)
+            .characterEncoding("UTF-8"))
+            .andExpect(status().isBadRequest)
+            .andReturn()
+            .response
+            .contentAsString
     }
 
     @Test
