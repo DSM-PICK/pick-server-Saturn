@@ -35,4 +35,14 @@ interface AttendanceRepository : JpaRepository<Attendance, Int> {
         @Param("periods") periods: List<Period>,
         @Param("date") date: LocalDate,
     )
+
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
+    @Query(value = "UPDATE Attendance a SET a.state = :state, a.memo = :memo WHERE a.student.number IN :numbers AND a.period IN :periods AND a.activity.date = :date")
+    fun updateByStudentNumbersAndPeriodsAndDate(
+        @Param("state") state: State,
+        @Param("memo") memo: String,
+        @Param("numbers") numbers: List<String>,
+        @Param("periods") periods: List<Period>,
+        @Param("date") date: LocalDate,
+    )
 }
