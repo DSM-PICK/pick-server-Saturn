@@ -66,6 +66,20 @@ class AttendanceController(
         )
     }
 
+    @PutMapping("/student")
+    fun modifyAllStudent(
+        @RequestHeader("Authorization") token: String,
+        @RequestBody @Valid request: StudentModificationRequest,
+    ) {
+        authService.validateToken(token)
+        attendanceService.modifyAllStudent(
+            studentNumbers = request.numbers,
+            periods = request.periods,
+            attendanceMemo = request.memo,
+            attendanceState = request.state,
+        )
+    }
+
     @PutMapping("/student-memo")
     fun modifyAllStudentMemo(
         @RequestHeader("Authorization") token: String,
