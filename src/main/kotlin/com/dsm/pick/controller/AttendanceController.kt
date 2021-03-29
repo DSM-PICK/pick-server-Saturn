@@ -85,11 +85,6 @@ class AttendanceController(
         @RequestHeader("Authorization") token: String,
         @RequestBody @Valid request: StudentMemoModificationRequest,
     ) {
-        println("-----------------------------")
-        println("memo: ${request.memo}")
-        println("student numbers: ${request.numbers}")
-        println("periods: ${request.periods}")
-        println("-----------------------------")
         authService.validateToken(token)
         attendanceService.modifyAllStudentMemo(
             studentNumbers = request.numbers,
@@ -142,7 +137,7 @@ class AttendanceController(
 
     @GetMapping("/student")
     fun searchStudentByState(
-        @RequestHeader("Autorization") token: String,
+        @RequestHeader("Authorization") token: String,
         @RequestParam("schedule") schedule: Schedule,
         @RequestParam("state") state: State,
     ): StudentSearchResponse {
