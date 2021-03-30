@@ -211,10 +211,12 @@ class AttendanceService(
         }
 
     private fun findClub(floor: Floor, priority: Int) =
-        clubRepository.findByLocationFloorAndLocationPriority(floor, priority)?: throw ClubNotFoundException(floor.value, priority)
+        clubRepository.findByLocationFloorAndLocationPriority(floor, priority)
+            ?: throw ClubNotFoundException(floor.value, priority)
 
     private fun findClassroom(floor: Floor, priority: Int) =
-        classroomRepository.findByFloorAndPriority(floor, priority)?: throw ClassroomNotFoundException(floor.value, priority)
+        classroomRepository.findByFloorAndPriority(floor, priority)
+            ?: throw ClassroomNotFoundException(floor.value, priority)
 
     private fun findAttendance(
         studentNumber: String,

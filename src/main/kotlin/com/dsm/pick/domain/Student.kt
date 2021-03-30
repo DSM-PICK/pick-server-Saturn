@@ -21,9 +21,9 @@ class Student(
     @JoinColumn(name = "class_name", referencedColumnName = "name")
     val classroom: Classroom,
 
-    @Column(name = "is_monday_self_study")
-    val isMondaySelfStudy: Boolean,
+    @Column(name = "is_self_study")
+    val isSelfStudy: Boolean,
 
-    @Column(name = "is_tuesday_self_study")
-    val isTuesdaySelfStudy: Boolean,
+    @Column(name = "is_replenishment")
+    val isReplenishment: Boolean,
 )
