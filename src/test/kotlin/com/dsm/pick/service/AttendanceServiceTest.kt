@@ -106,18 +106,6 @@ internal class AttendanceServiceTest {
     }
 
     @Test
-    fun `존재하지 않는 일정의 출석 현황 반환 Non Exist Schedule Exception`() {
-        assertThrows<NonExistScheduleException> {
-            attendanceService.showAttendance(
-                schedule = Schedule.AFTER_SCHOOL,
-                floor = Floor.THREE,
-                priority = 0,
-                date = LocalDate.of(2021, 1, 1)
-            )
-        }
-    }
-
-    @Test
     fun `출석 상태 변환 OK`() {
         attendanceService.updateAttendance(
             studentNumber = "3417",
@@ -211,8 +199,8 @@ internal class AttendanceServiceTest {
         name = "Jin",
         club = club,
         classroom = classroom,
-        isMondaySelfStudy = false,
-        isTuesdaySelfStudy = false,
+        isSelfStudy = false,
+        isReplenishment = false,
     )
 
     private val clubActivity = Activity(

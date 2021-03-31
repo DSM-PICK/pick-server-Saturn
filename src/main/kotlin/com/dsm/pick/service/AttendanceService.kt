@@ -41,17 +41,17 @@ class AttendanceService(
             clubHead = when (schedule) {
                 Schedule.CLUB -> findClub(floor, priority).head
                 Schedule.SELF_STUDY -> null
-                Schedule.AFTER_SCHOOL -> throw NonExistScheduleException(schedule.value)
+                Schedule.AFTER_SCHOOL -> null
             },
             name = when (schedule) {
                 Schedule.CLUB -> findClub(floor, priority).name
                 Schedule.SELF_STUDY -> findClassroom(floor, priority).name
-                Schedule.AFTER_SCHOOL -> throw NonExistScheduleException(schedule.value)
+                Schedule.AFTER_SCHOOL -> "창조실"
             },
             managerTeacher = when (schedule) {
                 Schedule.CLUB -> findClub(floor, priority).teacher
                 Schedule.SELF_STUDY -> findNameOfManager(floor, priority)
-                Schedule.AFTER_SCHOOL -> throw NonExistScheduleException(schedule.value)
+                Schedule.AFTER_SCHOOL -> null
             }
         )
 
@@ -93,7 +93,7 @@ class AttendanceService(
         attendanceRepository.updateByStudentNumbersAndPeriodsAndDate(
             state = State.values().singleOrNull { it.value == attendanceState } ?: throw NonExistStateException(attendanceState),
             numbers = studentNumbers,
-            periods = periods.map { period -> Period.values().singleOrNull { it.value == period } ?: throw NonExistPeriodException(period) },
+            periods = periods.map { period -> Period.values().singleOrNull { it.value == period }?: throw NonExistPeriodException(period) },
             date = attendanceDate,
         )
     }
@@ -129,7 +129,11 @@ class AttendanceService(
         grade: Grade,
         date: LocalDate = LocalDate.now(),
     ): AttendanceRecordResponse {
-        val attendanceByGrade = attendanceRepository.findByActivityDateAndStudentNumberStartingWith(date, grade.value.toString())
+        val attendanceByGrade =
+            attendanceRepository.findByActivityDateAndStudentNumberStartingWith(
+                date = date,
+                grade = grade.value.toString(),
+            )
 
         return AttendanceRecordResponse(
             outing = attendanceByGrade.filter { it.state == State.OUTING }.count(),
@@ -160,10 +164,15 @@ class AttendanceService(
             Floor.FOUR -> findSchedule(date).forthFloorTeacher.name
         }
 
-    private fun findSchedule(date: LocalDate = LocalDate.now()) = activityRepository.findActivityByDate(date)?: throw ActivityNotFoundException(date)
+    private fun findSchedule(date: LocalDate = LocalDate.now()) =
+        activityRepository.findActivityByDate(date)
+            ?: throw ActivityNotFoundException(date)
 
     private fun createLocationInformation(schedule: Schedule, floor: Floor): List<LocationInformation> {
-        val locationInformation = findLocationInformation(schedule, floor).ifEmpty { return listOf() }
+        val locationInformation =
+            findLocationInformation(schedule, floor)
+                .ifEmpty { return listOf() }
+
         locationInformation.first().done = "done"
         return locationInformation
     }
@@ -186,9 +195,23 @@ class AttendanceService(
         priority: Int,
         attendanceDate: LocalDate = LocalDate.now()
     ) = when (schedule) {
-        Schedule.CLUB -> attendanceRepository.findByStudentClubLocationFloorAndStudentClubLocationPriorityAndActivityDate(floor, priority, attendanceDate)
-        Schedule.SELF_STUDY -> attendanceRepository.findByStudentClassroomFloorAndStudentClassroomPriorityAndActivityDate(floor, priority, attendanceDate)
-        Schedule.AFTER_SCHOOL -> throw NonExistScheduleException(schedule.value)
+        Schedule.CLUB ->
+            attendanceRepository.findByStudentClubLocationFloorAndStudentClubLocationPriorityAndActivityDate(
+                floor = floor,
+                priority = priority,
+                attendanceDate = attendanceDate,
+            )
+        Schedule.SELF_STUDY ->
+            attendanceRepository.findByStudentClassroomFloorAndStudentClassroomPriorityAndActivityDate(
+                floor = floor,
+                priority = priority,
+                attendanceDate = attendanceDate,
+            )
+        Schedule.AFTER_SCHOOL ->
+            attendanceRepository.findByActivityDateAndStudentIsSelfStudy(
+                attendanceDate = attendanceDate,
+                isSelfStudy = true,
+            )
     }.groupBy { it.student }
         .map { (student, attendance) ->
             StudentState(
@@ -211,10 +234,12 @@ class AttendanceService(
         }
 
     private fun findClub(floor: Floor, priority: Int) =
-        clubRepository.findByLocationFloorAndLocationPriority(floor, priority)?: throw ClubNotFoundException(floor.value, priority)
+        clubRepository.findByLocationFloorAndLocationPriority(floor, priority)
+            ?: throw ClubNotFoundException(floor.value, priority)
 
     private fun findClassroom(floor: Floor, priority: Int) =
-        classroomRepository.findByFloorAndPriority(floor, priority)?: throw ClassroomNotFoundException(floor.value, priority)
+        classroomRepository.findByFloorAndPriority(floor, priority)
+            ?: throw ClassroomNotFoundException(floor.value, priority)
 
     private fun findAttendance(
         studentNumber: String,
