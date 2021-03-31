@@ -32,9 +32,12 @@ class AuthController(
 
     @PatchMapping("/password")
     fun changePassword(
-        @RequestHeader("Authorization") token: String,
         @RequestBody @Valid request: PasswordRequest,
-    ) = authService.changePassword(token, request.newPassword, request.confirmNewPassword)
+    ) = authService.changePassword(
+        teacherId = request.teacherId,
+        newPassword = request.newPassword,
+        authenticationNumber = request.authenticationNumber,
+    )
 
     @PostMapping("/authentication-number")
     fun validateAuthenticationNumber(@RequestBody @Valid request: AuthenticationNumberRequest) =
