@@ -84,37 +84,6 @@ internal class AuthServiceTest {
     }
 
     @Test
-    fun `비밀번호 변경 OK`() {
-        authService.changePassword(
-            token = "this-is-test-token",
-            newPassword = "newPassword",
-            confirmNewPassword = "newPassword",
-        )
-    }
-
-    @Test
-    fun `비밀번호 변경 중 토큰 유효성 검사 실패 Invalid Token Exception`() {
-        assertThrows<InvalidTokenException> {
-            authService.changePassword(
-                token = "invalid token",
-                newPassword = "newPassword",
-                confirmNewPassword = "newPassword",
-            )
-        }
-    }
-
-    @Test
-    fun `새 비밀번호와 비밀번호 다시입력이 서로 같지 않음 Account Information Mismatch Exception`() {
-        assertThrows<AccountInformationMismatchException> {
-            authService.changePassword(
-                token = "this-is-test-token",
-                newPassword = "newPassword",
-                confirmNewPassword = "void",
-            )
-        }
-    }
-
-    @Test
     fun `인증번호 확인 OK`() {
         authService.validateAuthenticationNumber("kotlin-good")
     }
