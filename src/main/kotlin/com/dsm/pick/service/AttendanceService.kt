@@ -169,6 +169,8 @@ class AttendanceService(
             ?: throw ActivityNotFoundException(date)
 
     private fun createLocationInformation(schedule: Schedule, floor: Floor): List<LocationInformation> {
+        if (schedule == Schedule.AFTER_SCHOOL && floor != Floor.ONE) return listOf()
+
         val locationInformation =
             findLocationInformation(schedule, floor)
                 .ifEmpty { return listOf() }
