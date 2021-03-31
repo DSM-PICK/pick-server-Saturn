@@ -183,9 +183,12 @@ class AttendanceService(
                 .sortedBy { it.location.priority }
                 .filter { it.students.isNotEmpty() }
                 .map { LocationInformation(it.location.location, it.name, "none", it.location.priority) }
-            Schedule.SELF_STUDY, Schedule.AFTER_SCHOOL -> classroomRepository.findByFloor(floor)
+            Schedule.SELF_STUDY -> classroomRepository.findByFloor(floor)
                 .sortedBy { it.priority }
                 .filter { it.students.isNotEmpty() }
+                .map { LocationInformation(it.name, it.name, "none", it.priority) }
+            Schedule.AFTER_SCHOOL -> classroomRepository.findByFloor(floor)
+                .sortedBy { it.priority }
                 .map { LocationInformation(it.name, it.name, "none", it.priority) }
         }
 
