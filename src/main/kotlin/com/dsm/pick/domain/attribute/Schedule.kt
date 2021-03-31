@@ -4,4 +4,5 @@ enum class Schedule(val value: String) {
     CLUB("club"),
     SELF_STUDY("self-study"),
     AFTER_SCHOOL("after-school"),
+    NO_SCHEDULE("no-schedule")
 }

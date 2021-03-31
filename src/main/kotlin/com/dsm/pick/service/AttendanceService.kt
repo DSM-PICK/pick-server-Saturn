@@ -170,6 +170,7 @@ class AttendanceService(
 
     private fun createLocationInformation(schedule: Schedule, floor: Floor): List<LocationInformation> {
         if (schedule == Schedule.AFTER_SCHOOL && floor != Floor.ONE) return listOf()
+        if (schedule == Schedule.NO_SCHEDULE) return listOf()
 
         val locationInformation =
             findLocationInformation(schedule, floor)
