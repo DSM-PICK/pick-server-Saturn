@@ -6,7 +6,7 @@ INSERT INTO club(name, location, teacher, club_head) VALUES('testClub', 'testLoc
 
 INSERT INTO class(name, floor, priority, manager) VALUES('testClassroom', 3, 0, 'teacherId');
 
-INSERT INTO student(num, name, club_name, class_name, is_monday_self_study, is_tuesday_self_study) VALUES('3417', 'Jin', 'testClub', 'testClassroom', true, true);
+INSERT INTO student(num, name, club_name, class_name, is_self_study, is_replenishment) VALUES('3417', 'Jin', 'testClub', 'testClassroom', false, false);
 
 INSERT INTO activity(date, schedule, second_floor_teacher_id, third_floor_teacher_id, forth_floor_teacher_id) VALUES('2021-01-01', 'club', 'teacherId', 'teacherId', 'teacherId');
 INSERT INTO activity(date, schedule, second_floor_teacher_id, third_floor_teacher_id, forth_floor_teacher_id) VALUES('2021-01-02', 'self-study', 'teacherId', 'teacherId', 'teacherId');

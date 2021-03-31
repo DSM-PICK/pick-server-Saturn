@@ -211,8 +211,8 @@ internal class AttendanceServiceTest {
         name = "Jin",
         club = club,
         classroom = classroom,
-        isMondaySelfStudy = false,
-        isTuesdaySelfStudy = false,
+        isSelfStudy = false,
+        isReplenishment = false,
     )
 
     private val clubActivity = Activity(
