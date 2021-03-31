@@ -122,23 +122,6 @@ internal class AttendanceControllerIntegrationTest(
     }
 
     @Test
-    fun `출석 현황 반환 - 존재하지 않는 일정 Non Exist Schedule Exception`() {
-        val response = objectMapper.readValue<ExceptionResponse>(
-            mock.perform(get("/attendance/student-state/after-school/3/0")
-                .header("Authorization", "this-is-test-token")
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .accept(MediaType.APPLICATION_JSON_UTF8)
-                .characterEncoding("UTF-8"))
-                .andExpect(status().isBadRequest)
-                .andReturn()
-                .response
-                .contentAsString
-        )
-
-        assertThat(response.code).isEqualTo("NON_EXIST_SCHEDULE")
-    }
-
-    @Test
     fun `출석 현황 반환 - 잘못된 토큰 Invalid Token`() {
         val response = objectMapper.readValue<ExceptionResponse>(
             mock.perform(get("/attendance/student-state/club/3/0")

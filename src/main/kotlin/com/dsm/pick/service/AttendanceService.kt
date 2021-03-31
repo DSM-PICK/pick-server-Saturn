@@ -208,9 +208,9 @@ class AttendanceService(
                 attendanceDate = attendanceDate,
             )
         Schedule.AFTER_SCHOOL ->
-            attendanceRepository.findByStudentSelfStudyAndActivityDate(
-                isSelfStudy = true,
+            attendanceRepository.findByActivityDateAndStudentIsSelfStudy(
                 attendanceDate = attendanceDate,
+                isSelfStudy = true,
             )
     }.groupBy { it.student }
         .map { (student, attendance) ->
