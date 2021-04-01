@@ -42,16 +42,19 @@ class AttendanceService(
                 Schedule.CLUB -> findClub(floor, priority).head
                 Schedule.SELF_STUDY -> null
                 Schedule.AFTER_SCHOOL -> null
+                Schedule.NO_SCHEDULE -> throw NonExistScheduleException(schedule.value)
             },
             name = when (schedule) {
                 Schedule.CLUB -> findClub(floor, priority).name
                 Schedule.SELF_STUDY -> findClassroom(floor, priority).name
                 Schedule.AFTER_SCHOOL -> "창조실"
+                Schedule.NO_SCHEDULE -> throw NonExistScheduleException(schedule.value)
             },
             managerTeacher = when (schedule) {
                 Schedule.CLUB -> findClub(floor, priority).teacher
                 Schedule.SELF_STUDY -> findNameOfManager(floor, priority)
                 Schedule.AFTER_SCHOOL -> null
+                Schedule.NO_SCHEDULE -> throw NonExistScheduleException(schedule.value)
             }
         )
 
@@ -169,6 +172,9 @@ class AttendanceService(
             ?: throw ActivityNotFoundException(date)
 
     private fun createLocationInformation(schedule: Schedule, floor: Floor): List<LocationInformation> {
+        if (schedule == Schedule.AFTER_SCHOOL && floor != Floor.ONE) return listOf()
+        if (schedule == Schedule.NO_SCHEDULE) return listOf()
+
         val locationInformation =
             findLocationInformation(schedule, floor)
                 .ifEmpty { return listOf() }
@@ -183,10 +189,14 @@ class AttendanceService(
                 .sortedBy { it.location.priority }
                 .filter { it.students.isNotEmpty() }
                 .map { LocationInformation(it.location.location, it.name, "none", it.location.priority) }
-            Schedule.SELF_STUDY, Schedule.AFTER_SCHOOL -> classroomRepository.findByFloor(floor)
+            Schedule.SELF_STUDY -> classroomRepository.findByFloor(floor)
                 .sortedBy { it.priority }
                 .filter { it.students.isNotEmpty() }
                 .map { LocationInformation(it.name, it.name, "none", it.priority) }
+            Schedule.AFTER_SCHOOL -> classroomRepository.findByFloor(floor)
+                .sortedBy { it.priority }
+                .map { LocationInformation(it.name, it.name, "none", it.priority) }
+            Schedule.NO_SCHEDULE -> throw NonExistScheduleException(schedule.value)
         }
 
     private fun createAttendance(
@@ -212,6 +222,7 @@ class AttendanceService(
                 attendanceDate = attendanceDate,
                 isSelfStudy = true,
             )
+        Schedule.NO_SCHEDULE -> throw NonExistScheduleException(schedule.value)
     }.groupBy { it.student }
         .map { (student, attendance) ->
             StudentState(
@@ -288,6 +299,7 @@ class AttendanceService(
                 .distinctBy { it.student.number }
                 .groupBy { it.student.classroom.floor }
         Schedule.AFTER_SCHOOL -> throw NonExistScheduleException(schedule.value)
+        Schedule.NO_SCHEDULE -> throw NonExistScheduleException(schedule.value)
     }.let {
         StudentSearchResponse(
             twoFloorStudents = toStudentInfo(it, Floor.TWO),

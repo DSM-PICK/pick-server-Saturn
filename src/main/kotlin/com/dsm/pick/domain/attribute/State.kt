@@ -8,4 +8,5 @@ enum class State(val value: String, val englishValue: String) {
     MOVE("이동", "move"),
     TRUANCY("무단", "truancy"),
     EMPLOYMENT("취업", "employment"),
+    REPLENISHMENT("기초학력", "replenishment"),
 }

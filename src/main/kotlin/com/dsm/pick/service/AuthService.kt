@@ -71,13 +71,9 @@ class AuthService(
         return createAccessToken(teacherId)
     }
 
-    fun changePassword(token: String, newPassword: String, confirmNewPassword: String) {
-        validateToken(token)
-
-        val teacherId = findTeacherIdByToken(token)
+    fun changePassword(teacherId: String, newPassword: String, authenticationNumber: String) {
+        validateAuthenticationNumber(authenticationNumber)
         val teacher = findTeacherById(teacherId)
-        validateSamePassword(newPassword, confirmNewPassword)
-
         teacher.password = encodingPassword(newPassword)
     }
 

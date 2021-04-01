@@ -140,11 +140,13 @@ class AttendanceController(
         @RequestHeader("Authorization") token: String,
         @RequestParam("schedule") schedule: Schedule,
         @RequestParam("state") state: State,
+        @RequestParam("date", defaultValue = "#{T(java.time.LocalDate).now()}") date: LocalDate,
     ): StudentSearchResponse {
         authService.validateToken(token)
         return attendanceService.getStudentByScheduleAndState(
             schedule = schedule,
             state = state,
+            date = date,
         )
     }
 }

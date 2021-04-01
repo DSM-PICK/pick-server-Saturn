@@ -170,8 +170,9 @@ internal class AuthControllerIntegrationTest(
     fun `비밀번호 변경 OK`() {
         val requestBody = objectMapper.writeValueAsString(
             PasswordRequest(
+                teacherId = "teacherId",
                 newPassword = "newPassword",
-                confirmNewPassword = "newPassword",
+                authenticationNumber = "kotlin-good",
             )
         )
         mock.perform(patch("/auth/password")
@@ -181,54 +182,6 @@ internal class AuthControllerIntegrationTest(
             .accept(MediaType.APPLICATION_JSON_UTF8)
             .characterEncoding("UTF-8"))
             .andExpect(status().isOk)
-    }
-
-    @Test
-    fun `비밀번호 변경 - 토큰이 잘못됨 Invalid Token Exception`() {
-        val requestBody = objectMapper.writeValueAsString(
-            PasswordRequest(
-                newPassword = "newPassword",
-                confirmNewPassword = "newPassword",
-            )
-        )
-        val response = objectMapper.readValue<ExceptionResponse>(
-            mock.perform(patch("/auth/password")
-                .header("Authorization", "invalid token")
-                .content(requestBody)
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .accept(MediaType.APPLICATION_JSON_UTF8)
-                .characterEncoding("UTF-8"))
-                .andExpect(status().isUnauthorized)
-                .andReturn()
-                .response
-                .contentAsString
-        )
-
-        assertThat(response.code).isEqualTo("INVALID_TOKEN")
-    }
-
-    @Test
-    fun `비밀번호 변경 - 새비밀번호와 비밀번호 재입력이 일치하지 않음 Account Information Mismatch Exception`() {
-        val requestBody = objectMapper.writeValueAsString(
-            PasswordRequest(
-                newPassword = "newPassword",
-                confirmNewPassword = "void",
-            )
-        )
-        val response = objectMapper.readValue<ExceptionResponse>(
-            mock.perform(patch("/auth/password")
-                .header("Authorization", "this-is-test-token")
-                .content(requestBody)
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .accept(MediaType.APPLICATION_JSON_UTF8)
-                .characterEncoding("UTF-8"))
-                .andExpect(status().isBadRequest)
-                .andReturn()
-                .response
-                .contentAsString
-        )
-
-        assertThat(response.code).isEqualTo("ACCOUNT_INFORMATION_MISMATCH")
     }
 
     @Test
