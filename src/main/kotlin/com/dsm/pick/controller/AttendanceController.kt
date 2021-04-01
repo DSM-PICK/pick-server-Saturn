@@ -112,9 +112,13 @@ class AttendanceController(
     fun showAttendanceRecordByGrade(
         @RequestHeader("Authorization") token: String,
         @PathVariable("grade") grade: Grade,
+        @RequestParam("date", defaultValue = "#{T(java.time.LocalDate).now()}") date: LocalDate,
     ): AttendanceRecordResponse {
         authService.validateToken(token)
-        return attendanceService.showAttendanceRecordByGrade(grade)
+        return attendanceService.showAttendanceRecordByGrade(
+            grade = grade,
+            date = date,
+        )
     }
 
     @GetMapping("/activity/{date}")
