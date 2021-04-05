@@ -218,10 +218,12 @@ class AttendanceService(
                 attendanceDate = attendanceDate,
             )
         Schedule.AFTER_SCHOOL ->
-            attendanceRepository.findByActivityDateAndStudentIsSelfStudy(
-                attendanceDate = attendanceDate,
-                isSelfStudy = true,
-            )
+            if (floor == Floor.ONE && priority == 0) {
+                attendanceRepository.findByActivityDateAndStudentIsSelfStudy(
+                    attendanceDate = attendanceDate,
+                    isSelfStudy = true,
+                )
+            } else listOf()
         Schedule.NO_SCHEDULE -> throw NonExistScheduleException(schedule.value)
     }.groupBy { it.student }
         .map { (student, attendance) ->
