@@ -10,12 +10,7 @@ jobs:
   CI:
     runs-on: ubuntu-latest
     env:
-      DATABASE_DRIVER: ${{ secrets.DATABASE_DRIVER }}
-      DATABASE_URL: ${{ secrets.DATABASE_URL }}
-      DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
-      DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
-      TOKEN_SECURE_KEY: ${{ secrets.TOKEN_SECURE_KEY }}
-      SERVER_HOST: ${{ secrets.SERVER_HOST }}
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
     steps:
       - uses: actions/checkout@v2
@@ -33,6 +28,9 @@ jobs:
 
       - name: Clean and Build
         run: ./gradlew clean build -x test
+
+      - name: codecov
+        run: codecov
   CD:
     runs-on: ubuntu-latest
     env:
