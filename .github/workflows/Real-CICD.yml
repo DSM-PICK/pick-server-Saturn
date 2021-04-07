@@ -9,13 +9,6 @@ on:
 jobs:
   CI:
     runs-on: ubuntu-latest
-    env:
-      DATABASE_DRIVER: ${{ secrets.DATABASE_DRIVER }}
-      DATABASE_URL: ${{ secrets.DATABASE_URL }}
-      DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
-      DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
-      TOKEN_SECURE_KEY: ${{ secrets.TOKEN_SECURE_KEY }}
-      SERVER_HOST: ${{ secrets.SERVER_HOST }}
 
     steps:
       - uses: actions/checkout@v2
@@ -33,6 +26,12 @@ jobs:
 
       - name: Clean and Build
         run: ./gradlew clean build -x test
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./build/reports/jacoco/test/jacocoTestReport.xml
   CD:
     runs-on: ubuntu-latest
     env:
