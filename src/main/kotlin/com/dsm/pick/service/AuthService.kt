@@ -4,10 +4,7 @@ import com.dsm.pick.controller.response.LoginResponse
 import com.dsm.pick.controller.response.LoginResponse.ManagedClassroom
 import com.dsm.pick.controller.response.LoginResponse.ManagedClub
 import com.dsm.pick.domain.Teacher
-import com.dsm.pick.exception.AccountInformationMismatchException
-import com.dsm.pick.exception.AlreadyExistAccountException
-import com.dsm.pick.exception.AuthenticationNumberMismatchException
-import com.dsm.pick.exception.InvalidTokenException
+import com.dsm.pick.exception.*
 import com.dsm.pick.repository.ClassroomRepository
 import com.dsm.pick.repository.ClubRepository
 import com.dsm.pick.repository.TeacherRepository
@@ -82,11 +79,11 @@ class AuthService(
             throw AuthenticationNumberMismatchException(authenticationNumber)
     }
 
-    fun join(teacherId: String, teacherPassword: String, teacherConfirmPassword: String, teacherName: String) {
+    fun join(teacherId: String, teacherPassword: String, teacherConfirmPassword: String, teacherName: String, managedClassroomName: String) {
         validateSamePassword(teacherPassword, teacherConfirmPassword)
 
         val isJoinPossible = isJoinPossible(teacherId)
-        if (isJoinPossible)
+        if (isJoinPossible) {
             teacherRepository.save(
                 Teacher(
                     id = teacherId,
@@ -95,8 +92,18 @@ class AuthService(
                     office = "임시 교무실",
                 )
             )
-        else
+
+            setManagerInClassroom(managedClassroomName)
+        } else {
             throw AlreadyExistAccountException(teacherId)
+        }
+    }
+
+    private fun setManagerInClassroom(managedClassroomName: String) {
+        val classroom = classroomRepository.findByName(managedClassroomName)
+            ?: throw ClassroomNotFoundException(-1, -1)
+
+        classroom.manager = managedClassroomName
     }
 
     private fun validateAccountInformation(teacherId: String, teacherPassword: String) {

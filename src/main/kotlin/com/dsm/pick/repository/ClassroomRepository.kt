@@ -8,4 +8,5 @@ interface ClassroomRepository : JpaRepository<Classroom, String> {
     fun findByManager(teacherId: String): Classroom?
     fun findByFloor(floor: Floor): List<Classroom>
     fun findByFloorAndPriority(floor: Floor, priority: Int): Classroom?
+    fun findByName(classroomName: String): Classroom?
 }

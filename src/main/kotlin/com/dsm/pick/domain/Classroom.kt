@@ -25,7 +25,7 @@ class Classroom(
     val priority: Int,
 
     @Column(name = "manager")
-    val manager: String?,
+    var manager: String?,
 ) {
 
     @OneToMany(mappedBy = "classroom")
