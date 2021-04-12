@@ -50,5 +50,6 @@ class AuthController(
             teacherPassword = request.password,
             teacherConfirmPassword = request.confirmPassword,
             teacherName = request.name,
+            managedClassroomName = request.managedClassroomName,
         )
 }
