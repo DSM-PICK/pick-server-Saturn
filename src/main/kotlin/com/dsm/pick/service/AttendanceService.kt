@@ -10,6 +10,8 @@ import com.dsm.pick.domain.Location
 import com.dsm.pick.domain.attribute.*
 import com.dsm.pick.exception.*
 import com.dsm.pick.repository.*
+import org.springframework.cache.annotation.CacheEvict
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
@@ -26,6 +28,7 @@ class AttendanceService(
     private val locationRepository: LocationRepository,
 ) {
 
+    @Cacheable(value = ["navigation"])
     fun showAttendanceNavigation(schedule: Schedule, floor: Floor, date: LocalDate = LocalDate.now()) =
         AttendanceNavigationResponse(
             date = timeService.changeDateToString(date),
@@ -35,6 +38,7 @@ class AttendanceService(
             locations = createLocationInformation(schedule, floor),
         )
 
+    @Cacheable(value = ["attendance"])
     fun showAttendance(schedule: Schedule, floor: Floor, priority: Int, date: LocalDate = LocalDate.now()) =
         AttendanceResponse(
             attendances = createAttendance(schedule, floor, priority, date),
@@ -58,6 +62,7 @@ class AttendanceService(
             }
         )
 
+    @CacheEvict(value = ["attendance"])
     fun updateAttendance(
         studentNumber: String,
         period: Int,
@@ -71,6 +76,7 @@ class AttendanceService(
         ).state = State.values().singleOrNull { it.value == attendanceState }?: throw NonExistStateException(attendanceState)
     }
 
+    @CacheEvict(value = ["attendance"])
     fun modifyAllStudent(
         studentNumbers: List<String>,
         periods: List<Int>,
@@ -87,6 +93,7 @@ class AttendanceService(
         )
     }
 
+    @CacheEvict(value = ["attendance"])
     fun modifyAllStudentState(
         studentNumbers: List<String>,
         periods: List<Int>,
@@ -101,6 +108,7 @@ class AttendanceService(
         )
     }
 
+    @CacheEvict(value = ["attendance"])
     fun modifyAllStudentMemo(
         studentNumbers: List<String>,
         periods: List<Int>,
@@ -115,6 +123,7 @@ class AttendanceService(
         )
     }
 
+    @CacheEvict(value = ["attendance"])
     fun updateMemo(
         studentNumber: String,
         period: Period,
@@ -128,6 +137,7 @@ class AttendanceService(
         ).memo = attendanceMemo
     }
 
+    @Cacheable(value = ["attendance"])
     fun showAttendanceRecordByGrade(
         grade: Grade,
         date: LocalDate = LocalDate.now(),
@@ -147,6 +157,7 @@ class AttendanceService(
         )
     }
 
+    @Cacheable(value = ["schedule"])
     fun showActivityByDate(date: LocalDate) =
         ActivityResponse(
             schedule = findSchedule(date).schedule.value,
