@@ -5,6 +5,7 @@ import com.dsm.pick.controller.response.*
 import com.dsm.pick.domain.attribute.*
 import com.dsm.pick.service.AttendanceService
 import com.dsm.pick.service.AuthService
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
