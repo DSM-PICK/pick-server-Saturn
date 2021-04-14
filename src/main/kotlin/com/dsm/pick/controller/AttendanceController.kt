@@ -5,6 +5,7 @@ import com.dsm.pick.controller.response.*
 import com.dsm.pick.domain.attribute.*
 import com.dsm.pick.service.AttendanceService
 import com.dsm.pick.service.AuthService
+import org.springframework.cache.annotation.CacheEvict
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.web.bind.annotation.*
@@ -41,6 +42,7 @@ class AttendanceController(
         return attendanceService.showAttendance(schedule, floor, priority, date)
     }
 
+    @CacheEvict(value = ["attendance"], allEntries = true)
     @PatchMapping("/student-state")
     fun changeAttendance(
         @RequestHeader("Authorization") token: String,
@@ -54,6 +56,7 @@ class AttendanceController(
         )
     }
 
+    @CacheEvict(value = ["attendance"], allEntries = true)
     @PutMapping("/student-state")
     fun modifyAllStudentState(
         @RequestHeader("Authorization") token: String,
@@ -67,6 +70,7 @@ class AttendanceController(
         )
     }
 
+    @CacheEvict(value = ["attendance"], allEntries = true)
     @PutMapping("/student")
     fun modifyAllStudent(
         @RequestHeader("Authorization") token: String,
@@ -81,6 +85,7 @@ class AttendanceController(
         )
     }
 
+    @CacheEvict(value = ["attendance"], allEntries = true)
     @PutMapping("/student-memo")
     fun modifyAllStudentMemo(
         @RequestHeader("Authorization") token: String,
@@ -94,6 +99,7 @@ class AttendanceController(
         )
     }
 
+    @CacheEvict(value = ["attendance"], allEntries = true)
     @PatchMapping("/memo/{student}/{period}")
     fun changeMemo(
         @RequestHeader("Authorization") token: String,
