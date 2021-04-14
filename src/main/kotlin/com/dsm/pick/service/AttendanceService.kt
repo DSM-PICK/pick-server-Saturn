@@ -62,7 +62,7 @@ class AttendanceService(
             }
         )
 
-    @CacheEvict(value = ["attendance"])
+    @CacheEvict(value = ["attendance"], allEntries = true)
     fun updateAttendance(
         studentNumber: String,
         period: Int,
@@ -76,7 +76,7 @@ class AttendanceService(
         ).state = State.values().singleOrNull { it.value == attendanceState }?: throw NonExistStateException(attendanceState)
     }
 
-    @CacheEvict(value = ["attendance"])
+    @CacheEvict(value = ["attendance"], allEntries = true)
     fun modifyAllStudent(
         studentNumbers: List<String>,
         periods: List<Int>,
@@ -93,7 +93,7 @@ class AttendanceService(
         )
     }
 
-    @CacheEvict(value = ["attendance"])
+    @CacheEvict(value = ["attendance"], allEntries = true)
     fun modifyAllStudentState(
         studentNumbers: List<String>,
         periods: List<Int>,
@@ -108,7 +108,7 @@ class AttendanceService(
         )
     }
 
-    @CacheEvict(value = ["attendance"])
+    @CacheEvict(value = ["attendance"], allEntries = true)
     fun modifyAllStudentMemo(
         studentNumbers: List<String>,
         periods: List<Int>,
@@ -123,7 +123,7 @@ class AttendanceService(
         )
     }
 
-    @CacheEvict(value = ["attendance"])
+    @CacheEvict(value = ["attendance"], allEntries = true)
     fun updateMemo(
         studentNumber: String,
         period: Period,
