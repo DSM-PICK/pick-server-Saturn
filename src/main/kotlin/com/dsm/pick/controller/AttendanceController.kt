@@ -8,6 +8,7 @@ import com.dsm.pick.service.AuthService
 import org.springframework.cache.annotation.CacheEvict
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.format.annotation.DateTimeFormat
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -31,6 +32,7 @@ class AttendanceController(
     }
 
     @GetMapping("/student-state/{schedule}/{floor}/{priority}")
+    @Transactional
     fun showAttendance(
         @RequestHeader("Authorization") token: String,
         @PathVariable("schedule") schedule: Schedule,
