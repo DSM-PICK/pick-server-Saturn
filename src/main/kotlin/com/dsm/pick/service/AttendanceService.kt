@@ -214,7 +214,7 @@ class AttendanceService(
         schedule: Schedule,
         floor: Floor,
         priority: Int,
-        attendanceDate: LocalDate = LocalDate.now()
+        attendanceDate: LocalDate = LocalDate.now(),
     ) = when (schedule) {
         Schedule.CLUB ->
             attendanceRepository.findByStudentClubLocationFloorAndStudentClubLocationPriorityAndActivityDate(
