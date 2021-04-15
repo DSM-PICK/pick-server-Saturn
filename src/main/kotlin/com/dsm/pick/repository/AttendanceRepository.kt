@@ -13,6 +13,7 @@ import org.springframework.data.repository.query.Param
 import java.time.LocalDate
 
 interface AttendanceRepository : JpaRepository<Attendance, Int> {
+    @EntityGraph(attributePaths = ["student", "student.classroom", "student.club", "student.club.location", "teacher", "activity"])
     fun findByStudentClubLocationFloorAndStudentClubLocationPriorityAndActivityDate(floor: Floor, priority: Int, attendanceDate: LocalDate): List<Attendance>
     @EntityGraph(attributePaths = ["student", "student.classroom", "student.club", "student.club.location", "teacher", "activity"])
     fun findByStudentClassroomFloorAndStudentClassroomPriorityAndActivityDate(floor: Floor, priority: Int, attendanceDate: LocalDate): List<Attendance>

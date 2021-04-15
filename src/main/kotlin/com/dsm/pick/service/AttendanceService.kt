@@ -39,12 +39,9 @@ class AttendanceService(
         )
 
     @Cacheable(value = ["attendance"])
-    fun showAttendance(schedule: Schedule, floor: Floor, priority: Int, date: LocalDate = LocalDate.now()): AttendanceResponse {
-        println("------")
-        val a = createAttendance(schedule, floor, priority, date)
-        println("------")
-        return AttendanceResponse(
-            attendances = a,
+    fun showAttendance(schedule: Schedule, floor: Floor, priority: Int, date: LocalDate = LocalDate.now()) =
+        AttendanceResponse(
+            attendances = createAttendance(schedule, floor, priority, date),
             clubHead = when (schedule) {
                 Schedule.CLUB -> findClub(floor, priority).head
                 Schedule.SELF_STUDY -> null
@@ -64,7 +61,6 @@ class AttendanceService(
                 Schedule.NO_SCHEDULE -> throw NonExistScheduleException(schedule.value)
             },
         )
-    }
 
     @CacheEvict(value = ["attendance"], allEntries = true)
     fun updateAttendance(
