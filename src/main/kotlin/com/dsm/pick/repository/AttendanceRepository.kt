@@ -18,6 +18,7 @@ interface AttendanceRepository : JpaRepository<Attendance, Int> {
     @EntityGraph(attributePaths = ["activity", "student", "student.classroom", "student.club", "student.club.location", "teacher"])
     fun findByStudentClassroomFloorAndStudentClassroomPriorityAndActivityDate(floor: Floor, priority: Int, attendanceDate: LocalDate): List<Attendance>
     fun findByActivityDateAndStudentIsSelfStudy(attendanceDate: LocalDate, isSelfStudy: Boolean): List<Attendance>
+    @EntityGraph(attributePaths = ["activity", "student", "student.classroom", "student.club", "student.club.location"])
     fun findByStudentNumberAndPeriodAndActivityDate(studentNumber: String, period: Period, attendanceDate: LocalDate): Attendance?
     @EntityGraph(attributePaths = ["activity", "student", "student.classroom", "student.club", "student.club.location"])
     fun findByActivityDateAndStudentNumberStartingWith(date: LocalDate, grade: String): List<Attendance>
