@@ -5,6 +5,7 @@ import com.dsm.pick.domain.attribute.Floor
 import com.dsm.pick.domain.attribute.Period
 import com.dsm.pick.domain.attribute.Schedule
 import com.dsm.pick.domain.attribute.State
+import org.springframework.data.jpa.repository.EntityGraph
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
@@ -13,8 +14,8 @@ import java.time.LocalDate
 
 interface AttendanceRepository : JpaRepository<Attendance, Int> {
     fun findByStudentClubLocationFloorAndStudentClubLocationPriorityAndActivityDate(floor: Floor, priority: Int, attendanceDate: LocalDate): List<Attendance>
+    @EntityGraph(attributePaths = ["student"])
     fun findByStudentClassroomFloorAndStudentClassroomPriorityAndActivityDate(floor: Floor, priority: Int, attendanceDate: LocalDate): List<Attendance>
-//    fun findByStudentSelfStudyAndActivityDate(isSelfStudy: Int, attendanceDate: LocalDate): List<Attendance>
     fun findByActivityDateAndStudentIsSelfStudy(attendanceDate: LocalDate, isSelfStudy: Boolean): List<Attendance>
     fun findByStudentNumberAndPeriodAndActivityDate(studentNumber: String, period: Period, attendanceDate: LocalDate): Attendance?
     fun findByActivityDateAndStudentNumberStartingWith(date: LocalDate, grade: String): List<Attendance>
