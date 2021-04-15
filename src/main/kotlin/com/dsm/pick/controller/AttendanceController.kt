@@ -32,7 +32,6 @@ class AttendanceController(
     }
 
     @GetMapping("/student-state/{schedule}/{floor}/{priority}")
-    @Transactional
     fun showAttendance(
         @RequestHeader("Authorization") token: String,
         @PathVariable("schedule") schedule: Schedule,

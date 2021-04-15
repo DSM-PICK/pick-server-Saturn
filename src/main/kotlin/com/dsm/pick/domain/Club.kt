@@ -23,6 +23,6 @@ class Club(
     val head: String?,
 ) {
 
-    @OneToMany(mappedBy = "club")
+    @OneToMany(mappedBy = "club", fetch = FetchType.EAGER)
     var students: List<Student> = listOf()
 }
