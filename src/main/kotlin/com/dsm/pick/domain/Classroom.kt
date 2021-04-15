@@ -28,6 +28,6 @@ class Classroom(
     var manager: String?,
 ) {
 
-    @OneToMany(mappedBy = "classroom", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "classroom")
     var students: List<Student> = listOf()
 }
