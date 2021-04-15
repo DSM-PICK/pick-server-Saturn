@@ -15,11 +15,11 @@ class Attendance(
     @Column(name = "id")
     var id: Int?,
 
-    @ManyToOne
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "date", referencedColumnName = "date")
     val activity: Activity,
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "student_num", referencedColumnName = "num")
     val student: Student,
 

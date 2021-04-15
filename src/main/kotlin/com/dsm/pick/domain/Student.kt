@@ -13,11 +13,11 @@ class Student(
     @Column(name = "name")
     val name: String,
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "club_name", referencedColumnName = "name")
     val club: Club,
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "class_name", referencedColumnName = "name")
     val classroom: Classroom,
 

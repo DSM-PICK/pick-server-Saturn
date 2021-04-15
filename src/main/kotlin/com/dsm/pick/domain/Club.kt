@@ -12,7 +12,7 @@ class Club(
     @NotBlank
     val name: String,
 
-    @OneToOne
+    @OneToOne(optional = false)
     @JoinColumn(name = "location", referencedColumnName = "location")
     val location: Location,
 
