@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
 
 @Service
+@Transactional
 class AttendanceService(
     private val timeService: TimeService,
     private val activityRepository: ActivityRepository,
