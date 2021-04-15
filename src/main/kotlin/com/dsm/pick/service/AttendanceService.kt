@@ -33,20 +33,12 @@ class AttendanceService(
     @Cacheable(value = ["navigation"])
     fun showAttendanceNavigation(schedule: Schedule, floor: Floor, date: LocalDate = LocalDate.now()): AttendanceNavigationResponse {
         val activity = findSchedule(date)
-        println("----------------------------------------------------------")
-        val a = findTeacherNameBySchedule(schedule, floor, activity)
-        println("----------------------------------------------------------")
-        val b = activity.schedule.value
-        println("----------------------------------------------------------")
-        val c = createLocationInformation(schedule, floor)
-        println("----------------------------------------------------------")
-
         return AttendanceNavigationResponse(
             date = timeService.changeDateToString(date),
             dayOfWeek = timeService.getDayOfWeek(date),
-            teacherName = a,
-            schedule = b,
-            locations = c,
+            teacherName = findTeacherNameBySchedule(schedule, floor, activity),
+            schedule = activity.schedule.value,
+            locations = createLocationInformation(schedule, floor),
         )
     }
 
@@ -315,6 +307,7 @@ class AttendanceService(
             ?.map { it.shortName }
             ?: listOf()
 
+    @Cacheable(value = ["attendance"])
     fun getStudentByScheduleAndState(
         state: State,
         schedule: Schedule,
