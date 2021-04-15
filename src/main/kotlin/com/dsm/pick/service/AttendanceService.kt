@@ -5,6 +5,7 @@ import com.dsm.pick.controller.response.AttendanceNavigationResponse.LocationInf
 import com.dsm.pick.controller.response.AttendanceResponse.StudentState
 import com.dsm.pick.controller.response.AttendanceResponse.StudentState.Memo
 import com.dsm.pick.controller.response.StudentSearchResponse.StudentInfo
+import com.dsm.pick.domain.Activity
 import com.dsm.pick.domain.Attendance
 import com.dsm.pick.domain.Club
 import com.dsm.pick.domain.Location
@@ -30,14 +31,16 @@ class AttendanceService(
 ) {
 
     @Cacheable(value = ["navigation"])
-    fun showAttendanceNavigation(schedule: Schedule, floor: Floor, date: LocalDate = LocalDate.now()) =
-        AttendanceNavigationResponse(
+    fun showAttendanceNavigation(schedule: Schedule, floor: Floor, date: LocalDate = LocalDate.now()): AttendanceNavigationResponse {
+        val activity = findSchedule(date)
+        return AttendanceNavigationResponse(
             date = timeService.changeDateToString(date),
             dayOfWeek = timeService.getDayOfWeek(date),
-            teacherName = findTeacherNameBySchedule(schedule, floor, date),
-            schedule = findSchedule(date).schedule.value,
+            teacherName = findTeacherNameBySchedule(schedule, floor, activity),
+            schedule = activity.schedule.value,
             locations = createLocationInformation(schedule, floor),
         )
+    }
 
     @Cacheable(value = ["attendance"])
     fun showAttendance(schedule: Schedule, floor: Floor, priority: Int, date: LocalDate = LocalDate.now()): AttendanceResponse {
@@ -173,13 +176,14 @@ class AttendanceService(
     private fun findTeacherNameBySchedule(
         schedule: Schedule,
         floor: Floor,
-        date: LocalDate = LocalDate.now(),
+        activity: Activity,
+//        date: LocalDate = LocalDate.now(),
     ) = if (schedule == Schedule.AFTER_SCHOOL) null
         else when(floor) {
             Floor.ONE -> null
-            Floor.TWO -> findSchedule(date).secondFloorTeacher.name
-            Floor.THREE -> findSchedule(date).thirdFloorTeacher.name
-            Floor.FOUR -> findSchedule(date).forthFloorTeacher.name
+            Floor.TWO -> activity.secondFloorTeacher.name
+            Floor.THREE -> activity.thirdFloorTeacher.name
+            Floor.FOUR -> activity.forthFloorTeacher.name
         }
 
     private fun findSchedule(date: LocalDate = LocalDate.now()) =
@@ -303,6 +307,7 @@ class AttendanceService(
             ?.map { it.shortName }
             ?: listOf()
 
+    @Cacheable(value = ["attendance"])
     fun getStudentByScheduleAndState(
         state: State,
         schedule: Schedule,
