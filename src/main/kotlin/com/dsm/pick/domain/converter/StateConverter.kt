@@ -14,5 +14,6 @@ class StateConverter : AttributeConverter<State, String>, Converter<String, Stat
         State.values().singleOrNull { it.value == state }?: throw NonExistStateException(state)
 
     override fun convert(request: String) =
-        State.values().singleOrNull { it.englishValue == request } ?: throw NonExistStateException(request)
+        State.values().singleOrNull { it.englishValue == request || it.name == request || it.value == request }
+            ?: throw NonExistStateException(request)
 }

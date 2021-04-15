@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
 
 @Service
-@Transactional
 class AttendanceService(
     private val timeService: TimeService,
     private val activityRepository: ActivityRepository,
@@ -39,28 +38,30 @@ class AttendanceService(
         )
 
     @Cacheable(value = ["attendance"])
-    fun showAttendance(schedule: Schedule, floor: Floor, priority: Int, date: LocalDate = LocalDate.now()) =
-        AttendanceResponse(
+    fun showAttendance(schedule: Schedule, floor: Floor, priority: Int, date: LocalDate = LocalDate.now()): AttendanceResponse {
+        val club = findClub(floor, priority)
+        return AttendanceResponse(
             attendances = createAttendance(schedule, floor, priority, date),
             clubHead = when (schedule) {
-                Schedule.CLUB -> findClub(floor, priority).head
+                Schedule.CLUB -> club.head
                 Schedule.SELF_STUDY -> null
                 Schedule.AFTER_SCHOOL -> null
                 Schedule.NO_SCHEDULE -> throw NonExistScheduleException(schedule.value)
             },
             name = when (schedule) {
-                Schedule.CLUB -> findClub(floor, priority).name
+                Schedule.CLUB -> club.name
                 Schedule.SELF_STUDY -> findClassroom(floor, priority).name
                 Schedule.AFTER_SCHOOL -> "창조실"
                 Schedule.NO_SCHEDULE -> throw NonExistScheduleException(schedule.value)
             },
             managerTeacher = when (schedule) {
-                Schedule.CLUB -> findClub(floor, priority).teacher
+                Schedule.CLUB -> club.teacher
                 Schedule.SELF_STUDY -> findNameOfManager(floor, priority)
                 Schedule.AFTER_SCHOOL -> null
                 Schedule.NO_SCHEDULE -> throw NonExistScheduleException(schedule.value)
-            }
+            },
         )
+    }
 
     @CacheEvict(value = ["attendance"], allEntries = true)
     fun updateAttendance(
@@ -158,13 +159,15 @@ class AttendanceService(
     }
 
     @Cacheable(value = ["schedule"])
-    fun showActivityByDate(date: LocalDate) =
-        ActivityResponse(
-            schedule = findSchedule(date).schedule.value,
-            secondFloorTeacherName = findSchedule(date).secondFloorTeacher.name,
-            thirdFloorTeacherName = findSchedule(date).thirdFloorTeacher.name,
-            forthFloorTeacherName = findSchedule(date).forthFloorTeacher.name,
+    fun showActivityByDate(date: LocalDate): ActivityResponse {
+        val schedule = findSchedule(date)
+        return ActivityResponse(
+            schedule = schedule.schedule.value,
+            secondFloorTeacherName = schedule.secondFloorTeacher.name,
+            thirdFloorTeacherName = schedule.thirdFloorTeacher.name,
+            forthFloorTeacherName = schedule.forthFloorTeacher.name,
         )
+    }
 
     private fun findTeacherNameBySchedule(
         schedule: Schedule,
@@ -214,7 +217,7 @@ class AttendanceService(
         schedule: Schedule,
         floor: Floor,
         priority: Int,
-        attendanceDate: LocalDate = LocalDate.now()
+        attendanceDate: LocalDate = LocalDate.now(),
     ) = when (schedule) {
         Schedule.CLUB ->
             attendanceRepository.findByStudentClubLocationFloorAndStudentClubLocationPriorityAndActivityDate(
@@ -282,6 +285,7 @@ class AttendanceService(
         else teacherRepository.findTeacherById(classroomManagerId)?.name
     }
 
+    @Cacheable(value = ["memoKind"])
     fun getMemoKind(): MemoKindResponse {
         val locations = locationRepository.findAll()
             .groupBy { it.floor }
