@@ -54,3 +54,13 @@
             ㄴapplication.yml
             ㄴdata.sql
 ```
+
+## Library & Framework
+- Spring Boot
+- Kotlin
+- Gradle
+- Spring Data JPA
+- Mockk
+
+## Review
+[PICK 오류일지] - https://velog.io/@dhwlddjgmanf/series/프로젝트-PICK
