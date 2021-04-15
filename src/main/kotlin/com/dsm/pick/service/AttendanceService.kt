@@ -40,7 +40,9 @@ class AttendanceService(
 
     @Cacheable(value = ["attendance"])
     fun showAttendance(schedule: Schedule, floor: Floor, priority: Int, date: LocalDate = LocalDate.now()): AttendanceResponse {
+        println("------")
         val a = createAttendance(schedule, floor, priority, date)
+        println("------")
         return AttendanceResponse(
             attendances = a,
             clubHead = when (schedule) {
