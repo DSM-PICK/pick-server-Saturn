@@ -95,7 +95,7 @@ internal class AttendanceServiceTest {
 
     @Test
     fun `존재하지 않는 교실 출석 현황 반환 Classroom Not Found Exception`() {
-        assertThrows<ClassroomNotFoundException> {
+        assertThrows<ClubNotFoundException> {
             attendanceService.showAttendance(
                 schedule = Schedule.SELF_STUDY,
                 floor = Floor.TWO,

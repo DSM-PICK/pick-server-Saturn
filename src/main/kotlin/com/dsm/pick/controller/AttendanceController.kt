@@ -132,8 +132,11 @@ class AttendanceController(
 
     @GetMapping("/activity/{date}")
     fun showActivityByDate(
-        @RequestHeader("Authorization") token: String,
-        @PathVariable("date") @DateTimeFormat(pattern = "yyyy-MM-dd") date: LocalDate,
+        @RequestHeader("Authorization")
+        token: String,
+        @DateTimeFormat(pattern = "yyyy-MM-dd")
+        @PathVariable("date")
+        date: LocalDate,
     ): ActivityResponse {
         authService.validateToken(token)
         return attendanceService.showActivityByDate(date)

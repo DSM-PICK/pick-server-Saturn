@@ -13,12 +13,13 @@ import org.springframework.data.repository.query.Param
 import java.time.LocalDate
 
 interface AttendanceRepository : JpaRepository<Attendance, Int> {
-    @EntityGraph(attributePaths = ["student", "student.classroom", "student.club", "student.club.location", "teacher", "activity"])
+    @EntityGraph(attributePaths = ["activity", "student", "student.classroom", "student.club", "student.club.location", "teacher"])
     fun findByStudentClubLocationFloorAndStudentClubLocationPriorityAndActivityDate(floor: Floor, priority: Int, attendanceDate: LocalDate): List<Attendance>
-    @EntityGraph(attributePaths = ["student", "student.classroom", "student.club", "student.club.location", "teacher", "activity"])
+    @EntityGraph(attributePaths = ["activity", "student", "student.classroom", "student.club", "student.club.location", "teacher"])
     fun findByStudentClassroomFloorAndStudentClassroomPriorityAndActivityDate(floor: Floor, priority: Int, attendanceDate: LocalDate): List<Attendance>
     fun findByActivityDateAndStudentIsSelfStudy(attendanceDate: LocalDate, isSelfStudy: Boolean): List<Attendance>
     fun findByStudentNumberAndPeriodAndActivityDate(studentNumber: String, period: Period, attendanceDate: LocalDate): Attendance?
+    @EntityGraph(attributePaths = ["activity", "student", "student.classroom", "student.club", "student.club.location"])
     fun findByActivityDateAndStudentNumberStartingWith(date: LocalDate, grade: String): List<Attendance>
     fun findByStateAndActivityDate(state: State, date: LocalDate): List<Attendance>
 

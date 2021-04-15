@@ -159,13 +159,15 @@ class AttendanceService(
     }
 
     @Cacheable(value = ["schedule"])
-    fun showActivityByDate(date: LocalDate) =
-        ActivityResponse(
-            schedule = findSchedule(date).schedule.value,
-            secondFloorTeacherName = findSchedule(date).secondFloorTeacher.name,
-            thirdFloorTeacherName = findSchedule(date).thirdFloorTeacher.name,
-            forthFloorTeacherName = findSchedule(date).forthFloorTeacher.name,
+    fun showActivityByDate(date: LocalDate): ActivityResponse {
+        val schedule = findSchedule(date)
+        return ActivityResponse(
+            schedule = schedule.schedule.value,
+            secondFloorTeacherName = schedule.secondFloorTeacher.name,
+            thirdFloorTeacherName = schedule.thirdFloorTeacher.name,
+            forthFloorTeacherName = schedule.forthFloorTeacher.name,
         )
+    }
 
     private fun findTeacherNameBySchedule(
         schedule: Schedule,
@@ -283,6 +285,7 @@ class AttendanceService(
         else teacherRepository.findTeacherById(classroomManagerId)?.name
     }
 
+    @Cacheable(value = ["memoKind"])
     fun getMemoKind(): MemoKindResponse {
         val locations = locationRepository.findAll()
             .groupBy { it.floor }
