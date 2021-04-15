@@ -233,12 +233,16 @@ class AttendanceService(
                 priority = priority,
                 attendanceDate = attendanceDate,
             )
-        Schedule.SELF_STUDY ->
-            attendanceRepository.findByStudentClassroomFloorAndStudentClassroomPriorityAndActivityDate(
+        Schedule.SELF_STUDY -> {
+            println("====================================================================")
+            val a = attendanceRepository.findByStudentClassroomFloorAndStudentClassroomPriorityAndActivityDate(
                 floor = floor,
                 priority = priority,
                 attendanceDate = attendanceDate,
             )
+            println("====================================================================")
+            a
+        }
         Schedule.AFTER_SCHOOL ->
             if (floor == Floor.ONE && priority == 0) {
                 attendanceRepository.findByActivityDateAndStudentIsSelfStudy(
@@ -249,22 +253,33 @@ class AttendanceService(
         Schedule.NO_SCHEDULE -> throw NonExistScheduleException(schedule.value)
     }.groupBy { it.student }
         .map { (student, attendance) ->
+            println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+            val a = student.number
+            println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+            val b = student.name
+            println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+            val c = StudentState.State(
+                seven = attendance.singleOrNull { it.period == Period.SEVEN }?.state?.value,
+                eight = attendance.singleOrNull { it.period == Period.EIGHT }?.state?.value,
+                nine = attendance.singleOrNull { it.period == Period.NINE }?.state?.value,
+                ten = attendance.singleOrNull { it.period == Period.TEN }?.state?.value,
+            )
+            println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+            val d = Memo(
+                seven = attendance.singleOrNull { it.period == Period.SEVEN }?.memo,
+                eight = attendance.singleOrNull { it.period == Period.EIGHT }?.memo,
+                nine = attendance.singleOrNull { it.period == Period.NINE }?.memo,
+                ten = attendance.singleOrNull { it.period == Period.TEN }?.memo,
+            )
+            println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+            val e = attendance.first().reason
+            println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
             StudentState(
-                studentNumber = student.number,
-                studentName = student.name,
-                state = StudentState.State(
-                    seven = attendance.singleOrNull { it.period == Period.SEVEN }?.state?.value,
-                    eight = attendance.singleOrNull { it.period == Period.EIGHT }?.state?.value,
-                    nine = attendance.singleOrNull { it.period == Period.NINE }?.state?.value,
-                    ten = attendance.singleOrNull { it.period == Period.TEN }?.state?.value,
-                ),
-                memo = Memo(
-                    seven = attendance.singleOrNull { it.period == Period.SEVEN }?.memo,
-                    eight = attendance.singleOrNull { it.period == Period.EIGHT }?.memo,
-                    nine = attendance.singleOrNull { it.period == Period.NINE }?.memo,
-                    ten = attendance.singleOrNull { it.period == Period.TEN }?.memo,
-                ),
-                reason = attendance.first().reason,
+                studentNumber = a,
+                studentName = b,
+                state = c,
+                memo = d,
+                reason = e,
             )
         }
 
