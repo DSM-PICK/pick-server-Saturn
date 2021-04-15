@@ -5,6 +5,7 @@ import com.dsm.pick.controller.response.AttendanceNavigationResponse.LocationInf
 import com.dsm.pick.controller.response.AttendanceResponse.StudentState
 import com.dsm.pick.controller.response.AttendanceResponse.StudentState.Memo
 import com.dsm.pick.controller.response.StudentSearchResponse.StudentInfo
+import com.dsm.pick.domain.Activity
 import com.dsm.pick.domain.Attendance
 import com.dsm.pick.domain.Club
 import com.dsm.pick.domain.Location
@@ -31,10 +32,11 @@ class AttendanceService(
 
     @Cacheable(value = ["navigation"])
     fun showAttendanceNavigation(schedule: Schedule, floor: Floor, date: LocalDate = LocalDate.now()): AttendanceNavigationResponse {
+        val activity = findSchedule(date)
         println("----------------------------------------------------------")
-        val a = findTeacherNameBySchedule(schedule, floor, date)
+        val a = findTeacherNameBySchedule(schedule, floor, activity)
         println("----------------------------------------------------------")
-        val b = findSchedule(date).schedule.value
+        val b = activity.schedule.value
         println("----------------------------------------------------------")
         val c = createLocationInformation(schedule, floor)
         println("----------------------------------------------------------")
@@ -182,13 +184,14 @@ class AttendanceService(
     private fun findTeacherNameBySchedule(
         schedule: Schedule,
         floor: Floor,
-        date: LocalDate = LocalDate.now(),
+        activity: Activity,
+//        date: LocalDate = LocalDate.now(),
     ) = if (schedule == Schedule.AFTER_SCHOOL) null
         else when(floor) {
             Floor.ONE -> null
-            Floor.TWO -> findSchedule(date).secondFloorTeacher.name
-            Floor.THREE -> findSchedule(date).thirdFloorTeacher.name
-            Floor.FOUR -> findSchedule(date).forthFloorTeacher.name
+            Floor.TWO -> activity.secondFloorTeacher.name
+            Floor.THREE -> activity.thirdFloorTeacher.name
+            Floor.FOUR -> activity.forthFloorTeacher.name
         }
 
     private fun findSchedule(date: LocalDate = LocalDate.now()) =
