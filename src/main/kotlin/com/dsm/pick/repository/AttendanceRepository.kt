@@ -14,7 +14,7 @@ import java.time.LocalDate
 
 interface AttendanceRepository : JpaRepository<Attendance, Int> {
     fun findByStudentClubLocationFloorAndStudentClubLocationPriorityAndActivityDate(floor: Floor, priority: Int, attendanceDate: LocalDate): List<Attendance>
-    @EntityGraph(attributePaths = ["student", "activity"])
+    @EntityGraph(attributePaths = ["student", "student.classroom", "student.club", "activity"])
     fun findByStudentClassroomFloorAndStudentClassroomPriorityAndActivityDate(floor: Floor, priority: Int, attendanceDate: LocalDate): List<Attendance>
     fun findByActivityDateAndStudentIsSelfStudy(attendanceDate: LocalDate, isSelfStudy: Boolean): List<Attendance>
     fun findByStudentNumberAndPeriodAndActivityDate(studentNumber: String, period: Period, attendanceDate: LocalDate): Attendance?
