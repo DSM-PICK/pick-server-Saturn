@@ -30,14 +30,23 @@ class AttendanceService(
 ) {
 
     @Cacheable(value = ["navigation"])
-    fun showAttendanceNavigation(schedule: Schedule, floor: Floor, date: LocalDate = LocalDate.now()) =
-        AttendanceNavigationResponse(
+    fun showAttendanceNavigation(schedule: Schedule, floor: Floor, date: LocalDate = LocalDate.now()): AttendanceNavigationResponse {
+        println("----------------------------------------------------------")
+        val a = findTeacherNameBySchedule(schedule, floor, date)
+        println("----------------------------------------------------------")
+        val b = findSchedule(date).schedule.value
+        println("----------------------------------------------------------")
+        val c = createLocationInformation(schedule, floor)
+        println("----------------------------------------------------------")
+
+        return AttendanceNavigationResponse(
             date = timeService.changeDateToString(date),
             dayOfWeek = timeService.getDayOfWeek(date),
-            teacherName = findTeacherNameBySchedule(schedule, floor, date),
-            schedule = findSchedule(date).schedule.value,
-            locations = createLocationInformation(schedule, floor),
+            teacherName = a,
+            schedule = b,
+            locations = c,
         )
+    }
 
     @Cacheable(value = ["attendance"])
     fun showAttendance(schedule: Schedule, floor: Floor, priority: Int, date: LocalDate = LocalDate.now()): AttendanceResponse {
