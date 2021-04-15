@@ -21,6 +21,7 @@ interface AttendanceRepository : JpaRepository<Attendance, Int> {
     fun findByStudentNumberAndPeriodAndActivityDate(studentNumber: String, period: Period, attendanceDate: LocalDate): Attendance?
     @EntityGraph(attributePaths = ["activity", "student", "student.classroom", "student.club", "student.club.location"])
     fun findByActivityDateAndStudentNumberStartingWith(date: LocalDate, grade: String): List<Attendance>
+    @EntityGraph(attributePaths = ["activity", "student", "student.classroom", "student.club", "student.club.location"])
     fun findByStateAndActivityDate(state: State, date: LocalDate): List<Attendance>
 
     @Modifying(clearAutomatically = true, flushAutomatically = true)
