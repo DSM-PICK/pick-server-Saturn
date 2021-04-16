@@ -114,7 +114,8 @@ internal class AuthServiceTest {
                 teacherPassword = "teacherPassword",
                 teacherConfirmPassword = "teacherPassword",
                 teacherName = "teacherName",
-                managedClassroomName = "savedClassroom",
+                managedClassroomFloor = Floor.THREE,
+                managedClassroomPriority = 0,
             )
         }
     }
