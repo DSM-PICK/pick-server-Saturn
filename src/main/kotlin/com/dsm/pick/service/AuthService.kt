@@ -4,6 +4,7 @@ import com.dsm.pick.controller.response.LoginResponse
 import com.dsm.pick.controller.response.LoginResponse.ManagedClassroom
 import com.dsm.pick.controller.response.LoginResponse.ManagedClub
 import com.dsm.pick.domain.Teacher
+import com.dsm.pick.domain.attribute.Floor
 import com.dsm.pick.exception.*
 import com.dsm.pick.repository.ClassroomRepository
 import com.dsm.pick.repository.ClubRepository
@@ -79,7 +80,14 @@ class AuthService(
             throw AuthenticationNumberMismatchException(authenticationNumber)
     }
 
-    fun join(teacherId: String, teacherPassword: String, teacherConfirmPassword: String, teacherName: String, managedClassroomName: String) {
+    fun join(
+        teacherId: String,
+        teacherPassword: String,
+        teacherConfirmPassword: String,
+        teacherName: String,
+        managedClassroomFloor: Floor,
+        managedClassroomPriority: Int,
+    ) {
         validateSamePassword(teacherPassword, teacherConfirmPassword)
 
         val isJoinPossible = isJoinPossible(teacherId)
@@ -93,17 +101,21 @@ class AuthService(
                 )
             )
 
-            setManagerInClassroom(managedClassroomName)
+            setManagerInClassroom(
+                teacherId = teacherId,
+                managedClassroomFloor = managedClassroomFloor,
+                managedClassroomPriority = managedClassroomPriority,
+            )
         } else {
             throw AlreadyExistAccountException(teacherId)
         }
     }
 
-    private fun setManagerInClassroom(managedClassroomName: String) {
-        val classroom = classroomRepository.findByName(managedClassroomName)
+    private fun setManagerInClassroom(teacherId: String, managedClassroomFloor: Floor, managedClassroomPriority: Int) {
+        val classroom = classroomRepository.findByFloorAndPriority(managedClassroomFloor, managedClassroomPriority)
             ?: throw ClassroomNotFoundException(-1, -1)
 
-        classroom.manager = managedClassroomName
+        classroom.manager = teacherId
     }
 
     private fun validateAccountInformation(teacherId: String, teacherPassword: String) {

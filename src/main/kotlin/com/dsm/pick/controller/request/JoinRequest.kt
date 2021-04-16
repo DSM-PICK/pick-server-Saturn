@@ -1,6 +1,9 @@
 package com.dsm.pick.controller.request
 
+import com.dsm.pick.domain.attribute.Floor
+import com.dsm.pick.exception.NonExistFloorException
 import javax.validation.constraints.NotBlank
+import javax.validation.constraints.NotNull
 import javax.validation.constraints.Pattern
 
 data class JoinRequest(
@@ -20,6 +23,13 @@ data class JoinRequest(
     @get:Pattern(regexp = "^[a-zA-Zㄱ-ㅎ가-힣\\s]{1,12}$", message = "정규표현식 = ^[a-zA-Zㄱ-ㅎ가-힣\\s]{1,12}$")
     val name: String,
 
-    @get:NotBlank(message = "허용하지 않는 형식 <NULL, EMPTY, BLANK>")
-    val managedClassroomName: String,
-)
+    @get:NotNull(message = "<NULL>")
+    val managedClassroomFloor: Int,
+
+    @get:NotNull(message = "<NULL>")
+    val managedClassroomPriority: Int,
+) {
+
+    fun toFloor() = Floor.values().singleOrNull { it.value == managedClassroomFloor }
+        ?: throw NonExistFloorException(managedClassroomFloor)
+}

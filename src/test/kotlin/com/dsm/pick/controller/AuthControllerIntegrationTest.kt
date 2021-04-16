@@ -225,7 +225,8 @@ internal class AuthControllerIntegrationTest(
                 password = "teacherPassword",
                 confirmPassword = "teacherPassword",
                 name = "teacherName",
-                managedClassroomName = "testClassroom",
+                managedClassroomFloor = 3,
+                managedClassroomPriority = 0,
             )
         )
         mock.perform(post("/auth/join")
@@ -244,7 +245,8 @@ internal class AuthControllerIntegrationTest(
                 password = "teacherPassword",
                 confirmPassword = "password",
                 name = "teacherName",
-                managedClassroomName = "savedClassroom",
+                managedClassroomFloor = 3,
+                managedClassroomPriority = 0,
             )
         )
         val response = objectMapper.readValue<ExceptionResponse>(
@@ -270,7 +272,8 @@ internal class AuthControllerIntegrationTest(
                 password = "teacherPassword",
                 confirmPassword = "teacherPassword",
                 name = "teacherName",
-                managedClassroomName = "savedClassroom",
+                managedClassroomFloor = 3,
+                managedClassroomPriority = 1,
             )
         )
         val response = objectMapper.readValue<ExceptionResponse>(
