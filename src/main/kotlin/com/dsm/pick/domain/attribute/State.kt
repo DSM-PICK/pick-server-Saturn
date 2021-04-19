@@ -9,4 +9,5 @@ enum class State(val value: String, val englishValue: String) {
     TRUANCY("무단", "truancy"),
     EMPLOYMENT("취업", "employment"),
     REPLENISHMENT("기초학력", "replenishment"),
+    AFTER_SCHOOL("방과후", "after-school"),
 }
