@@ -3,8 +3,6 @@ name: Test-CI/CD
 on:
   push:
     branches: [test]
-  pull_request:
-    branches: [test]
 
 jobs:
   CI:
