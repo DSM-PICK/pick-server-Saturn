@@ -43,7 +43,7 @@ class AttendanceController(
         return attendanceService.showAttendance(schedule, floor, priority, date)
     }
 
-    @CacheEvict(value = ["attendance"], allEntries = true)
+//    @CacheEvict(value = ["attendance"], allEntries = true)
     @PatchMapping("/student-state")
     fun changeAttendance(
         @RequestHeader("Authorization") token: String,
@@ -57,7 +57,7 @@ class AttendanceController(
         )
     }
 
-    @CacheEvict(value = ["attendance"], allEntries = true)
+//    @CacheEvict(value = ["attendance"], allEntries = true)
     @PutMapping("/student-state")
     fun modifyAllStudentState(
         @RequestHeader("Authorization") token: String,
@@ -71,7 +71,7 @@ class AttendanceController(
         )
     }
 
-    @CacheEvict(value = ["attendance"], allEntries = true)
+//    @CacheEvict(value = ["attendance"], allEntries = true)
     @PutMapping("/student")
     fun modifyAllStudent(
         @RequestHeader("Authorization") token: String,
@@ -86,7 +86,7 @@ class AttendanceController(
         )
     }
 
-    @CacheEvict(value = ["attendance"], allEntries = true)
+//    @CacheEvict(value = ["attendance"], allEntries = true)
     @PutMapping("/student-memo")
     fun modifyAllStudentMemo(
         @RequestHeader("Authorization") token: String,
@@ -100,7 +100,7 @@ class AttendanceController(
         )
     }
 
-    @CacheEvict(value = ["attendance"], allEntries = true)
+//    @CacheEvict(value = ["attendance"], allEntries = true)
     @PatchMapping("/memo/{student}/{period}")
     fun changeMemo(
         @RequestHeader("Authorization") token: String,

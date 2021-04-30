@@ -7,7 +7,6 @@ import com.dsm.pick.controller.response.AttendanceResponse.StudentState.Memo
 import com.dsm.pick.controller.response.StudentSearchResponse.StudentInfo
 import com.dsm.pick.domain.Activity
 import com.dsm.pick.domain.Attendance
-import com.dsm.pick.domain.Club
 import com.dsm.pick.domain.Location
 import com.dsm.pick.domain.attribute.*
 import com.dsm.pick.exception.*
@@ -30,7 +29,7 @@ class AttendanceService(
     private val locationRepository: LocationRepository,
 ) {
 
-    @Cacheable(value = ["navigation"])
+//    @Cacheable(value = ["navigation"])
     fun showAttendanceNavigation(schedule: Schedule, floor: Floor, date: LocalDate = LocalDate.now()): AttendanceNavigationResponse {
         val activity = findSchedule(date)
         return AttendanceNavigationResponse(
@@ -42,7 +41,7 @@ class AttendanceService(
         )
     }
 
-    @Cacheable(value = ["attendance"])
+//    @Cacheable(value = ["attendance"])
     fun showAttendance(schedule: Schedule, floor: Floor, priority: Int, date: LocalDate = LocalDate.now()): AttendanceResponse {
         return AttendanceResponse(
             attendances = createAttendance(schedule, floor, priority, date),
@@ -67,7 +66,7 @@ class AttendanceService(
         )
     }
 
-    @CacheEvict(value = ["attendance"], allEntries = true)
+//    @CacheEvict(value = ["attendance"], allEntries = true)
     fun updateAttendance(
         studentNumber: String,
         period: Int,
@@ -81,7 +80,7 @@ class AttendanceService(
         ).state = State.values().singleOrNull { it.value == attendanceState }?: throw NonExistStateException(attendanceState)
     }
 
-    @CacheEvict(value = ["attendance"], allEntries = true)
+//    @CacheEvict(value = ["attendance"], allEntries = true)
     fun modifyAllStudent(
         studentNumbers: List<String>,
         periods: List<Int>,
@@ -98,7 +97,7 @@ class AttendanceService(
         )
     }
 
-    @CacheEvict(value = ["attendance"], allEntries = true)
+//    @CacheEvict(value = ["attendance"], allEntries = true)
     fun modifyAllStudentState(
         studentNumbers: List<String>,
         periods: List<Int>,
@@ -113,7 +112,7 @@ class AttendanceService(
         )
     }
 
-    @CacheEvict(value = ["attendance"], allEntries = true)
+//    @CacheEvict(value = ["attendance"], allEntries = true)
     fun modifyAllStudentMemo(
         studentNumbers: List<String>,
         periods: List<Int>,
@@ -128,7 +127,7 @@ class AttendanceService(
         )
     }
 
-    @CacheEvict(value = ["attendance"], allEntries = true)
+//    @CacheEvict(value = ["attendance"], allEntries = true)
     fun updateMemo(
         studentNumber: String,
         period: Period,
@@ -142,7 +141,7 @@ class AttendanceService(
         ).memo = attendanceMemo
     }
 
-    @Cacheable(value = ["attendance"])
+//    @Cacheable(value = ["attendance"])
     fun showAttendanceRecordByGrade(
         grade: Grade,
         date: LocalDate = LocalDate.now(),
@@ -162,7 +161,7 @@ class AttendanceService(
         )
     }
 
-    @Cacheable(value = ["schedule"])
+//    @Cacheable(value = ["schedule"])
     fun showActivityByDate(date: LocalDate): ActivityResponse {
         val schedule = findSchedule(date)
         return ActivityResponse(
@@ -177,7 +176,6 @@ class AttendanceService(
         schedule: Schedule,
         floor: Floor,
         activity: Activity,
-//        date: LocalDate = LocalDate.now(),
     ) = if (schedule == Schedule.AFTER_SCHOOL) null
         else when(floor) {
             Floor.ONE -> null
@@ -290,7 +288,7 @@ class AttendanceService(
         else teacherRepository.findTeacherById(classroomManagerId)?.name
     }
 
-    @Cacheable(value = ["memoKind"])
+//    @Cacheable(value = ["memoKind"])
     fun getMemoKind(): MemoKindResponse {
         val locations = locationRepository.findAll()
             .groupBy { it.floor }
@@ -307,7 +305,7 @@ class AttendanceService(
             ?.map { it.shortName }
             ?: listOf()
 
-    @Cacheable(value = ["attendance"])
+//    @Cacheable(value = ["attendance"])
     fun getStudentByScheduleAndState(
         state: State,
         schedule: Schedule,
